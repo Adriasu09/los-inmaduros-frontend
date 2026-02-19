@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { getRoutes, getRouteBySlug } from "@/lib/api/routes";
+import { getRouteBySlug, getRoutes } from "../services/routes-service";
+import { queryKeys } from "@/lib/api/query-keys";
 
 /**
  * Hook to get all routes
  */
 export function useRoutes() {
   return useQuery({
-    queryKey: ["routes"],
+    queryKey: queryKeys.routes.all,
     queryFn: getRoutes,
   });
 }
@@ -16,7 +17,7 @@ export function useRoutes() {
  */
 export function useRoute(slug: string) {
   return useQuery({
-    queryKey: ["route", slug],
+    queryKey: queryKeys.routes.detail(slug),
     queryFn: () => getRouteBySlug(slug),
     enabled: !!slug,
   });
