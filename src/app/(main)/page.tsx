@@ -1,5 +1,9 @@
-const page = () => {
-  return <div></div>;
-};
+import HeroSection from "@/components/home/HeroSection";
 
-export default page;
+export default function HomePage() {
+  return (
+    <>
+      <HeroSection />
+    </>
+  );
+}
