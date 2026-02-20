@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 
 export default function NavbarActions() {
   const { theme, setTheme } = useTheme();
@@ -29,11 +30,8 @@ export default function NavbarActions() {
 
       {/* AUTH CON CLERK */}
       <SignedOut>
-        <Link
-          href="/sign-in"
-          className="bg-sky-400 text-white font-semibold py-2 px-6 rounded-full hover:bg-sky-500 transition-transform transform hover:scale-105 shadow-lg"
-        >
-          Únete
+        <Link href="/sign-in">
+          <Button size="sm">Únete</Button>
         </Link>
       </SignedOut>
       <SignedIn>
