@@ -27,3 +27,11 @@ export const ROUTE_PACES = {
   LOCURA_TOTAL: { label: "Locura Total ☠️", emoji: "☠️" },
   MIAUCORNIA: { label: "Miaucornia 🐈🦄", emoji: "🐈🦄" },
 } as const;
+
+export const NAV_LINKS = [
+  { label: "Inicio", href: "/" },
+  { label: "Rutas", href: "/rutas" },
+  { label: "Eventos", href: "/eventos" },
+  { label: "Galería", href: "/galeria" },
+  { label: "Contacto", href: "/contacto" },
+];

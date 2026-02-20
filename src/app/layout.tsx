@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "next-themes";
 import { QueryProvider } from "@/lib/providers/query-provider";
 import "./globals.css";
 
@@ -22,9 +23,18 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="es">
-        <body className={`${poppins.variable} antialiased`}>
-          <QueryProvider>{children}</QueryProvider>
+      <html lang="es" suppressHydrationWarning>
+        <body
+          className={`${poppins.variable} antialiased`}
+          suppressHydrationWarning
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+          >
+            <QueryProvider>{children}</QueryProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
