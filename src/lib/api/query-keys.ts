@@ -39,6 +39,8 @@ export const queryKeys = {
     all: ["favorites"] as const,
     lists: () => [...queryKeys.favorites.all, "list"] as const,
     my: () => [...queryKeys.favorites.lists(), "my"] as const,
+    check: (routeId: string) =>
+      [...queryKeys.favorites.all, "check", routeId] as const,
   },
 
   // Photos

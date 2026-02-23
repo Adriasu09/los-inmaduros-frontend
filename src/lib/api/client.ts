@@ -40,38 +40,23 @@ class HttpClient {
    * Setup request and response interceptors
    */
   private setupInterceptors(): void {
-    // Request interceptor - añadir token de Clerk
+    // Request interceptor
     this.client.interceptors.request.use(
-      async (config) => {
-        // TODO: Añadir token de Clerk cuando implementemos auth
-        // const token = await getClerkToken();
-        // if (token) {
-        //   config.headers.Authorization = `Bearer ${token}`;
-        // }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(handleNetworkError(error));
-      },
+      (config) => config,
+      (error) => Promise.reject(handleNetworkError(error)),
     );
 
     // Response interceptor - error handling
     this.client.interceptors.response.use(
       (response) => response,
       async (error) => {
-        // If it is an Axios error with a response
         if (error.response) {
           const apiError = await handleApiError(error.response);
-
-          // Handling 401/403 (logout)
           if (apiError.is("UNAUTHORIZED") || apiError.is("FORBIDDEN")) {
             this.handleUnauthorized();
           }
-
           return Promise.reject(apiError);
         }
-
-        // Network error or timeout
         return Promise.reject(handleNetworkError(error));
       },
     );
@@ -135,6 +120,20 @@ class HttpClient {
         code: "UNKNOWN_ERROR",
       })
     );
+  }
+
+  /**
+   * Set auth token for requests
+   */
+  setAuthToken(token: string): void {
+    this.client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
+
+  /**
+   * Clear auth token
+   */
+  clearAuthToken(): void {
+    delete this.client.defaults.headers.common["Authorization"];
   }
 
   /**
