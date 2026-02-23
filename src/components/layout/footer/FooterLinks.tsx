@@ -32,7 +32,7 @@ export default function FooterLinks() {
           {FOOTER_COMMUNITY_LINKS.map((link) => (
             <li key={link.href}>
               <Link
-                href={"mailto:" + link.href}
+                href={link.href}
                 className="text-sm text-slate-500 dark:text-slate-400 hover:text-sky-400 dark:hover:text-sky-400 transition-colors"
               >
                 {link.label}

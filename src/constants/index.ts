@@ -37,7 +37,7 @@ export const ROUTE_PACES = {
 
 export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
-  { label: "Rutas", href: "/rutas" },
+  { label: "Rutas", href: "/routes" },
   { label: "Eventos", href: "/eventos" },
   { label: "Galería", href: "/galeria" },
   { label: "Contacto", href: "/contacto" },
@@ -53,7 +53,7 @@ export const FOOTER_EXPLORE_LINKS = [
 export const FOOTER_COMMUNITY_LINKS = [
   { label: "Sobre Nosotros", href: "/nosotros" },
   { label: "Normas del Grupo", href: "/normas" },
-  { label: "Contacto", href: "losinmadurosrollermadrid@gmail.com" },
+  { label: "Contacto", href: "mailto:losinmadurosrollermadrid@gmail.com" },
 ];
 
 export const SOCIAL_LINKS = [
