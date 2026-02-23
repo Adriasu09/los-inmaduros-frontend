@@ -1,3 +1,10 @@
+import {
+  FaFacebook,
+  FaInstagram,
+  FaTelegram,
+  FaWhatsapp,
+} from "react-icons/fa";
+
 export const ROUTE_LEVELS = {
   BEGINNER: {
     label: "Principiante",
@@ -34,4 +41,36 @@ export const NAV_LINKS = [
   { label: "Eventos", href: "/eventos" },
   { label: "Galería", href: "/galeria" },
   { label: "Contacto", href: "/contacto" },
+];
+
+export const FOOTER_EXPLORE_LINKS = [
+  { label: "Rutas Populares", href: "/rutas" },
+  { label: "Próximos Eventos", href: "/eventos" },
+  { label: "Niveles de Dificultad", href: "/rutas#niveles" },
+  { label: "Galería de Fotos", href: "/galeria" },
+];
+
+export const FOOTER_COMMUNITY_LINKS = [
+  { label: "Sobre Nosotros", href: "/nosotros" },
+  { label: "Normas del Grupo", href: "/normas" },
+  { label: "Contacto", href: "losinmadurosrollermadrid@gmail.com" },
+];
+
+export const SOCIAL_LINKS = [
+  {
+    icon: FaInstagram,
+    href: "https://www.instagram.com/los_inmadurosrollers/",
+    label: "Instagram",
+  },
+  {
+    icon: FaFacebook,
+    href: "https://www.facebook.com/groups/227134327307651/",
+    label: "Facebook",
+  },
+  {
+    icon: FaWhatsapp,
+    href: "https://chat.whatsapp.com/DZBoC7M8jtc0YMLpOGIwlo",
+    label: "WhatsApp",
+  },
+  { icon: FaTelegram, href: "https://t.me/PatinarEnMadrid", label: "Telegram" },
 ];
