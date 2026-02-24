@@ -1,6 +1,15 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 import { ApiError, handleApiError, handleNetworkError } from "@/lib/errors";
 
+// Bridge para inyectar el token de Clerk en cada request sin depender de React
+let getClerkToken: (() => Promise<string | null>) | null = null;
+
+export function setClerkTokenGetter(
+  fn: (() => Promise<string | null>) | null,
+): void {
+  getClerkToken = fn;
+}
+
 /**
  * Configuration for HTTP Client
  */
@@ -40,9 +49,17 @@ class HttpClient {
    * Setup request and response interceptors
    */
   private setupInterceptors(): void {
-    // Request interceptor
+    // Request interceptor - inyecta el token de Clerk si está disponible
     this.client.interceptors.request.use(
-      (config) => config,
+      async (config) => {
+        if (getClerkToken) {
+          const token = await getClerkToken();
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+        }
+        return config;
+      },
       (error) => Promise.reject(handleNetworkError(error)),
     );
 
@@ -68,13 +85,8 @@ class HttpClient {
   private handleUnauthorized(): void {
     if (this.config.onUnauthorized) {
       this.config.onUnauthorized();
-      return;
     }
-
-    // Default behavior: redirect to sign-in
-    if (typeof window !== "undefined") {
-      window.location.href = "/sign-in";
-    }
+    // Sin redirect por defecto: Clerk gestiona la autenticación vía modal/redirect
   }
 
   /**

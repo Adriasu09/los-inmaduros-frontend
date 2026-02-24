@@ -7,6 +7,7 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import type { Route } from "@/types";
 import RouteLevelBadge from "./RouteLevelBadge";
 import { useIsFavorite, useToggleFavorite } from "@/features/favorites";
+import { usePathname } from "next/navigation";
 
 interface RouteCardProps {
   route: Route;
@@ -15,6 +16,7 @@ interface RouteCardProps {
 export default function RouteCard({ route }: RouteCardProps) {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
+  const pathname = usePathname();
 
   const { data: isFavorite = false } = useIsFavorite(route.id);
   const { mutate: toggleFavorite, isPending } = useToggleFavorite(route.id);
@@ -24,7 +26,9 @@ export default function RouteCard({ route }: RouteCardProps) {
     if (isPending) return;
 
     if (!isSignedIn) {
-      openSignIn();
+      openSignIn({
+        redirectUrl: pathname,
+      });
       return;
     }
 

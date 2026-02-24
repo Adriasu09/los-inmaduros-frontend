@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import { QueryProvider } from "@/lib/providers/query-provider";
+import { ClerkAxiosSync } from "@/components/auth/ClerkAxiosSync";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -33,7 +34,10 @@ export default function RootLayout({
             defaultTheme="dark"
             enableSystem={false}
           >
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+              <ClerkAxiosSync />
+              {children}
+            </QueryProvider>
           </ThemeProvider>
         </body>
       </html>
