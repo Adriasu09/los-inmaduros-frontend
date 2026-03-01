@@ -13,7 +13,10 @@ export default function HeroSection() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/homeBanner.mp4" type="video/mp4" />
+        <source
+          src="https://res.cloudinary.com/dj4j3uoia/video/upload/v1772395509/homeBanner_dazbpa.mp4"
+          type="video/mp4"
+        />
       </video>
 
       {/* OVERLAY OSCURO */}
