@@ -9,18 +9,26 @@ export const ROUTE_LEVELS = {
   BEGINNER: {
     label: "Principiante",
     color: "text-green-500",
+    activeFilter:
+      "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 border-green-300 dark:border-green-700",
   },
   INTERMEDIATE: {
     label: "Intermedio",
     color: "text-primary",
+    activeFilter:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700",
   },
   ADVANCED: {
     label: "Avanzado",
     color: "text-red-500",
+    activeFilter:
+      "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300 border-orange-300 dark:border-orange-700",
   },
   EXPERT: {
     label: "Experto",
     color: "text-purple-500",
+    activeFilter:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-700",
   },
 } as const;
 

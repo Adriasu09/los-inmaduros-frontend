@@ -4,36 +4,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import NavbarLinks from "./NavbarLinks";
-import NavbarActions from "./NavbarActions";
 import NavbarMobileMenu from "./NavbarMobileMenu";
+
+const NavbarActions = dynamic(() => import("./NavbarActions"), { ssr: false });
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-slate-100/90 dark:bg-slate-900/80 backdrop-blur-sm shadow-sm border-b border-slate-200 dark:border-slate-800">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-3">
-            {mounted && (
-              <Image
-                src={theme === "dark" ? "/Logo_dark.png" : "/Logo_light.png"}
-                alt="Logo Los Inmaduros Roller Madrid"
-                width={180}
-                height={48}
-                className="h-auto w-45"
-                priority
-              />
-            )}
+            <Image
+              src="/Logo_dark.png"
+              alt="Logo Los Inmaduros Roller Madrid"
+              width={180}
+              height={48}
+              className="h-auto w-45 hidden dark:block"
+              priority
+            />
+            <Image
+              src="/Logo_light.png"
+              alt="Logo Los Inmaduros Roller Madrid"
+              width={180}
+              height={48}
+              className="h-auto w-45 block dark:hidden"
+              priority
+            />
           </Link>
 
           <NavbarLinks />
