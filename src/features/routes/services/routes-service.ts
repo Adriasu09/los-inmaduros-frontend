@@ -1,6 +1,6 @@
 import apiClient from "@/lib/api/client";
 import { serverFetch } from "@/lib/api/server-fetch";
-import type { Route, ApiResponse } from "@/types";
+import type { Route, ApiResponse, RouteDetail } from "@/types";
 
 // ✅ Para Client Components (React Query hooks)
 export async function getRoutes(): Promise<ApiResponse<Route[]>> {
@@ -9,8 +9,8 @@ export async function getRoutes(): Promise<ApiResponse<Route[]>> {
 
 export async function getRouteBySlug(
   slug: string,
-): Promise<ApiResponse<Route>> {
-  return apiClient.get<ApiResponse<Route>>(`/routes/${slug}`);
+): Promise<ApiResponse<RouteDetail>> {
+  return apiClient.get<ApiResponse<RouteDetail>>(`/routes/${slug}`);
 }
 
 // ✅ Para Server Components (page.tsx)
@@ -20,6 +20,6 @@ export async function getRoutesServer(): Promise<ApiResponse<Route[]>> {
 
 export async function getRouteBySlugServer(
   slug: string,
-): Promise<ApiResponse<Route>> {
-  return serverFetch<ApiResponse<Route>>(`/routes/${slug}`);
+): Promise<ApiResponse<RouteDetail>> {
+  return serverFetch<ApiResponse<RouteDetail>>(`/routes/${slug}`);
 }
