@@ -27,6 +27,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
     );
   }, [routes]);
 
+  //TODO: optimizar este filtrado con un useMemo y añadiendo un debounce al input de búsqueda
   const filtered = routes.filter((route) => {
     const matchesSearch = normalize(route.name).includes(normalize(search));
     const matchesLevel =

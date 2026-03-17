@@ -36,6 +36,13 @@ export interface Route {
   };
 }
 
+export interface RouteDetail extends Route {
+  reviews: Review[];
+  photos: Photo[];
+  averageRating: number;
+  reviewsPagination: PaginationMeta;
+}
+
 // RouteCall types
 export type RoutePace =
   | "ROCA"
