@@ -35,7 +35,7 @@ export default function RouteCard({ route }: RouteCardProps) {
   };
 
   const reviewCount = route._count?.reviews ?? 0;
-  const averageRating = (route as any).averageRating ?? 0;
+  const averageRating = route.averageRating ?? 0;
 
   return (
     <div className="group relative bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">

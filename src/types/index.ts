@@ -28,6 +28,7 @@ export interface Route {
   mapEmbedUrl: string | null;
   createdAt: string;
   updatedAt: string;
+  averageRating?: number;
   _count?: {
     reviews: number;
     favorites: number;
