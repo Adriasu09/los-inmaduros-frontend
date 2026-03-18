@@ -19,7 +19,7 @@ export default function NavbarMobileMenu({
   // Cierra el menú automáticamente si cambia la ruta
   useEffect(() => {
     onClose();
-  }, [pathname]);
+  }, [pathname, onClose]);
 
   if (!isOpen) return null;
 
