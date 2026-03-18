@@ -9,7 +9,7 @@ export const metadata = {
 
 export default async function RoutesPage() {
   const response = await getRoutesServer();
-  const routes = response.data ?? [];
+  const routes = response?.data ?? [];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
