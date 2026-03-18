@@ -5,18 +5,12 @@ import { Search } from "lucide-react";
 import type { Route, RouteLevel } from "@/types";
 import { ROUTE_LEVELS } from "@/constants";
 import { useDebounce } from "@/hooks/use-debounce";
+import { normalize } from "@/lib/utils";
 import RouteCard from "./RouteCard";
 
 interface RouteGridProps {
   routes: Route[];
 }
-
-// Fuera del componente: función pura que no depende del estado
-const normalize = (str: string) =>
-  str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
 
 export default function RouteGrid({ routes }: RouteGridProps) {
   const [search, setSearch] = useState("");
