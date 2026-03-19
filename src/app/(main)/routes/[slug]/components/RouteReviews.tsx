@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Star, X, PenLine } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useAuth, useClerk } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
 import { useRoute } from "@/features/routes";
 import RouteReviewForm from "./RouteReviewForm";
 
@@ -52,7 +52,8 @@ export default function RouteReviews({
   routeId,
 }: RouteReviewsProps) {
   const { isSignedIn } = useAuth();
-  const router = useRouter();
+  const { openSignIn } = useClerk();
+  const pathname = usePathname();
   const { data: response, isLoading } = useRoute(routeSlug);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE); // ← nuevo
@@ -131,7 +132,7 @@ export default function RouteReviews({
             if (isSignedIn) {
               setIsModalOpen(true);
             } else {
-              router.push("/sign-in");
+              openSignIn({ forceRedirectUrl: pathname });
             }
           }}
           className="flex items-center gap-2 self-start bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-full text-sm font-medium transition-colors border border-slate-200 dark:border-slate-700"

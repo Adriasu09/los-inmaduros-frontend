@@ -26,7 +26,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
     if (isPending) return;
 
     if (!isSignedIn) {
-      openSignIn({ redirectUrl: pathname, afterSignInUrl: pathname });
+      openSignIn({ forceRedirectUrl: pathname });
       return;
     }
 
