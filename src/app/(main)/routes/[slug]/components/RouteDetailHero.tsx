@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Heart, MapPin, Star, Route } from "lucide-react";
 import RouteLevelBadge from "../../components/RouteLevelBadge";
 import type { RouteDetail } from "@/types";
+import { BLUR_DATA_URL } from "@/lib/utils";
 
 interface RouteDetailHeroProps {
   route: RouteDetail;
@@ -32,13 +33,15 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
         {/* Columna izquierda: imagen + descripción */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Imagen más contenida */}
-          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125">
+          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125 bg-slate-100 dark:bg-slate-700">
             <Image
               src={route.image}
               alt={route.name}
               fill
               className="object-cover"
               priority
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
             />
           </div>
 
