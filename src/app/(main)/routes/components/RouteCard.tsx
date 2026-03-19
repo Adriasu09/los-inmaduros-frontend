@@ -30,7 +30,7 @@ export default function RouteCard({ route }: RouteCardProps) {
     if (isPending) return;
 
     if (!isSignedIn) {
-      openSignIn({ redirectUrl: pathname });
+      openSignIn({ redirectUrl: pathname, afterSignInUrl: pathname });
       return;
     }
 
