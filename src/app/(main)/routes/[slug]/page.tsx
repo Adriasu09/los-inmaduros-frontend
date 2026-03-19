@@ -14,7 +14,7 @@ export default async function RouteDetailPage({
 
   const response = await getRouteBySlugServer(slug);
 
-  if (!response.success || !response.data) {
+  if (!response?.success || !response?.data) {
     notFound();
   }
 

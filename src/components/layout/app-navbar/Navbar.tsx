@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Menu, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import NavbarLinks from "./NavbarLinks";
@@ -12,6 +12,9 @@ const NavbarActions = dynamic(() => import("./NavbarActions"), { ssr: false });
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  // useCallback garantiza una referencia estable para onClose,
+  // evitando que el useEffect de NavbarMobileMenu se dispare en cada render
+  const handleCloseMenu = useCallback(() => setMenuOpen(false), []);
 
   return (
     <header className="sticky top-0 z-50 bg-slate-100/90 dark:bg-slate-900/80 backdrop-blur-sm shadow-sm border-b border-slate-200 dark:border-slate-800">
@@ -53,7 +56,7 @@ export default function Navbar() {
 
         <NavbarMobileMenu
           isOpen={menuOpen}
-          onClose={() => setMenuOpen(false)}
+          onClose={handleCloseMenu}
         />
       </div>
     </header>

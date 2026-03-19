@@ -1,14 +1,37 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Heart, MapPin, Star, Route } from "lucide-react";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
 import RouteLevelBadge from "../../components/RouteLevelBadge";
 import type { RouteDetail } from "@/types";
+import { useIsFavorite, useToggleFavorite } from "@/features/favorites";
+import { BLUR_DATA_URL } from "@/lib/utils";
 
 interface RouteDetailHeroProps {
   route: RouteDetail;
 }
 
 export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
+  const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
+  const pathname = usePathname();
+
+  const { data: isFavorite = false } = useIsFavorite(route.id);
+  const { mutate: toggleFavorite, isPending } = useToggleFavorite(route.id);
+
+  const handleFavorite = () => {
+    if (isPending) return;
+
+    if (!isSignedIn) {
+      openSignIn({ forceRedirectUrl: pathname });
+      return;
+    }
+
+    toggleFavorite(isFavorite);
+  };
   return (
     <div className="flex flex-col gap-6">
       {/* Botón volver */}
@@ -32,13 +55,15 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
         {/* Columna izquierda: imagen + descripción */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Imagen más contenida */}
-          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125">
+          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125 bg-slate-100 dark:bg-slate-700">
             <Image
               src={route.image}
               alt={route.name}
               fill
               className="object-cover"
               priority
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
             />
           </div>
 
@@ -109,9 +134,17 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
           </div>
 
           {/* Botón favorito */}
-          <button className="flex items-center justify-center gap-2 w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-xl text-sm font-medium transition-colors border border-slate-200 dark:border-slate-700">
-            <Heart className="w-4 h-4" />
-            Guardar en favoritos
+          <button
+            onClick={handleFavorite}
+            disabled={isPending}
+            className={`flex items-center justify-center gap-2 w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-xl text-sm font-medium transition-colors border border-slate-200 dark:border-slate-700 ${isPending ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+          >
+            <Heart
+              className={`w-4 h-4 transition-colors ${
+                isFavorite ? "fill-red-500 text-red-500" : ""
+              }`}
+            />
+            {isFavorite ? "Guardado en favoritos" : "Guardar en favoritos"}
           </button>
 
           {/* Placeholder del mapa */}

@@ -52,9 +52,9 @@ export const NAV_LINKS = [
 ];
 
 export const FOOTER_EXPLORE_LINKS = [
-  { label: "Rutas Populares", href: "/rutas" },
+  { label: "Rutas Populares", href: "/routes" },
   { label: "Próximos Eventos", href: "/eventos" },
-  { label: "Niveles de Dificultad", href: "/rutas#niveles" },
+  { label: "Niveles de Dificultad", href: "/routes#niveles" },
   { label: "Galería de Fotos", href: "/galeria" },
 ];
 

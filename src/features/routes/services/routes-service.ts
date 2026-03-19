@@ -14,12 +14,12 @@ export async function getRouteBySlug(
 }
 
 // ✅ Para Server Components (page.tsx)
-export async function getRoutesServer(): Promise<ApiResponse<Route[]>> {
+export async function getRoutesServer(): Promise<ApiResponse<Route[]> | null> {
   return serverFetch<ApiResponse<Route[]>>("/routes");
 }
 
 export async function getRouteBySlugServer(
   slug: string,
-): Promise<ApiResponse<RouteDetail>> {
+): Promise<ApiResponse<RouteDetail> | null> {
   return serverFetch<ApiResponse<RouteDetail>>(`/routes/${slug}`);
 }

@@ -28,6 +28,7 @@ export interface Route {
   mapEmbedUrl: string | null;
   createdAt: string;
   updatedAt: string;
+  averageRating: number;
   _count?: {
     reviews: number;
     favorites: number;
@@ -39,7 +40,6 @@ export interface Route {
 export interface RouteDetail extends Route {
   reviews: Review[];
   photos: Photo[];
-  averageRating: number;
   reviewsPagination: PaginationMeta;
 }
 

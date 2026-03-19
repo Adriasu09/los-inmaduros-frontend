@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, MapPin, Star } from "lucide-react";
+import { Heart, ImageOff, MapPin, Star } from "lucide-react";
 import { useClerk, useUser } from "@clerk/nextjs";
+import { useState } from "react";
 import type { Route } from "@/types";
 import RouteLevelBadge from "./RouteLevelBadge";
 import { useIsFavorite, useToggleFavorite } from "@/features/favorites";
 import { usePathname } from "next/navigation";
+import { BLUR_DATA_URL } from "@/lib/utils";
 
 interface RouteCardProps {
   route: Route;
@@ -17,6 +19,7 @@ export default function RouteCard({ route }: RouteCardProps) {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
   const pathname = usePathname();
+  const [imgError, setImgError] = useState(false);
 
   const { data: isFavorite = false } = useIsFavorite(route.id);
   const { mutate: toggleFavorite, isPending } = useToggleFavorite(route.id);
@@ -27,7 +30,7 @@ export default function RouteCard({ route }: RouteCardProps) {
     if (isPending) return;
 
     if (!isSignedIn) {
-      openSignIn({ redirectUrl: pathname });
+      openSignIn({ forceRedirectUrl: pathname });
       return;
     }
 
@@ -35,20 +38,29 @@ export default function RouteCard({ route }: RouteCardProps) {
   };
 
   const reviewCount = route._count?.reviews ?? 0;
-  const averageRating = (route as any).averageRating ?? 0;
+  const averageRating = route.averageRating ?? 0;
 
   return (
     <div className="group relative bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
       <Link href={`/routes/${route.slug}`} className="flex flex-col flex-1">
         {/* IMAGEN */}
-        <div className="relative h-48 w-full overflow-hidden">
-          <Image
-            src={route.image}
-            alt={route.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-          />
+        <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-700">
+          {imgError ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <ImageOff size={28} className="text-slate-400" />
+            </div>
+          ) : (
+            <Image
+              src={route.image}
+              alt={route.name}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
+              onError={() => setImgError(true)}
+            />
+          )}
         </div>
 
         {/* CONTENIDO */}

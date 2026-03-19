@@ -4,6 +4,8 @@ import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import type { Route, RouteLevel } from "@/types";
 import { ROUTE_LEVELS } from "@/constants";
+import { useDebounce } from "@/hooks/use-debounce";
+import { normalize } from "@/lib/utils";
 import RouteCard from "./RouteCard";
 
 interface RouteGridProps {
@@ -14,11 +16,9 @@ export default function RouteGrid({ routes }: RouteGridProps) {
   const [search, setSearch] = useState("");
   const [selectedLevel, setSelectedLevel] = useState<RouteLevel | null>(null);
 
-  const normalize = (str: string) =>
-    str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
+  // El input actualiza 'search' inmediatamente (UI responsive),
+  // pero el filtrado solo se recalcula 300ms después de que el usuario para de escribir
+  const debouncedSearch = useDebounce(search, 300);
 
   const availableLevels = useMemo(() => {
     const levelsInRoutes = new Set(routes.flatMap((r) => r.level));
@@ -27,13 +27,18 @@ export default function RouteGrid({ routes }: RouteGridProps) {
     );
   }, [routes]);
 
-  //TODO: optimizar este filtrado con un useMemo y añadiendo un debounce al input de búsqueda
-  const filtered = routes.filter((route) => {
-    const matchesSearch = normalize(route.name).includes(normalize(search));
-    const matchesLevel =
-      selectedLevel === null || route.level.includes(selectedLevel);
-    return matchesSearch && matchesLevel;
-  });
+  const filtered = useMemo(
+    () =>
+      routes.filter((route) => {
+        const matchesSearch = normalize(route.name).includes(
+          normalize(debouncedSearch),
+        );
+        const matchesLevel =
+          selectedLevel === null || route.level.includes(selectedLevel);
+        return matchesSearch && matchesLevel;
+      }),
+    [routes, debouncedSearch, selectedLevel],
+  );
 
   return (
     <div className="flex flex-col gap-6 mt-8">

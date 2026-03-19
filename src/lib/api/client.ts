@@ -135,20 +135,6 @@ class HttpClient {
   }
 
   /**
-   * Set auth token for requests
-   */
-  setAuthToken(token: string): void {
-    this.client.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  }
-
-  /**
-   * Clear auth token
-   */
-  clearAuthToken(): void {
-    delete this.client.defaults.headers.common["Authorization"];
-  }
-
-  /**
    * GET request
    */
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
