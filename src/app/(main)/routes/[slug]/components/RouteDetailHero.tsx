@@ -11,6 +11,7 @@ import RouteGallery from "./RouteGallery";
 import type { RouteDetail } from "@/types";
 import { useIsFavorite, useToggleFavorite } from "@/features/favorites";
 import { BLUR_DATA_URL } from "@/lib/utils";
+import { Button } from "@/components/ui/Button";
 
 interface RouteDetailHeroProps {
   route: RouteDetail;
@@ -141,18 +142,22 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
           </div>
 
           {/* Botón favorito */}
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleFavorite}
             disabled={isPending}
-            className={`flex items-center justify-center gap-2 w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-xl text-sm font-medium transition-colors border border-slate-200 dark:border-slate-700 ${isPending ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+            className="w-full rounded-xl"
+            leftIcon={
+              <Heart
+                className={`w-4 h-4 transition-colors ${
+                  isFavorite ? "fill-red-500 text-red-500" : ""
+                }`}
+              />
+            }
           >
-            <Heart
-              className={`w-4 h-4 transition-colors ${
-                isFavorite ? "fill-red-500 text-red-500" : ""
-              }`}
-            />
             {isFavorite ? "Guardado en favoritos" : "Guardar en favoritos"}
-          </button>
+          </Button>
 
           {/* Placeholder del mapa */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">

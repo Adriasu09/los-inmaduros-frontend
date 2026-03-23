@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -25,12 +26,9 @@ export default function RoutesError({ error, reset }: ErrorProps) {
           inténtalo de nuevo.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <button
-            onClick={reset}
-            className="px-6 py-2.5 rounded-full bg-sky-400 text-white font-semibold hover:bg-sky-500 transition-colors"
-          >
+          <Button onClick={reset} size="sm">
             Reintentar
-          </button>
+          </Button>
           <Link
             href="/"
             className="px-6 py-2.5 rounded-full border-2 border-sky-400 text-sky-400 font-semibold hover:bg-sky-400/10 transition-colors"

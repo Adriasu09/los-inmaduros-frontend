@@ -19,6 +19,7 @@ import { usePathname } from "next/navigation";
 import { useRoute } from "@/features/routes";
 import { useUploadPhoto } from "@/features/photos";
 import ImageUploadModal from "@/components/ui/ImageUploadModal";
+import { Button } from "@/components/ui/Button";
 import type { Photo } from "@/types";
 
 interface RouteGalleryProps {
@@ -271,13 +272,13 @@ export default function RouteGallery({
                 ¡Sé el primero en compartir una foto!
               </p>
             </div>
-            <button
+            <Button
+              size="sm"
               onClick={handleUploadClick}
-              className="flex items-center gap-2 bg-sky-400 hover:bg-sky-500 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer"
+              leftIcon={<Upload className="w-4 h-4" />}
             >
-              <Upload className="w-4 h-4" />
               Subir la primera foto
-            </button>
+            </Button>
           </div>
         )}
       </div>

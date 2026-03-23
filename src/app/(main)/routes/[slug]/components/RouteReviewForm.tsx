@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 import { useCreateReview } from "@/features/reviews";
+import { Button } from "@/components/ui/Button";
 
 interface RouteReviewFormProps {
   routeId: string;
@@ -51,7 +52,7 @@ export default function RouteReviewForm({
               className="transition-transform hover:scale-125"
             >
               <Star
-                className={`w-9 h-9 transition-colors ${
+                className={`w-9 h-9 transition-colors cursor-pointer ${
                   star <= (hoverRating || rating)
                     ? "text-cyan-500 fill-cyan-500"
                     : "text-slate-300 dark:text-slate-600"
@@ -83,14 +84,14 @@ export default function RouteReviewForm({
         </p>
       )}
 
-      <button
-        type="button"
+      <Button
+        size="sm"
         onClick={handleSubmit}
         disabled={rating === 0 || isPending}
-        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed text-white disabled:text-slate-500 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+        className="w-full rounded-lg"
       >
         {isPending ? "Publicando..." : "Publicar"}
-      </button>
+      </Button>
     </div>
   );
 }

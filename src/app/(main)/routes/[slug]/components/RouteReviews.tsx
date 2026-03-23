@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Star, X, PenLine } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { useRoute } from "@/features/routes";
@@ -127,7 +128,10 @@ export default function RouteReviews({
         )}
 
         {/* Botón escribir opinión */}
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
+          className="self-start"
           onClick={() => {
             if (isSignedIn) {
               setIsModalOpen(true);
@@ -135,11 +139,10 @@ export default function RouteReviews({
               openSignIn({ forceRedirectUrl: pathname });
             }
           }}
-          className="flex items-center gap-2 self-start bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-full text-sm font-medium transition-colors border border-slate-200 dark:border-slate-700"
+          leftIcon={<PenLine className="w-4 h-4" />}
         >
-          <PenLine className="w-4 h-4" />
           Escribir una opinión
-        </button>
+        </Button>
 
         {/* Lista — solo las visibles */}
         <div className="flex flex-col gap-6">
@@ -211,7 +214,7 @@ export default function RouteReviews({
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
