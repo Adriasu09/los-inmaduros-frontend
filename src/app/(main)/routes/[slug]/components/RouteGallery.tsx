@@ -202,10 +202,10 @@ export default function RouteGallery({
       <div className="flex flex-col gap-4">
         {/* Cabecera */}
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-slate-900 dark:text-white text-xl font-bold flex items-center gap-2 min-w-0">
+          <h2 className="text-foreground text-xl font-bold flex items-center gap-2 min-w-0">
             <span className="truncate">Galería de Fotos</span>
             {photos.length > 0 && (
-              <span className="shrink-0 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full">
+              <span className="shrink-0 text-xs font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
                 {photos.length}
               </span>
             )}
@@ -214,7 +214,7 @@ export default function RouteGallery({
             onClick={handleUploadClick}
             title="Subir foto"
             aria-label="Subir foto"
-            className="shrink-0 p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+            className="shrink-0 p-2 rounded-full bg-muted hover:bg-accent text-soft-foreground transition-colors border border-border cursor-pointer"
           >
             <Upload className="w-4 h-4" />
           </button>
@@ -227,7 +227,7 @@ export default function RouteGallery({
               <button
                 key={photo.id}
                 onClick={() => openLightbox(i)}
-                className="relative aspect-square rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 hover:opacity-80 transition-opacity cursor-pointer"
+                className="relative aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <Image
                   src={photo.imageUrl}
@@ -243,7 +243,7 @@ export default function RouteGallery({
             {hasMore && (
               <button
                 onClick={() => setIsFullGalleryOpen(true)}
-                className="relative aspect-square rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 cursor-pointer group"
+                className="relative aspect-square rounded-lg overflow-hidden bg-muted cursor-pointer group"
               >
                 <Image
                   src={photos[PREVIEW_LIMIT].imageUrl}
@@ -262,13 +262,13 @@ export default function RouteGallery({
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-12 gap-4 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-            <Camera className="w-10 h-10 text-slate-300 dark:text-slate-600" />
+          <div className="flex flex-col items-center justify-center py-12 gap-4 rounded-xl border-2 border-dashed border-border">
+            <Camera className="w-10 h-10 text-faint-foreground" />
             <div className="text-center">
-              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">
+              <p className="text-muted-foreground text-sm font-medium">
                 Aún no hay fotos de esta ruta
               </p>
-              <p className="text-slate-400 dark:text-slate-500 text-xs mt-1">
+              <p className="text-faint-foreground text-xs mt-1">
                 ¡Sé el primero en compartir una foto!
               </p>
             </div>
@@ -290,19 +290,19 @@ export default function RouteGallery({
           onClick={() => setIsFullGalleryOpen(false)}
         >
           <div
-            className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col"
+            className="bg-card rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 shrink-0">
-              <h3 className="text-slate-900 dark:text-white font-bold text-lg flex items-center gap-2">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+              <h3 className="text-foreground font-bold text-lg flex items-center gap-2">
                 Galería de Fotos
-                <span className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full">
+                <span className="text-xs font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
                   {photos.length}
                 </span>
               </h3>
               <button
                 onClick={() => setIsFullGalleryOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                className="text-faint-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -313,7 +313,7 @@ export default function RouteGallery({
                   <button
                     key={photo.id}
                     onClick={() => openLightbox(i, true)}
-                    className="relative aspect-square rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 hover:opacity-80 transition-opacity cursor-pointer"
+                    className="relative aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-80 transition-opacity cursor-pointer"
                   >
                     <Image
                       src={photo.imageUrl}

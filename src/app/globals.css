@@ -34,6 +34,9 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-soft-foreground: var(--soft-foreground);
+  --color-faint-foreground: var(--faint-foreground);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -50,16 +53,11 @@
 :root {
   --radius: 0.625rem;
 
-  /* 🎨 LOS INMADUROS BRAND COLORS */
+  /* 🎨 LOS INMADUROS BRAND TOKENS */
   --primary: #38bdf8; /* Sky Blue - Color principal */
-  --background-light: #f8fafc; /* Slate 50 */
-  --background-dark: #0f172a; /* Slate 900 */
-  --card-light: #ffffff;
-  --card-dark: #1e293b; /* Slate 800 */
-  --text-light: #1e293b; /* Slate 800 */
-  --text-dark: #e2e8f0; /* Slate 200 */
-  --text-muted-light: #64748b; /* Slate 500 */
-  --text-muted-dark: #94a3b8; /* Slate 400 */
+  --primary-hover: #0ea5e9; /* Sky-500 — hover de CTA */
+  --soft-foreground: oklch(0.446 0.043 257.281); /* ≈ slate-600 — texto body */
+  --faint-foreground: oklch(0.704 0.04 256.788); /* ≈ slate-400 — hints */
 
   /* shadcn/ui variables */
   --background: oklch(1 0 0);
@@ -95,6 +93,10 @@
 }
 
 .dark {
+  --primary-hover: #7dd3fc; /* Sky-300 — hover más claro en dark */
+  --soft-foreground: oklch(0.869 0.022 252.894); /* ≈ slate-300 */
+  --faint-foreground: oklch(0.554 0.046 257.417); /* ≈ slate-500 */
+
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);

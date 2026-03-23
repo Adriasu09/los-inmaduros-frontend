@@ -21,7 +21,7 @@ export default async function RouteDetailPage({
   const route = response.data;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <RouteDetailHero route={route} />
       </div>

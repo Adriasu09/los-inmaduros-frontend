@@ -10,7 +10,6 @@ import RouteReviews from "./RouteReviews";
 import RouteGallery from "./RouteGallery";
 import type { RouteDetail } from "@/types";
 import { useIsFavorite, useToggleFavorite } from "@/features/favorites";
-import { BLUR_DATA_URL } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 
 interface RouteDetailHeroProps {
@@ -40,7 +39,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
       {/* Botón volver */}
       <Link
         href="/routes"
-        className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors w-fit"
+        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
       >
         <ArrowLeft className="w-4 h-4" />
         Volver a rutas
@@ -48,7 +47,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
 
       {/* Título y nivel — encima del layout de dos columnas */}
       <div>
-        <h1 className="text-slate-900 dark:text-white text-3xl sm:text-4xl font-bold leading-tight">
+        <h1 className="text-foreground text-3xl sm:text-4xl font-bold leading-tight">
           {route.name}
         </h1>
       </div>
@@ -58,24 +57,22 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
         {/* Columna izquierda: imagen + descripción */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Imagen más contenida */}
-          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125 bg-slate-100 dark:bg-slate-700">
+          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125 bg-muted">
             <Image
               src={route.image}
               alt={route.name}
               fill
               className="object-cover"
               priority
-              placeholder="blur"
-              blurDataURL={BLUR_DATA_URL}
             />
           </div>
 
           {/* Descripción */}
           <div>
-            <h3 className="text-slate-900 dark:text-white text-lg font-bold mb-2">
+            <h3 className="text-foreground text-lg font-bold mb-2">
               Descripción
             </h3>
-            <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed">
+            <p className="text-soft-foreground text-base leading-relaxed">
               {route.description}
             </p>
           </div>
@@ -89,18 +86,18 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
         {/* Columna derecha: información clave + favorito + mapa */}
         <div className="flex flex-col gap-4 lg:w-72 xl:w-80 shrink-0">
           {/* Tarjeta de información clave */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
-            <h3 className="text-slate-900 dark:text-white text-lg font-bold px-4 pt-4 pb-2">
+          <div className="bg-card border border-border rounded-xl overflow-hidden">
+            <h3 className="text-foreground text-lg font-bold px-4 pt-4 pb-2">
               Información Clave
             </h3>
 
-            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-slate-200 dark:border-slate-700 px-4 py-3">
-              <p className="text-slate-500 dark:text-slate-400 text-sm">
+            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-border px-4 py-3">
+              <p className="text-muted-foreground text-sm">
                 Puntuación
               </p>
               <div className="flex items-center gap-1">
                 <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <p className="text-slate-900 dark:text-white text-sm font-semibold">
+                <p className="text-foreground text-sm font-semibold">
                   {route.averageRating > 0
                     ? `${route.averageRating}/5`
                     : "Sin valoraciones"}
@@ -108,20 +105,20 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-slate-200 dark:border-slate-700 px-4 py-3">
-              <p className="text-slate-500 dark:text-slate-400 text-sm">
+            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-border px-4 py-3">
+              <p className="text-muted-foreground text-sm">
                 Distancia
               </p>
               <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                <p className="text-slate-900 dark:text-white text-sm font-semibold">
+                <MapPin className="w-4 h-4 text-faint-foreground" />
+                <p className="text-foreground text-sm font-semibold">
                   {route.approximateDistance} aprox.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-slate-200 dark:border-slate-700 px-4 py-3">
-              <p className="text-slate-500 dark:text-slate-400 text-sm">
+            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-border px-4 py-3">
+              <p className="text-muted-foreground text-sm">
                 Dificultad
               </p>
               <div className="flex flex-wrap gap-1">
@@ -131,11 +128,11 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-slate-200 dark:border-slate-700 px-4 py-3">
-              <p className="text-slate-500 dark:text-slate-400 text-sm">
+            <div className="grid grid-cols-[40%_1fr] items-center gap-x-4 border-t border-border px-4 py-3">
+              <p className="text-muted-foreground text-sm">
                 Reseñas
               </p>
-              <p className="text-slate-900 dark:text-white text-sm font-semibold">
+              <p className="text-foreground text-sm font-semibold">
                 {route._count?.reviews ?? 0} valoraciones
               </p>
             </div>
@@ -151,7 +148,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             leftIcon={
               <Heart
                 className={`w-4 h-4 transition-colors ${
-                  isFavorite ? "fill-red-500 text-red-500" : ""
+                  isFavorite ? "fill-destructive text-destructive" : ""
                 }`}
               />
             }
@@ -160,13 +157,13 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
           </Button>
 
           {/* Placeholder del mapa */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
-            <h3 className="text-slate-900 dark:text-white text-lg font-bold px-4 pt-4 pb-2">
+          <div className="bg-card border border-border rounded-xl overflow-hidden">
+            <h3 className="text-foreground text-lg font-bold px-4 pt-4 pb-2">
               Mapa Interactivo
             </h3>
-            <div className="mx-4 mb-4 aspect-square rounded-lg bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center gap-2">
-              <Route className="w-8 h-8 text-slate-400" />
-              <p className="text-slate-400 text-sm text-center px-4">
+            <div className="mx-4 mb-4 aspect-square rounded-lg bg-muted flex flex-col items-center justify-center gap-2">
+              <Route className="w-8 h-8 text-faint-foreground" />
+              <p className="text-faint-foreground text-sm text-center px-4">
                 El mapa GPX se cargará aquí
               </p>
             </div>

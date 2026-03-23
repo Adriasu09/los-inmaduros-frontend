@@ -23,8 +23,8 @@ export default function NavLink({
       className={cn(
         "px-4 rounded-full font-medium text-sm transition-all duration-200",
         isActive
-          ? "bg-sky-400/20 text-sky-400 font-semibold"
-          : "text-slate-700 dark:text-slate-300 hover:text-sky-400 dark:hover:text-sky-400 hover:bg-slate-100 dark:hover:bg-slate-800",
+          ? "bg-primary/20 text-primary font-semibold"
+          : "text-soft-foreground hover:text-primary hover:bg-accent",
         className,
       )}
     >

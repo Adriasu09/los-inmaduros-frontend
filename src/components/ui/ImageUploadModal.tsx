@@ -106,18 +106,18 @@ export default function ImageUploadModal({
       onClick={handleClose}
     >
       <div
-        className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md flex flex-col gap-5 p-6"
+        className="bg-card rounded-2xl shadow-2xl w-full max-w-md flex flex-col gap-5 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="text-slate-900 dark:text-white text-lg font-bold">
+          <h3 className="text-foreground text-lg font-bold">
             {title}
           </h3>
           <button
             onClick={handleClose}
             disabled={isPending}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+            className="text-faint-foreground hover:text-foreground transition-colors disabled:opacity-50 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -125,7 +125,7 @@ export default function ImageUploadModal({
 
         {/* Área de selección / Preview */}
         {preview ? (
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 group">
+          <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted group">
             <Image
               src={preview}
               alt="Vista previa"
@@ -153,16 +153,16 @@ export default function ImageUploadModal({
             className={cn(
               "w-full aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors",
               validationError
-                ? "border-red-400 bg-red-50 dark:bg-red-900/10"
-                : "border-slate-300 dark:border-slate-600 hover:border-sky-400 hover:bg-sky-50 dark:hover:bg-sky-900/10 bg-slate-50 dark:bg-slate-800",
+                ? "border-destructive/60 bg-destructive/5"
+                : "border-border hover:border-primary hover:bg-primary/5 bg-muted",
             )}
           >
-            <ImagePlus className="w-8 h-8 text-slate-400" />
+            <ImagePlus className="w-8 h-8 text-faint-foreground" />
             <div className="text-center">
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+              <p className="text-sm font-medium text-soft-foreground">
                 Haz clic o arrastra una foto
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-faint-foreground mt-1">
                 JPEG, PNG, GIF, WebP · Máx. {MAX_SIZE_MB}MB
               </p>
             </div>
@@ -180,7 +180,7 @@ export default function ImageUploadModal({
 
         {/* Error de validación local */}
         {validationError && (
-          <p className="text-red-500 text-sm -mt-2">{validationError}</p>
+          <p className="text-destructive text-sm -mt-2">{validationError}</p>
         )}
 
         {/* Caption */}
@@ -192,16 +192,16 @@ export default function ImageUploadModal({
             rows={3}
             placeholder="Añade una descripción (opcional)..."
             disabled={isPending}
-            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-sky-400 disabled:opacity-60"
+            className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-faint-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60"
           />
-          <p className="text-slate-400 text-xs text-right">
+          <p className="text-faint-foreground text-xs text-right">
             {caption.length}/{MAX_CAPTION_LENGTH}
           </p>
         </div>
 
         {/* Error de API */}
         {isError && (
-          <p className="text-red-500 text-sm text-center -mt-2">
+          <p className="text-destructive text-sm text-center -mt-2">
             Ha ocurrido un error al subir la foto. Inténtalo de nuevo.
           </p>
         )}
@@ -212,7 +212,7 @@ export default function ImageUploadModal({
             type="button"
             onClick={handleClose}
             disabled={isPending}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-muted text-soft-foreground hover:bg-accent transition-colors disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -220,7 +220,7 @@ export default function ImageUploadModal({
             type="button"
             onClick={handleSubmit}
             disabled={!file || isPending}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-sky-400 text-white hover:bg-sky-500 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isPending ? "Subiendo..." : "Publicar"}
           </button>
