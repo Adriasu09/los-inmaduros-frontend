@@ -6,6 +6,8 @@ import { ArrowLeft, Heart, MapPin, Star, Route } from "lucide-react";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import RouteLevelBadge from "../../components/RouteLevelBadge";
+import RouteReviews from "./RouteReviews";
+import RouteGallery from "./RouteGallery";
 import type { RouteDetail } from "@/types";
 import { useIsFavorite, useToggleFavorite } from "@/features/favorites";
 import { BLUR_DATA_URL } from "@/lib/utils";
@@ -51,7 +53,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
       </div>
 
       {/* Layout de dos columnas: imagen + sidebar */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Columna izquierda: imagen + descripción */}
         <div className="flex flex-col gap-4 flex-1">
           {/* Imagen más contenida */}
@@ -75,6 +77,11 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed">
               {route.description}
             </p>
+          </div>
+
+          {/* Sección de reseñas */}
+          <div className="mt-12 flex flex-col gap-6 max-w-2xl">
+            <RouteReviews routeSlug={route.slug} routeId={route.id} />
           </div>
         </div>
 
@@ -159,6 +166,9 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
               </p>
             </div>
           </div>
+
+          {/* Galería de fotos — sidebar */}
+          <RouteGallery routeSlug={route.slug} routeId={route.id} />
         </div>
       </div>
     </div>
