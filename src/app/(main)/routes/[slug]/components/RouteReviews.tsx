@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Star, X, PenLine } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { useRoute } from "@/features/routes";
@@ -27,7 +28,7 @@ function timeAgo(dateString: string): string {
   return `Hace ${Math.floor(diffDays / 365)} años`;
 }
 
-// ← cyan-500 en vez de yellow-500
+// Estrellas usando token primary
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5">
@@ -36,8 +37,8 @@ function StarRating({ rating }: { rating: number }) {
           key={star}
           className={`w-4 h-4 ${
             star <= rating
-              ? "text-cyan-500 fill-cyan-500"
-              : "text-slate-300 dark:text-slate-600"
+              ? "text-primary fill-primary"
+              : "text-border dark:text-muted-foreground"
           }`}
         />
       ))}
@@ -76,7 +77,7 @@ export default function RouteReviews({
 
   if (isLoading) {
     return (
-      <p className="text-slate-400 text-sm animate-pulse">
+      <p className="text-faint-foreground text-body-sm animate-pulse">
         Cargando reseñas...
       </p>
     );
@@ -85,18 +86,18 @@ export default function RouteReviews({
   return (
     <>
       <div className="flex flex-col gap-6">
-        <h2 className="text-slate-900 dark:text-white text-xl font-bold">
+        <h2 className="text-foreground text-heading">
           Puntuación y Comentarios
         </h2>
 
         {totalReviews > 0 ? (
           <div className="flex flex-wrap gap-8 items-start">
             <div className="flex flex-col gap-1 items-center min-w-20">
-              <p className="text-slate-900 dark:text-white text-5xl font-black leading-none">
+              <p className="text-foreground text-stat">
                 {averageRating.toFixed(1)}
               </p>
               <StarRating rating={Math.round(averageRating)} />
-              <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
+              <p className="text-muted-foreground text-caption mt-1">
                 {totalReviews} reseñas
               </p>
             </div>
@@ -104,16 +105,16 @@ export default function RouteReviews({
             <div className="flex flex-col gap-2 flex-1 min-w-40">
               {ratingDistribution.map(({ star, percent }) => (
                 <div key={star} className="flex items-center gap-2">
-                  <span className="text-slate-600 dark:text-slate-400 text-xs w-3 shrink-0">
+                  <span className="text-muted-foreground text-caption w-3 shrink-0">
                     {star}
                   </span>
-                  <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-accent rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-cyan-500 rounded-full transition-all duration-500" // ← cyan
+                      className="h-full bg-primary rounded-full transition-all duration-500"
                       style={{ width: `${percent}%` }}
                     />
                   </div>
-                  <span className="text-slate-500 dark:text-slate-400 text-xs w-8 text-right shrink-0">
+                  <span className="text-muted-foreground text-caption w-8 text-right shrink-0">
                     {percent}%
                   </span>
                 </div>
@@ -121,13 +122,16 @@ export default function RouteReviews({
             </div>
           </div>
         ) : (
-          <p className="text-slate-500 dark:text-slate-400 text-sm">
+          <p className="text-muted-foreground text-body-sm">
             Todavía no hay reseñas para esta ruta. ¡Sé el primero!
           </p>
         )}
 
         {/* Botón escribir opinión */}
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
+          className="self-start"
           onClick={() => {
             if (isSignedIn) {
               setIsModalOpen(true);
@@ -135,21 +139,20 @@ export default function RouteReviews({
               openSignIn({ forceRedirectUrl: pathname });
             }
           }}
-          className="flex items-center gap-2 self-start bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-full text-sm font-medium transition-colors border border-slate-200 dark:border-slate-700"
+          leftIcon={<PenLine className="w-4 h-4" />}
         >
-          <PenLine className="w-4 h-4" />
           Escribir una opinión
-        </button>
+        </Button>
 
         {/* Lista — solo las visibles */}
         <div className="flex flex-col gap-6">
           {visibleReviews.map((review) => (
             <div
               key={review.id}
-              className="flex flex-col gap-3 pb-6 border-b border-slate-200 dark:border-slate-800 last:border-0"
+              className="flex flex-col gap-3 pb-6 border-b border-border last:border-0"
             >
               <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-700 shrink-0">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden bg-accent shrink-0">
                   {review.user?.imageUrl ? (
                     <Image
                       src={review.user.imageUrl}
@@ -158,16 +161,16 @@ export default function RouteReviews({
                       className="object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-500 text-sm font-bold">
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-body-sm font-bold">
                       {(review.user?.name ?? "U")[0].toUpperCase()}
                     </div>
                   )}
                 </div>
                 <div>
-                  <p className="text-slate-900 dark:text-white text-sm font-semibold">
+                  <p className="text-foreground text-body-sm font-semibold">
                     {review.user?.name ?? "Usuario anónimo"}
                   </p>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs">
+                  <p className="text-muted-foreground text-caption">
                     {timeAgo(review.createdAt)}
                   </p>
                 </div>
@@ -176,7 +179,7 @@ export default function RouteReviews({
               <StarRating rating={review.rating} />
 
               {review.comment && (
-                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                <p className="text-soft-foreground text-body-sm leading-relaxed">
                   {review.comment}
                 </p>
               )}
@@ -188,7 +191,7 @@ export default function RouteReviews({
         {hasMore && (
           <button
             onClick={() => setVisibleCount((prev) => prev + REVIEWS_PER_PAGE)}
-            className="self-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 text-sm font-medium transition-colors underline underline-offset-2"
+            className="self-center text-primary hover:text-primary-hover text-body-sm font-medium transition-colors underline underline-offset-2"
           >
             Ver más reseñas ({reviews.length - visibleCount} restantes)
           </button>
@@ -202,16 +205,16 @@ export default function RouteReviews({
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-5"
+            className="bg-card rounded-2xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-slate-900 dark:text-white text-lg font-bold">
+              <h3 className="text-foreground text-subheading">
                 Escribe tu opinión
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>

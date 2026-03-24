@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function FooterSocial() {
   return (
     <div>
-      <h4 className="font-semibold text-slate-900 dark:text-white mb-4">
+      <h4 className="text-body font-semibold text-foreground mb-4">
         Síguenos
       </h4>
       <div className="flex space-x-4">
@@ -16,7 +16,7 @@ export default function FooterSocial() {
             key={label}
             href={href}
             aria-label={label}
-            className="text-slate-400 hover:text-sky-400 transition-colors"
+            className="text-faint-foreground hover:text-primary transition-colors"
           >
             <Icon size={24} />
           </Link>

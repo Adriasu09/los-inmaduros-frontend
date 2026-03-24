@@ -34,6 +34,9 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-soft-foreground: var(--soft-foreground);
+  --color-faint-foreground: var(--faint-foreground);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -45,21 +48,40 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Typography — Modular Scale (base 16px, ratio 1.25) */
+  --font-size-xs: var(--fs-xs);
+  --font-size-sm: var(--fs-sm);
+  --font-size-base: var(--fs-base);
+  --font-size-lg: var(--fs-lg);
+  --font-size-xl: var(--fs-xl);
+  --font-size-2xl: var(--fs-2xl);
+  --font-size-3xl: var(--fs-3xl);
+  --font-size-4xl: var(--fs-4xl);
+  --font-size-5xl: var(--fs-5xl);
+  --font-size-6xl: var(--fs-6xl);
 }
 
 :root {
   --radius: 0.625rem;
 
-  /* 🎨 LOS INMADUROS BRAND COLORS */
+  /* 🔤 Typography — Modular Scale (base 16px, ratio 1.25) */
+  --fs-xs: 0.75rem;    /* 12px — captions, badges */
+  --fs-sm: 0.875rem;   /* 14px — small body, nav, labels */
+  --fs-base: 1rem;     /* 16px — step 0 — body text */
+  --fs-lg: 1.125rem;   /* 18px — large body */
+  --fs-xl: 1.25rem;    /* 20px — step 1 — small headings */
+  --fs-2xl: 1.5rem;    /* 24px — section headings */
+  --fs-3xl: 1.953rem;  /* ~31px — step 3 — page titles */
+  --fs-4xl: 2.441rem;  /* ~39px — step 4 — display */
+  --fs-5xl: 3.052rem;  /* ~49px — step 5 — hero */
+  --fs-6xl: 3.815rem;  /* ~61px — step 6 — display XL */
+
+  /* 🎨 LOS INMADUROS BRAND TOKENS */
   --primary: #38bdf8; /* Sky Blue - Color principal */
-  --background-light: #f8fafc; /* Slate 50 */
-  --background-dark: #0f172a; /* Slate 900 */
-  --card-light: #ffffff;
-  --card-dark: #1e293b; /* Slate 800 */
-  --text-light: #1e293b; /* Slate 800 */
-  --text-dark: #e2e8f0; /* Slate 200 */
-  --text-muted-light: #64748b; /* Slate 500 */
-  --text-muted-dark: #94a3b8; /* Slate 400 */
+  --primary-hover: #0ea5e9; /* Sky-500 — hover de CTA */
+  --soft-foreground: oklch(0.446 0.043 257.281); /* ≈ slate-600 — texto body */
+  --faint-foreground: oklch(0.704 0.04 256.788); /* ≈ slate-400 — hints */
 
   /* shadcn/ui variables */
   --background: oklch(1 0 0);
@@ -95,6 +117,10 @@
 }
 
 .dark {
+  --primary-hover: #7dd3fc; /* Sky-300 — hover más claro en dark */
+  --soft-foreground: oklch(0.869 0.022 252.894); /* ≈ slate-300 */
+  --faint-foreground: oklch(0.554 0.046 257.417); /* ≈ slate-500 */
+
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -136,4 +162,61 @@
     @apply bg-background text-foreground;
     font-family: var(--font-poppins), "Poppins", sans-serif;
   }
+}
+
+/* === Typography Utilities === */
+
+@utility text-display {
+  font-size: var(--fs-5xl);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+@utility text-title {
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+@utility text-heading {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+@utility text-subheading {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+@utility text-body {
+  font-size: var(--fs-base);
+  line-height: 1.625;
+}
+
+@utility text-body-sm {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+@utility text-caption {
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+
+@utility text-label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@utility text-stat {
+  font-size: var(--fs-5xl);
+  font-weight: 900;
+  line-height: 1;
 }

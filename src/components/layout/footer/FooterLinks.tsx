@@ -6,7 +6,7 @@ export default function FooterLinks() {
     <>
       {/* EXPLORAR */}
       <div>
-        <h4 className="font-semibold text-slate-900 dark:text-white mb-4">
+        <h4 className="text-body font-semibold text-foreground mb-4">
           Explorar
         </h4>
         <ul className="space-y-2">
@@ -14,7 +14,7 @@ export default function FooterLinks() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-sm text-slate-500 dark:text-slate-400 hover:text-sky-400 dark:hover:text-sky-400 transition-colors"
+                className="text-body-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {link.label}
               </Link>
@@ -25,7 +25,7 @@ export default function FooterLinks() {
 
       {/* COMUNIDAD */}
       <div>
-        <h4 className="font-semibold text-slate-900 dark:text-white mb-4">
+        <h4 className="text-body font-semibold text-foreground mb-4">
           Comunidad
         </h4>
         <ul className="space-y-2">
@@ -33,7 +33,7 @@ export default function FooterLinks() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-sm text-slate-500 dark:text-slate-400 hover:text-sky-400 dark:hover:text-sky-400 transition-colors"
+                className="text-body-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {link.label}
               </Link>

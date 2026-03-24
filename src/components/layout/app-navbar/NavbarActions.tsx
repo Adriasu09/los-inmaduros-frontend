@@ -14,7 +14,7 @@ export default function NavbarActions() {
       {/* TOGGLE DARK/LIGHT */}
       <button
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="cursor-pointer p-2 rounded-full text-slate-700 dark:text-slate-300 hover:text-sky-400 dark:hover:text-sky-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        className="cursor-pointer p-2 rounded-full text-soft-foreground hover:text-primary hover:bg-accent transition-colors"
         aria-label="Cambiar tema"
       >
         {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}

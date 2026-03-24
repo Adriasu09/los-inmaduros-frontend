@@ -8,16 +8,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         solid:
-          "bg-sky-400 text-white hover:bg-sky-500 hover:scale-105 shadow-lg",
+          "bg-primary text-primary-foreground hover:bg-primary-hover hover:scale-105 shadow-lg",
         outline:
-          "bg-transparent text-sky-400 border-2 border-sky-400 hover:bg-sky-400/10 hover:scale-105",
+          "bg-transparent text-primary border-2 border-primary hover:bg-primary/10 hover:scale-105",
         "outline-dark":
-          "bg-slate-800 text-sky-400 border-2 border-sky-400/40 hover:border-sky-400 hover:scale-105",
+          "bg-card text-primary border-2 border-primary/40 hover:border-primary hover:scale-105",
+        ghost:
+          "bg-muted hover:bg-accent text-soft-foreground border border-border",
       },
       size: {
-        sm: "text-sm py-2 px-5",
-        md: "text-base py-2.5 px-7",
-        lg: "text-lg py-3 px-9",
+        sm: "text-body-sm py-2 px-5",
+        md: "text-body py-2.5 px-7",
+        lg: "text-subheading py-3 px-9",
       },
     },
     defaultVariants: {

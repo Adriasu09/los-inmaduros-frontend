@@ -21,14 +21,9 @@ export default async function RouteDetailPage({
   const route = response.data;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <RouteDetailHero route={route} />
-
-        {/* Sección de reseñas */}
-        <div className="mt-12 flex flex-col gap-6 max-w-2xl">
-          <RouteReviews routeSlug={route.slug} routeId={route.id} />
-        </div>
       </div>
     </div>
   );

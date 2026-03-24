@@ -8,5 +8,5 @@ interface RouteLevelBadgeProps {
 export default function RouteLevelBadge({ level }: RouteLevelBadgeProps) {
   const { label, color } = ROUTE_LEVELS[level];
 
-  return <span className={`text-xs font-semibold ${color}`}>{label}</span>;
+  return <span className={`text-caption font-semibold ${color}`}>{label}</span>;
 }
