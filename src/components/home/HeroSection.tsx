@@ -24,10 +24,10 @@ export default function HeroSection() {
 
       {/* CONTENIDO */}
       <div className="relative z-10 text-left px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tighter leading-tight mb-4 max-w-2xl">
+        <h1 className="text-title md:text-display mb-4 max-w-2xl">
           Rueda, Conecta, Disfruta
         </h1>
-        <p className="text-base md:text-xl max-w-2xl mb-8 text-gray-200 leading-relaxed">
+        <p className="text-body md:text-xl max-w-2xl mb-8 text-gray-200">
           La comunidad de patinaje urbano de Madrid que te mueve. Descubre
           nuevas rutas, únete a quedadas y comparte tu pasión sobre ruedas.
         </p>

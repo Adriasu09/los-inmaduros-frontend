@@ -17,9 +17,9 @@ const buttonVariants = cva(
           "bg-muted hover:bg-accent text-soft-foreground border border-border",
       },
       size: {
-        sm: "text-sm py-2 px-5",
-        md: "text-base py-2.5 px-7",
-        lg: "text-lg py-3 px-9",
+        sm: "text-body-sm py-2 px-5",
+        md: "text-body py-2.5 px-7",
+        lg: "text-subheading py-3 px-9",
       },
     },
     defaultVariants: {

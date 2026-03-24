@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function FooterSocial() {
   return (
     <div>
-      <h4 className="font-semibold text-foreground mb-4">
+      <h4 className="text-body font-semibold text-foreground mb-4">
         Síguenos
       </h4>
       <div className="flex space-x-4">

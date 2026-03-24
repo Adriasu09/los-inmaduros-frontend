@@ -55,7 +55,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
             placeholder="Buscar rutas..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-full bg-card dark:bg-muted border border-border text-foreground placeholder:text-faint-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary transition"
+            className="w-full pl-9 pr-4 py-2 rounded-full bg-card dark:bg-muted border border-border text-foreground placeholder:text-faint-foreground text-body-sm focus:outline-none focus:ring-2 focus:ring-primary transition"
           />
         </div>
 
@@ -66,7 +66,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedLevel(null)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+            className={`px-3 py-1.5 rounded-full text-caption font-medium border transition-all ${
               selectedLevel === null
                 ? "bg-primary-hover text-white border-primary-hover"
                 : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary"
@@ -81,7 +81,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
               onClick={() =>
                 setSelectedLevel(selectedLevel === level ? null : level)
               }
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              className={`px-3 py-1.5 rounded-full text-caption font-medium border transition-all ${
                 selectedLevel === level
                   ? ROUTE_LEVELS[level].activeFilter
                   : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary"
@@ -103,10 +103,10 @@ export default function RouteGrid({ routes }: RouteGridProps) {
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <span className="text-5xl mb-4">🛼</span>
-          <p className="text-muted-foreground text-lg font-medium">
+          <p className="text-muted-foreground text-subheading font-medium">
             No encontramos rutas con ese nombre
           </p>
-          <p className="text-faint-foreground text-sm mt-1">
+          <p className="text-faint-foreground text-body-sm mt-1">
             Prueba con otro término de búsqueda
           </p>
         </div>

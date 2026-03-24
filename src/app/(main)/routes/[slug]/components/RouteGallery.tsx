@@ -202,10 +202,10 @@ export default function RouteGallery({
       <div className="flex flex-col gap-4">
         {/* Cabecera */}
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-foreground text-xl font-bold flex items-center gap-2 min-w-0">
+          <h2 className="text-foreground text-heading flex items-center gap-2 min-w-0">
             <span className="truncate">Galería de Fotos</span>
             {photos.length > 0 && (
-              <span className="shrink-0 text-xs font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+              <span className="shrink-0 text-caption font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
                 {photos.length}
               </span>
             )}
@@ -253,10 +253,10 @@ export default function RouteGallery({
                   sizes="96px"
                 />
                 <div className="absolute inset-0 bg-black/60 group-hover:bg-black/70 transition-colors flex flex-col items-center justify-center gap-0.5">
-                  <span className="text-white font-bold text-lg leading-none">
+                  <span className="text-white font-bold text-subheading leading-none">
                     +{remainingCount}
                   </span>
-                  <span className="text-white/80 text-xs">ver todas</span>
+                  <span className="text-white/80 text-caption">ver todas</span>
                 </div>
               </button>
             )}
@@ -265,10 +265,10 @@ export default function RouteGallery({
           <div className="flex flex-col items-center justify-center py-12 gap-4 rounded-xl border-2 border-dashed border-border">
             <Camera className="w-10 h-10 text-faint-foreground" />
             <div className="text-center">
-              <p className="text-muted-foreground text-sm font-medium">
+              <p className="text-muted-foreground text-body-sm font-medium">
                 Aún no hay fotos de esta ruta
               </p>
-              <p className="text-faint-foreground text-xs mt-1">
+              <p className="text-faint-foreground text-caption mt-1">
                 ¡Sé el primero en compartir una foto!
               </p>
             </div>
@@ -294,9 +294,9 @@ export default function RouteGallery({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
-              <h3 className="text-foreground font-bold text-lg flex items-center gap-2">
+              <h3 className="text-foreground text-subheading flex items-center gap-2">
                 Galería de Fotos
-                <span className="text-xs font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                <span className="text-caption font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
                   {photos.length}
                 </span>
               </h3>
@@ -343,7 +343,7 @@ export default function RouteGallery({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Contador */}
-            <span className="text-white/80 text-sm font-medium pointer-events-auto select-none">
+            <span className="text-white/80 text-body-sm font-medium pointer-events-auto select-none">
               {(lightboxIndex ?? 0) + 1} / {photos.length}
             </span>
 
@@ -360,7 +360,7 @@ export default function RouteGallery({
               </button>
 
               {/* Indicador de zoom */}
-              <span className="text-white/70 text-xs w-10 text-center select-none tabular-nums">
+              <span className="text-white/70 text-caption w-10 text-center select-none tabular-nums">
                 {zoom === 1 ? "1×" : `${zoom}×`}
               </span>
 
@@ -471,7 +471,7 @@ export default function RouteGallery({
               className="absolute bottom-0 inset-x-0 px-6 py-4 bg-linear-to-t from-black/70 to-transparent"
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="text-white/80 text-sm text-center max-w-xl mx-auto">
+              <p className="text-white/80 text-body-sm text-center max-w-xl mx-auto">
                 {currentPhoto.caption}
               </p>
             </div>

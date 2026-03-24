@@ -77,7 +77,7 @@ export default function RouteReviews({
 
   if (isLoading) {
     return (
-      <p className="text-faint-foreground text-sm animate-pulse">
+      <p className="text-faint-foreground text-body-sm animate-pulse">
         Cargando reseñas...
       </p>
     );
@@ -86,18 +86,18 @@ export default function RouteReviews({
   return (
     <>
       <div className="flex flex-col gap-6">
-        <h2 className="text-foreground text-xl font-bold">
+        <h2 className="text-foreground text-heading">
           Puntuación y Comentarios
         </h2>
 
         {totalReviews > 0 ? (
           <div className="flex flex-wrap gap-8 items-start">
             <div className="flex flex-col gap-1 items-center min-w-20">
-              <p className="text-foreground text-5xl font-black leading-none">
+              <p className="text-foreground text-stat">
                 {averageRating.toFixed(1)}
               </p>
               <StarRating rating={Math.round(averageRating)} />
-              <p className="text-muted-foreground text-xs mt-1">
+              <p className="text-muted-foreground text-caption mt-1">
                 {totalReviews} reseñas
               </p>
             </div>
@@ -105,7 +105,7 @@ export default function RouteReviews({
             <div className="flex flex-col gap-2 flex-1 min-w-40">
               {ratingDistribution.map(({ star, percent }) => (
                 <div key={star} className="flex items-center gap-2">
-                  <span className="text-muted-foreground text-xs w-3 shrink-0">
+                  <span className="text-muted-foreground text-caption w-3 shrink-0">
                     {star}
                   </span>
                   <div className="flex-1 h-2 bg-accent rounded-full overflow-hidden">
@@ -114,7 +114,7 @@ export default function RouteReviews({
                       style={{ width: `${percent}%` }}
                     />
                   </div>
-                  <span className="text-muted-foreground text-xs w-8 text-right shrink-0">
+                  <span className="text-muted-foreground text-caption w-8 text-right shrink-0">
                     {percent}%
                   </span>
                 </div>
@@ -122,7 +122,7 @@ export default function RouteReviews({
             </div>
           </div>
         ) : (
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-body-sm">
             Todavía no hay reseñas para esta ruta. ¡Sé el primero!
           </p>
         )}
@@ -161,16 +161,16 @@ export default function RouteReviews({
                       className="object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm font-bold">
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-body-sm font-bold">
                       {(review.user?.name ?? "U")[0].toUpperCase()}
                     </div>
                   )}
                 </div>
                 <div>
-                  <p className="text-foreground text-sm font-semibold">
+                  <p className="text-foreground text-body-sm font-semibold">
                     {review.user?.name ?? "Usuario anónimo"}
                   </p>
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-caption">
                     {timeAgo(review.createdAt)}
                   </p>
                 </div>
@@ -179,7 +179,7 @@ export default function RouteReviews({
               <StarRating rating={review.rating} />
 
               {review.comment && (
-                <p className="text-soft-foreground text-sm leading-relaxed">
+                <p className="text-soft-foreground text-body-sm leading-relaxed">
                   {review.comment}
                 </p>
               )}
@@ -191,7 +191,7 @@ export default function RouteReviews({
         {hasMore && (
           <button
             onClick={() => setVisibleCount((prev) => prev + REVIEWS_PER_PAGE)}
-            className="self-center text-primary hover:text-primary-hover text-sm font-medium transition-colors underline underline-offset-2"
+            className="self-center text-primary hover:text-primary-hover text-body-sm font-medium transition-colors underline underline-offset-2"
           >
             Ver más reseñas ({reviews.length - visibleCount} restantes)
           </button>
@@ -209,7 +209,7 @@ export default function RouteReviews({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-foreground text-lg font-bold">
+              <h3 className="text-foreground text-subheading">
                 Escribe tu opinión
               </h3>
               <button

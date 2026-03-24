@@ -13,7 +13,7 @@ export default function Footer() {
         </div>
 
         {/* COPYRIGHT */}
-        <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
+        <div className="mt-8 pt-8 border-t border-border text-center text-body-sm text-muted-foreground">
           <p>
             © {new Date().getFullYear()} Los Inmaduros Roller Madrid. Todos los
             derechos reservados.

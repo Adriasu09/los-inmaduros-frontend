@@ -62,7 +62,7 @@ export default function RouteCard({ route }: RouteCardProps) {
 
         {/* CONTENIDO */}
         <div className="p-4 flex flex-col gap-2 flex-1">
-          <h3 className="font-bold text-foreground text-base leading-snug group-hover:text-primary transition-colors">
+          <h3 className="font-bold text-foreground text-body leading-snug group-hover:text-primary transition-colors">
             {route.name}
           </h3>
 
@@ -71,7 +71,7 @@ export default function RouteCard({ route }: RouteCardProps) {
             {route.level.map((lvl) => (
               <span
                 key={lvl}
-                className="bg-muted px-2 py-0.5 rounded-full text-xs font-semibold"
+                className="bg-muted px-2 py-0.5 rounded-full text-caption font-semibold"
               >
                 <RouteLevelBadge level={lvl} />
               </span>
@@ -80,13 +80,13 @@ export default function RouteCard({ route }: RouteCardProps) {
 
           {/* DISTANCIA + RATING */}
           <div className="flex items-center justify-between mt-auto pt-2 border-t border-border">
-            <div className="flex items-center gap-1 text-muted-foreground text-sm">
+            <div className="flex items-center gap-1 text-muted-foreground text-body-sm">
               <MapPin size={13} className="shrink-0" />
               <span>{route.approximateDistance}</span>
             </div>
 
             {reviewCount > 0 ? (
-              <div className="flex items-center gap-1 text-sm">
+              <div className="flex items-center gap-1 text-body-sm">
                 <Star size={13} className="fill-yellow-400 text-yellow-400" />
                 <span className="font-semibold text-foreground">
                   {averageRating.toFixed(1)}
@@ -94,7 +94,7 @@ export default function RouteCard({ route }: RouteCardProps) {
                 <span className="text-faint-foreground">({reviewCount})</span>
               </div>
             ) : (
-              <span className="text-xs text-faint-foreground italic">
+              <span className="text-caption text-faint-foreground italic">
                 Sin valoraciones
               </span>
             )}

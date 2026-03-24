@@ -111,7 +111,7 @@ export default function ImageUploadModal({
       >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="text-foreground text-lg font-bold">
+          <h3 className="text-foreground text-subheading">
             {title}
           </h3>
           <button
@@ -140,7 +140,7 @@ export default function ImageUploadModal({
               className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/0 group-hover:bg-black/40 transition-colors disabled:cursor-not-allowed"
             >
               <Trash2 className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="text-white text-caption font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Cambiar foto
               </span>
             </button>
@@ -159,10 +159,10 @@ export default function ImageUploadModal({
           >
             <ImagePlus className="w-8 h-8 text-faint-foreground" />
             <div className="text-center">
-              <p className="text-sm font-medium text-soft-foreground">
+              <p className="text-body-sm font-medium text-soft-foreground">
                 Haz clic o arrastra una foto
               </p>
-              <p className="text-xs text-faint-foreground mt-1">
+              <p className="text-caption text-faint-foreground mt-1">
                 JPEG, PNG, GIF, WebP · Máx. {MAX_SIZE_MB}MB
               </p>
             </div>
@@ -180,7 +180,7 @@ export default function ImageUploadModal({
 
         {/* Error de validación local */}
         {validationError && (
-          <p className="text-destructive text-sm -mt-2">{validationError}</p>
+          <p className="text-destructive text-body-sm -mt-2">{validationError}</p>
         )}
 
         {/* Caption */}
@@ -192,16 +192,16 @@ export default function ImageUploadModal({
             rows={3}
             placeholder="Añade una descripción (opcional)..."
             disabled={isPending}
-            className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-faint-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60"
+            className="w-full bg-muted border border-border rounded-lg px-3 py-2 text-body-sm text-foreground placeholder:text-faint-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60"
           />
-          <p className="text-faint-foreground text-xs text-right">
+          <p className="text-faint-foreground text-caption text-right">
             {caption.length}/{MAX_CAPTION_LENGTH}
           </p>
         </div>
 
         {/* Error de API */}
         {isError && (
-          <p className="text-destructive text-sm text-center -mt-2">
+          <p className="text-destructive text-body-sm text-center -mt-2">
             Ha ocurrido un error al subir la foto. Inténtalo de nuevo.
           </p>
         )}
@@ -212,7 +212,7 @@ export default function ImageUploadModal({
             type="button"
             onClick={handleClose}
             disabled={isPending}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-muted text-soft-foreground hover:bg-accent transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 rounded-lg text-body-sm font-semibold bg-muted text-soft-foreground hover:bg-accent transition-colors disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -220,7 +220,7 @@ export default function ImageUploadModal({
             type="button"
             onClick={handleSubmit}
             disabled={!file || isPending}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-4 py-2.5 rounded-lg text-body-sm font-semibold bg-primary text-primary-foreground hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isPending ? "Subiendo..." : "Publicar"}
           </button>
