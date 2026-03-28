@@ -36,7 +36,6 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
   };
   return (
     <div className="flex flex-col gap-6">
-      {/* Botón volver */}
       <Link
         href="/routes"
         className="flex items-center gap-2 text-body-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
@@ -45,47 +44,38 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
         Volver a rutas
       </Link>
 
-      {/* Título y nivel — encima del layout de dos columnas */}
       <div>
         <h1 className="text-foreground text-title sm:text-4xl">
           {route.name}
         </h1>
       </div>
 
-      {/* Layout de dos columnas: imagen + sidebar */}
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Columna izquierda: imagen + descripción */}
-        <div className="flex flex-col gap-4 flex-1">
-          {/* Imagen más contenida */}
-          <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125 bg-muted">
-            <Image
-              src={route.image}
-              alt={route.name}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
+      <div className="grid gap-8 lg:grid-cols-[1fr_18rem] xl:grid-cols-[1fr_20rem]">
 
-          {/* Descripción */}
-          <div>
-            <h3 className="text-foreground text-subheading mb-2">
-              Descripción
-            </h3>
-            <p className="text-soft-foreground text-body">
-              {route.description}
-            </p>
-          </div>
-
-          {/* Sección de reseñas */}
-          <div className="mt-12 flex flex-col gap-6 max-w-2xl">
-            <RouteReviews routeSlug={route.slug} routeId={route.id} />
-          </div>
+        <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden max-h-125 bg-muted lg:col-start-1 lg:row-start-1">
+          <Image
+            src={route.image}
+            alt={route.name}
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
-        {/* Columna derecha: información clave + favorito + mapa */}
-        <div className="flex flex-col gap-4 lg:w-72 xl:w-80 shrink-0">
-          {/* Tarjeta de información clave */}
+        <div className="lg:col-start-1 lg:row-start-2">
+          <h3 className="text-foreground text-subheading mb-2">
+            Descripción
+          </h3>
+          <p className="text-soft-foreground text-body">
+            {route.description}
+          </p>
+        </div>
+
+        <div className="order-last lg:order-0 lg:col-start-1 lg:row-start-3 flex flex-col gap-6 max-w-2xl">
+          <RouteReviews routeSlug={route.slug} routeId={route.id} />
+        </div>
+
+        <div className="flex flex-col gap-4 lg:col-start-2 lg:row-start-1 lg:row-span-3">
           <div className="bg-card border border-border rounded-xl overflow-hidden">
             <h3 className="text-foreground text-subheading px-4 pt-4 pb-2">
               Información Clave
