@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Heart, MapPin, Star, Route } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Heart, MapPin, Star, Expand } from "lucide-react";
+import RouteMap from "./RouteMap";
+import MapLoadingPlaceholder from "@/components/map/MapLoadingPlaceholder";
+import MapModal from "@/components/map/MapModal";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import RouteLevelBadge from "../../components/RouteLevelBadge";
@@ -20,6 +24,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
   const pathname = usePathname();
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   const { data: isFavorite = false } = useIsFavorite(route.id);
   const { mutate: toggleFavorite, isPending } = useToggleFavorite(route.id);
@@ -146,18 +151,47 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             {isFavorite ? "Guardado en favoritos" : "Guardar en favoritos"}
           </Button>
 
-          {/* Placeholder del mapa */}
+          {/* Mapa interactivo */}
           <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <h3 className="text-foreground text-subheading px-4 pt-4 pb-2">
-              Mapa Interactivo
-            </h3>
-            <div className="mx-4 mb-4 aspect-square rounded-lg bg-muted flex flex-col items-center justify-center gap-2">
-              <Route className="w-8 h-8 text-faint-foreground" />
-              <p className="text-faint-foreground text-body-sm text-center px-4">
-                El mapa GPX se cargará aquí
-              </p>
+            <div className="flex items-center justify-between px-4 pt-4 pb-2">
+              <h3 className="text-foreground text-subheading">
+                Mapa Interactivo
+              </h3>
+              {route.gpxFileUrl && (
+                <button
+                  onClick={() => setIsMapOpen(true)}
+                  className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
+                  title="Ampliar mapa"
+                >
+                  <Expand className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <div className="mx-4 mb-4 aspect-video rounded-lg overflow-hidden">
+              {route.gpxFileUrl ? (
+                <RouteMap gpxUrl={route.gpxFileUrl} />
+              ) : route.mapEmbedUrl ? (
+                <iframe
+                  src={route.mapEmbedUrl!}
+                  className="w-full h-full border-0"
+                  title={`Mapa de ${route.name}`}
+                  loading="lazy"
+                />
+              ) : (
+                <MapLoadingPlaceholder message="No hay mapa disponible" />
+              )}
             </div>
           </div>
+
+          {/* Modal del mapa expandido */}
+          {route.gpxFileUrl && (
+            <MapModal
+              isOpen={isMapOpen}
+              onClose={() => setIsMapOpen(false)}
+              gpxUrl={route.gpxFileUrl}
+              title={route.name}
+            />
+          )}
 
           {/* Galería de fotos — sidebar */}
           <RouteGallery routeSlug={route.slug} routeId={route.id} />
