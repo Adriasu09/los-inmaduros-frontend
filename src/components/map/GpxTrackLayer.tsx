@@ -1,11 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 
 interface GpxTrackLayerProps {
   gpxUrl: string;
+}
+
+function createPinIcon(color: string) {
+  return L.divIcon({
+    html: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="38" viewBox="0 0 28 38">
+      <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 24 14 24s14-13.5 14-24C28 6.268 21.732 0 14 0z"
+            fill="${color}" stroke="#fff" stroke-width="2"/>
+      <circle cx="14" cy="14" r="5" fill="#fff"/>
+    </svg>`,
+    className: "",
+    iconSize: [28, 38],
+    iconAnchor: [14, 38],
+    tooltipAnchor: [0, -38],
+  });
 }
 
 // Parse GPX XML and extract track coordinates
@@ -26,7 +40,7 @@ function parseGpxCoordinates(gpxText: string): [number, number][] {
 
 export default function GpxTrackLayer({ gpxUrl }: GpxTrackLayerProps) {
   const map = useMap();
-  const [error, setError] = useState(false);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,10 +51,7 @@ export default function GpxTrackLayer({ gpxUrl }: GpxTrackLayerProps) {
         if (cancelled) return;
 
         const coords = parseGpxCoordinates(gpxText);
-        if (coords.length === 0) {
-          setError(true);
-          return;
-        }
+        if (coords.length === 0) return;
 
         const polyline = L.polyline(coords, {
           color: "#38bdf8",
@@ -49,50 +60,32 @@ export default function GpxTrackLayer({ gpxUrl }: GpxTrackLayerProps) {
           lineCap: "round",
         }).addTo(map);
 
-        // Start marker (green) and end marker (red)
-        const startMarker = L.circleMarker(coords[0], {
-          radius: 7,
-          color: "#fff",
-          weight: 2,
-          fillColor: "#22c55e",
-          fillOpacity: 1,
+        const startMarker = L.marker(coords[0], {
+          icon: createPinIcon("#22c55e"),
         })
-          .bindTooltip("Inicio", { direction: "top", offset: [0, -8] })
+          .bindTooltip("Inicio", { direction: "top" })
           .addTo(map);
 
-        const endMarker = L.circleMarker(coords[coords.length - 1], {
-          radius: 7,
-          color: "#fff",
-          weight: 2,
-          fillColor: "#ef4444",
-          fillOpacity: 1,
+        const endMarker = L.marker(coords[coords.length - 1], {
+          icon: createPinIcon("#ef4444"),
         })
-          .bindTooltip("Fin", { direction: "top", offset: [0, -8] })
+          .bindTooltip("Fin", { direction: "top" })
           .addTo(map);
 
         map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
 
-        cleanupRef = () => {
+        cleanupRef.current = () => {
           map.removeLayer(polyline);
           map.removeLayer(startMarker);
           map.removeLayer(endMarker);
         };
-      })
-      .catch(() => {
-        if (!cancelled) setError(true);
       });
-
-    let cleanupRef: (() => void) | null = null;
 
     return () => {
       cancelled = true;
-      cleanupRef?.();
+      cleanupRef.current?.();
     };
   }, [map, gpxUrl]);
-
-  if (error) {
-    return null;
-  }
 
   return null;
 }

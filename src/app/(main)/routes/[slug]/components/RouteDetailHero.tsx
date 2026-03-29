@@ -157,7 +157,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
               <h3 className="text-foreground text-subheading">
                 Mapa Interactivo
               </h3>
-              {(route.gpxFileUrl || true) && (
+              {route.gpxFileUrl && (
                 <button
                   onClick={() => setIsMapOpen(true)}
                   className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
@@ -168,9 +168,8 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
               )}
             </div>
             <div className="mx-4 mb-4 aspect-video rounded-lg overflow-hidden">
-              {/* TODO: remove test GPX, use route.gpxFileUrl once connected to backend */}
-              {route.gpxFileUrl || true ? (
-                <RouteMap gpxUrl={route.gpxFileUrl ?? "/gpx/clasica.gpx"} />
+              {route.gpxFileUrl ? (
+                <RouteMap gpxUrl={route.gpxFileUrl} />
               ) : route.mapEmbedUrl ? (
                 <iframe
                   src={route.mapEmbedUrl!}
@@ -185,12 +184,14 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
           </div>
 
           {/* Modal del mapa expandido */}
-          <MapModal
-            isOpen={isMapOpen}
-            onClose={() => setIsMapOpen(false)}
-            gpxUrl={route.gpxFileUrl ?? "/gpx/clasica.gpx"}
-            title={route.name}
-          />
+          {route.gpxFileUrl && (
+            <MapModal
+              isOpen={isMapOpen}
+              onClose={() => setIsMapOpen(false)}
+              gpxUrl={route.gpxFileUrl}
+              title={route.name}
+            />
+          )}
 
           {/* Galería de fotos — sidebar */}
           <RouteGallery routeSlug={route.slug} routeId={route.id} />
