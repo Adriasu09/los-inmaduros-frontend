@@ -78,7 +78,7 @@ export interface RouteCall {
   description: string | null;
   image: string | null;
   dateRoute: string;
-  pace: RoutePace;
+  paces: RoutePace[];
   status: RouteCallStatus;
   createdAt: string;
   updatedAt: string;

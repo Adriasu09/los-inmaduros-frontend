@@ -7,12 +7,11 @@ import { ROUTE_PACES, PACE_ORDER } from "@/constants";
 import type { RoutePace } from "@/types";
 
 interface PaceInfoBadgeProps {
-  pace: RoutePace;
+  paces: RoutePace[];
 }
 
-export default function PaceInfoBadge({ pace }: PaceInfoBadgeProps) {
+export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const currentPace = ROUTE_PACES[pace];
 
   // Bloquear scroll del body cuando el modal está abierto
   useEffect(() => {
@@ -26,11 +25,14 @@ export default function PaceInfoBadge({ pace }: PaceInfoBadgeProps) {
 
   return (
     <>
-      {/* BADGE: emoji + icono info */}
+      {/* BADGE: emojis de todos los paces + icono info */}
       <div className="flex items-center gap-1.5">
         <span className="text-caption font-semibold text-primary">Ritmo:</span>
-        <span className="text-body" title={currentPace.label}>
-          {currentPace.emoji}
+        <span
+          className="text-body"
+          title={paces.map((p) => ROUTE_PACES[p].label).join(", ")}
+        >
+          {paces.map((p) => ROUTE_PACES[p].emoji).join(" ")}
         </span>
         <button
           onClick={(e) => {
@@ -78,7 +80,7 @@ export default function PaceInfoBadge({ pace }: PaceInfoBadgeProps) {
               <div className="space-y-3">
                 {PACE_ORDER.map((paceKey) => {
                   const p = ROUTE_PACES[paceKey];
-                  const isActive = paceKey === pace;
+                  const isActive = paces.includes(paceKey);
                   return (
                     <div
                       key={paceKey}

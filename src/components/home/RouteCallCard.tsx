@@ -80,7 +80,7 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
       {/* CONTENIDO */}
       <div className="p-5 flex flex-col flex-1">
         {/* RITMO */}
-        <PaceInfoBadge pace={routeCall.pace} />
+        <PaceInfoBadge paces={routeCall.paces} />
 
         {/* TÍTULO */}
         <h3 className="font-bold text-foreground text-body mt-1 line-clamp-1 group-hover:text-primary transition-colors">
