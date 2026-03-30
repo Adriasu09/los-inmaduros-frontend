@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Isolate Leaflet's internal z-indices (controls go up to z-index: 1000)
+   so they don't bleed above modals and overlays */
+.leaflet-container {
+  isolation: isolate;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
