@@ -66,7 +66,7 @@ export default function RouteCallCardFooter({
               </div>
             ))}
             {totalCount > 3 && (
-              <div className="w-7 h-7 rounded-full bg-primary/20 ring-2 ring-card dark:ring-muted flex items-center justify-center text-[10px] font-bold text-primary">
+              <div className="relative w-7 h-7 rounded-full bg-muted-foreground ring-2 ring-card dark:ring-muted flex items-center justify-center text-[10px] font-bold text-primary-foreground">
                 +{totalCount - 3}
               </div>
             )}
