@@ -78,7 +78,7 @@ export interface RouteCall {
   description: string | null;
   image: string | null;
   dateRoute: string;
-  pace: RoutePace;
+  paces: RoutePace[];
   status: RouteCallStatus;
   createdAt: string;
   updatedAt: string;
@@ -97,6 +97,23 @@ export interface Review {
   userId: string;
   rating: number;
   comment: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user?: {
+    id: string;
+    name: string | null;
+    imageUrl: string | null;
+  };
+}
+
+// Attendance types
+export type AttendanceStatus = "CONFIRMED" | "CANCELLED";
+
+export interface Attendance {
+  id: string;
+  routeCallId: string;
+  userId: string;
+  status: AttendanceStatus;
   createdAt: string;
   updatedAt: string;
   user?: {

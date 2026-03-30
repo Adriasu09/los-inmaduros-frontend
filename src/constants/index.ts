@@ -32,16 +32,60 @@ export const ROUTE_LEVELS = {
   },
 } as const;
 
-// Route paces con iconos
+// Route paces con iconos y descripciones
 export const ROUTE_PACES = {
-  ROCA: { label: "Roca 🪨", emoji: "🪨" },
-  CARACOL: { label: "Caracol 🐌", emoji: "🐌" },
-  GUSANO: { label: "Gusano 🐛", emoji: "🐛" },
-  MARIPOSA: { label: "Mariposa 🦋", emoji: "🦋" },
-  EXPERIMENTADO: { label: "Experimentado 🚀", emoji: "🚀" },
-  LOCURA_TOTAL: { label: "Locura Total ☠️", emoji: "☠️" },
-  MIAUCORNIA: { label: "Miaucornia 🐈🦄", emoji: "🐈🦄" },
+  ROCA: {
+    label: "Roca",
+    emoji: "🪨",
+    description:
+      "Aún no te ves seguro sobre los patines y evitas las cuestas a toda costa. No sabes frenar.",
+  },
+  CARACOL: {
+    label: "Caracol",
+    emoji: "🐌",
+    description:
+      "Eres autónomo en rectas y cuesta arriba, pero necesitas ayuda todavía para frenar, aunque lo intentes solo.",
+  },
+  GUSANO: {
+    label: "Gusano",
+    emoji: "🐛",
+    description:
+      "Eres autónomo 100% y te gusta ir a las caracoleras, pero te gusta salir por la calle, ritmo disfrutón.",
+  },
+  MARIPOSA: {
+    label: "Mariposa",
+    emoji: "🦋",
+    description:
+      "Te gusta la calle, bajar cuestas infinitas sin frenar, pasar por túneles, ritmo avanzado.",
+  },
+  EXPERIMENTADO: {
+    label: "Experimentado",
+    emoji: "🚀",
+    description: "Rutas X, Galáctica, 7 picos...",
+  },
+  LOCURA_TOTAL: {
+    label: "Locura Total",
+    emoji: "☠️",
+    description:
+      "Te pasas los semáforos, esquivas coches, descensos a toda hostia y alcohol en las venas.",
+  },
+  MIAUCORNIA: {
+    label: "Miaucornia",
+    emoji: "🐈🦄",
+    description:
+      "Siempre cerveza en mano, nadie te gana a patinar pedo. Coges la ruta a mitad de camino para evitar las cuestas. Llegas tarde y persigues la ruta.",
+  },
 } as const;
+
+export const PACE_ORDER: (keyof typeof ROUTE_PACES)[] = [
+  "ROCA",
+  "CARACOL",
+  "GUSANO",
+  "MARIPOSA",
+  "EXPERIMENTADO",
+  "LOCURA_TOTAL",
+  "MIAUCORNIA",
+];
 
 export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
