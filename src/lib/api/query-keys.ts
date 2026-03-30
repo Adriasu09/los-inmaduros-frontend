@@ -43,6 +43,15 @@ export const queryKeys = {
       [...queryKeys.favorites.all, "check", routeId] as const,
   },
 
+  // Attendances
+  attendances: {
+    all: ["attendances"] as const,
+    byRouteCall: (routeCallId: string) =>
+      [...queryKeys.attendances.all, "byRouteCall", routeCallId] as const,
+    check: (routeCallId: string) =>
+      [...queryKeys.attendances.all, "check", routeCallId] as const,
+  },
+
   // Photos
   photos: {
     all: ["photos"] as const,

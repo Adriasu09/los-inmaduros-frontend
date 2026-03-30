@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
-import { MapPin, Clock, Route as RouteIcon, ImageOff, Users } from "lucide-react";
+import { MapPin, Clock, Route as RouteIcon, ImageOff } from "lucide-react";
 import type { RouteCall } from "@/types";
 import PaceInfoBadge from "./PaceInfoBadge";
+import RouteCallCardFooter from "./RouteCallCardFooter";
 
 interface RouteCallCardProps {
   routeCall: RouteCall;
@@ -137,18 +137,10 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
         </div>
 
         {/* FOOTER */}
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
-          <div className="flex items-center gap-2 text-caption text-muted-foreground">
-            <Users size={14} />
-            <span>{attendees} apuntados</span>
-          </div>
-          <Link
-            href={`/eventos/${routeCall.id}`}
-            className="text-body-sm font-semibold text-primary hover:text-primary-hover transition-colors"
-          >
-            Apuntarme
-          </Link>
-        </div>
+        <RouteCallCardFooter
+          routeCallId={routeCall.id}
+          initialCount={attendees}
+        />
       </div>
     </article>
   );
