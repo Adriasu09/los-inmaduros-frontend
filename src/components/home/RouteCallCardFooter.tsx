@@ -12,22 +12,24 @@ import {
 interface RouteCallCardFooterProps {
   routeCallId: string;
   initialCount: number;
+  variant?: "upcoming" | "past";
 }
 
 export default function RouteCallCardFooter({
   routeCallId,
   initialCount,
+  variant = "upcoming",
 }: RouteCallCardFooterProps) {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
   const pathname = usePathname();
 
-  const { data: attendees = [] } = useRouteCallAttendees(routeCallId);
+  const { data: attendees = [], isFetched } = useRouteCallAttendees(routeCallId);
   const { data: isAttending = false } = useIsAttending(routeCallId);
   const { mutate: toggle, isPending } = useToggleAttendance(routeCallId);
 
-  const totalCount = attendees.length || initialCount;
-  const visibleAttendees = attendees.slice(0, 3);
+  const totalCount = isFetched ? attendees.length : initialCount;
+  const visibleAttendees = attendees.slice(0, 3);  
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -79,17 +81,19 @@ export default function RouteCallCardFooter({
       </div>
 
       {/* BOTÓN APUNTARME / NO VOY */}
-      <button
-        onClick={handleToggle}
-        disabled={isPending}
-        className={`text-body-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 ${
-          isAttending
-            ? "text-red-400 hover:text-red-300"
-            : "text-primary hover:text-primary-hover"
-        }`}
-      >
-        {isPending ? "..." : isAttending ? "No voy" : "Apuntarme"}
-      </button>
+      {variant !== "past" && (
+        <button
+          onClick={handleToggle}
+          disabled={isPending}
+          className={`text-body-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 ${
+            isAttending
+              ? "text-red-400 hover:text-red-300"
+              : "text-primary hover:text-primary-hover"
+          }`}
+        >
+          {isPending ? "..." : isAttending ? "No voy" : "Apuntarme"}
+        </button>
+      )}
     </div>
   );
 }

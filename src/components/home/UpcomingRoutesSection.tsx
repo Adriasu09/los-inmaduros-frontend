@@ -3,6 +3,7 @@ import { PlusCircle, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { RouteCall } from "@/types";
 import RouteCallCard from "./RouteCallCard";
+import CreateRouteCallButton from "./CreateRouteCallButton";
 
 interface UpcomingRoutesSectionProps {
   routeCalls: RouteCall[];
@@ -24,11 +25,7 @@ export default function UpcomingRoutesSection({
               Estas son las próximas quedadas. ¡Elige la tuya y apúntate!
             </p>
           </div>
-          <Link href="/eventos/crear">
-            <Button variant="outline" leftIcon={<PlusCircle size={18} />}>
-              Crear Ruta/Evento
-            </Button>
-          </Link>
+          <CreateRouteCallButton />
         </div>
 
         {/* GRID O EMPTY STATE */}
@@ -49,7 +46,7 @@ export default function UpcomingRoutesSection({
 
         {/* CTA BOTTOM */}
         <div className="mt-12 text-center">
-          <Link href="/eventos">
+          <Link href="/events">
             <Button size="lg" rightIcon={<Calendar size={20} />}>
               Ver Todas las Rutas{" "}
             </Button>
