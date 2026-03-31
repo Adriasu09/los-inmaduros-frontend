@@ -90,14 +90,14 @@ export const PACE_ORDER: (keyof typeof ROUTE_PACES)[] = [
 export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
   { label: "Rutas", href: "/routes" },
-  { label: "Eventos", href: "/eventos" },
+  { label: "Eventos", href: "/events" },
   { label: "Galería", href: "/galeria" },
   { label: "Contacto", href: "/contacto" },
 ];
 
 export const FOOTER_EXPLORE_LINKS = [
   { label: "Rutas Populares", href: "/routes" },
-  { label: "Próximos Eventos", href: "/eventos" },
+  { label: "Próximos Eventos", href: "/events" },
   { label: "Niveles de Dificultad", href: "/routes#niveles" },
   { label: "Galería de Fotos", href: "/galeria" },
 ];
@@ -107,6 +107,31 @@ export const FOOTER_COMMUNITY_LINKS = [
   { label: "Normas del Grupo", href: "/normas" },
   { label: "Contacto", href: "mailto:losinmadurosrollermadrid@gmail.com" },
 ];
+
+// Puntos de encuentro predeterminados para convocatorias
+export const PREDEFINED_MEETING_POINTS = [
+  {
+    id: "explanada",
+    name: "Explanada del Banco de Madera (Madrid Río)",
+    coordinates: [40.3922, -3.7103] as [number, number],
+    googleMapsUrl: "https://maps.app.goo.gl/gCJfpLSoy3D454Y19",
+  },
+  {
+    id: "puerta-alcala",
+    name: "Puerta de Alcalá (salida del Retiro)",
+    coordinates: [40.4201, -3.6886] as [number, number],
+    googleMapsUrl: "https://maps.app.goo.gl/3kjrtMz9BtQ39BJYA",
+  },
+  {
+    id: "plaza-cibeles",
+    name: "Plaza de Cibeles",
+    coordinates: [40.4194, -3.6931] as [number, number],
+    googleMapsUrl: "https://maps.app.goo.gl/LuE7bF56QJgBtLbRA",
+  },
+] as const;
+
+export type PredefinedMeetingPointId =
+  (typeof PREDEFINED_MEETING_POINTS)[number]["id"];
 
 export const SOCIAL_LINKS = [
   {

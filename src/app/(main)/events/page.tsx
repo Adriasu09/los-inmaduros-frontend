@@ -1,0 +1,23 @@
+import { getAllRouteCallsServer } from "@/features/route-calls";
+import EventsHero from "./components/EventsHero";
+import EventsContent from "./components/EventsContent";
+
+export const metadata = {
+  title: "Eventos | Los Inmaduros Roller Madrid",
+  description:
+    "Todas las convocatorias de patinaje — próximas rutas y eventos pasados",
+};
+
+export default async function EventsPage() {
+  const response = await getAllRouteCallsServer();
+  const routeCalls = response?.data ?? [];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <EventsHero />
+        <EventsContent routeCalls={routeCalls} />
+      </div>
+    </div>
+  );
+}

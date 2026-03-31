@@ -6,6 +6,7 @@ import RouteCallCardFooter from "./RouteCallCardFooter";
 
 interface RouteCallCardProps {
   routeCall: RouteCall;
+  variant?: "upcoming" | "past";
 }
 
 function formatDateBadge(dateString: string): string {
@@ -40,8 +41,9 @@ function isToday(dateString: string): boolean {
   );
 }
 
-export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
-  const imageUrl = routeCall.image ?? routeCall.route?.image;
+export default function RouteCallCard({ routeCall, variant = "upcoming" }: RouteCallCardProps) {
+  const isPast = variant === "past";
+  const imageUrl = routeCall.image;
   const primaryPoint = routeCall.meetingPoints?.find(
     (mp) => mp.type === "PRIMARY",
   );
@@ -50,7 +52,7 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
   const organizer = routeCall.organizer;
 
   return (
-    <article className="group bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+    <article className={`group bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col ${isPast ? "opacity-70" : "hover:shadow-xl hover:-translate-y-1"}`}>
       {/* IMAGEN + BADGE FECHA / HOY */}
       <div className="relative h-52 w-full overflow-hidden bg-muted">
         {imageUrl ? (
@@ -66,7 +68,11 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
             <ImageOff size={28} className="text-faint-foreground" />
           </div>
         )}
-        {today ? (
+        {isPast ? (
+          <span className="absolute top-3 left-3 bg-muted-foreground/70 text-muted text-caption font-bold px-3 py-1 rounded-full">
+            {formatDateBadge(routeCall.dateRoute)}
+          </span>
+        ) : today ? (
           <span className="absolute top-3 left-3 bg-green-500 text-white text-caption font-bold px-3 py-1 rounded-full animate-pulse shadow-lg">
             HOY
           </span>
@@ -111,9 +117,10 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
 
         {/* DESCRIPCIÓN */}
         {routeCall.description && (
-          <p className="text-body-sm text-muted-foreground mt-1 line-clamp-3">
-            {routeCall.description}
-          </p>
+          <div
+            className="text-body-sm text-muted-foreground mt-1 line-clamp-3 prose prose-sm dark:prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: routeCall.description }}
+          />
         )}
 
         {/* METADATA */}
@@ -126,7 +133,7 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
           )}
           <span className="flex items-center gap-1">
             <Clock size={14} className="shrink-0" />
-            {formatTime(routeCall.dateRoute)}
+            {isPast ? "Completada" : formatTime(routeCall.dateRoute)}
           </span>
           {routeCall.route?.approximateDistance && (
             <span className="flex items-center gap-1">
@@ -140,6 +147,7 @@ export default function RouteCallCard({ routeCall }: RouteCallCardProps) {
         <RouteCallCardFooter
           routeCallId={routeCall.id}
           initialCount={attendees}
+          variant={variant}
         />
       </div>
     </article>
