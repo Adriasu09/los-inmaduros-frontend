@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { MapPin, Clock, Route as RouteIcon, ImageOff } from "lucide-react";
 import type { RouteCall } from "@/types";
 import PaceInfoBadge from "./PaceInfoBadge";
@@ -52,7 +53,11 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
   const organizer = routeCall.organizer;
 
   return (
-    <article className={`group bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col ${isPast ? "opacity-70" : "hover:shadow-xl hover:-translate-y-1"}`}>
+    <Link
+      href={`/events/${routeCall.id}`}
+      className={`group block bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col h-full ${isPast ? "opacity-70" : "hover:shadow-xl hover:-translate-y-1"}`}
+    >
+    <article className="flex flex-col flex-1 min-h-0">
       {/* IMAGEN + BADGE FECHA / HOY */}
       <div className="relative h-52 w-full overflow-hidden bg-muted">
         {imageUrl ? (
@@ -151,5 +156,7 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
         />
       </div>
     </article>
+    </Link>
   );
+
 }

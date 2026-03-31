@@ -56,6 +56,20 @@ export async function getAllRouteCallsServer(): Promise<ApiResponse<
   return serverFetch<ApiResponse<RouteCall[]>>("/route-calls");
 }
 
+// Para Client Components — una convocatoria por ID
+export async function getRouteCallById(
+  id: string,
+): Promise<ApiResponse<RouteCall>> {
+  return apiClient.get<ApiResponse<RouteCall>>(`/route-calls/${id}`);
+}
+
+// Para Server Components — una convocatoria por ID
+export async function getRouteCallByIdServer(
+  id: string,
+): Promise<ApiResponse<RouteCall> | null> {
+  return serverFetch<ApiResponse<RouteCall>>(`/route-calls/${id}`);
+}
+
 // Crear una nueva convocatoria
 export async function createRouteCall(
   data: CreateRouteCallPayload,
