@@ -89,8 +89,8 @@ export const PACE_ORDER: (keyof typeof ROUTE_PACES)[] = [
 
 export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
-  { label: "Rutas", href: "/routes" },
   { label: "Eventos", href: "/events" },
+  { label: "Rutas", href: "/routes" },
   { label: "Galería", href: "/galeria" },
   { label: "Contacto", href: "/contacto" },
 ];
