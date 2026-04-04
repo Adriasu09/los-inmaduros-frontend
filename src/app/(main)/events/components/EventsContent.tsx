@@ -1,52 +1,149 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Search } from "lucide-react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { Search, ChevronDown } from "lucide-react";
 import type { RouteCall, RoutePace } from "@/types";
 import { ROUTE_PACES, PACE_ORDER } from "@/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { normalize } from "@/lib/utils";
 import RouteCallCard from "@/components/home/RouteCallCard";
 
+const PAGE_SIZE = 6;
+
+type Tab = "upcoming" | "past";
+
 interface EventsContentProps {
-  routeCalls: RouteCall[];
+  upcoming: RouteCall[];
+  past: RouteCall[];
 }
 
-export default function EventsContent({ routeCalls }: EventsContentProps) {
+export default function EventsContent({
+  upcoming: upcomingAll,
+  past: pastAll,
+}: EventsContentProps) {
+  const [activeTab, setActiveTab] = useState<Tab>("upcoming");
   const [search, setSearch] = useState("");
   const [selectedPace, setSelectedPace] = useState<RoutePace | null>(null);
+  const [upcomingVisible, setUpcomingVisible] = useState(PAGE_SIZE);
+  const [pastVisible, setPastVisible] = useState(PAGE_SIZE);
 
   const debouncedSearch = useDebounce(search, 300);
 
-  const { upcoming, past } = useMemo(() => {
-    const filtered = routeCalls.filter((rc) => {
-      const matchesSearch = normalize(rc.title).includes(
-        normalize(debouncedSearch),
-      );
-      const matchesPace =
-        selectedPace === null || rc.paces.includes(selectedPace);
-      return matchesSearch && matchesPace;
-    });
+  // Reset visible counts when filters change so results start from the top
+  useEffect(() => {
+    setUpcomingVisible(PAGE_SIZE);
+    setPastVisible(PAGE_SIZE);
+  }, [debouncedSearch, selectedPace]);
 
-    const upcoming = filtered
-      .filter((rc) => rc.status === "SCHEDULED" || rc.status === "ONGOING")
-      .sort(
-        (a, b) =>
-          new Date(a.dateRoute).getTime() - new Date(b.dateRoute).getTime(),
-      );
+  const filterList = useCallback(
+    (list: RouteCall[]) =>
+      list.filter((rc) => {
+        const matchesSearch = normalize(rc.title).includes(
+          normalize(debouncedSearch),
+        );
+        const matchesPace =
+          selectedPace === null || rc.paces.includes(selectedPace);
+        return matchesSearch && matchesPace;
+      }),
+    [debouncedSearch, selectedPace],
+  );
 
-    const past = filtered
-      .filter((rc) => rc.status === "COMPLETED" || rc.status === "CANCELLED")
-      .sort(
-        (a, b) =>
-          new Date(b.dateRoute).getTime() - new Date(a.dateRoute).getTime(),
-      );
+  const filteredUpcoming = useMemo(
+    () => filterList(upcomingAll),
+    [filterList, upcomingAll],
+  );
 
-    return { upcoming, past };
-  }, [routeCalls, debouncedSearch, selectedPace]);
+  const filteredPast = useMemo(
+    () => filterList(pastAll),
+    [filterList, pastAll],
+  );
+
+  const visibleUpcoming = filteredUpcoming.slice(0, upcomingVisible);
+  const visiblePast = filteredPast.slice(0, pastVisible);
+
+  const hasMoreUpcoming = upcomingVisible < filteredUpcoming.length;
+  const hasMorePast = pastVisible < filteredPast.length;
+
+  const activeList = activeTab === "upcoming" ? visibleUpcoming : visiblePast;
+  const filteredActiveTotal =
+    activeTab === "upcoming" ? filteredUpcoming.length : filteredPast.length;
+  const hasMore = activeTab === "upcoming" ? hasMoreUpcoming : hasMorePast;
+
+  function loadMore() {
+    if (activeTab === "upcoming") {
+      setUpcomingVisible((v) => v + PAGE_SIZE);
+    } else {
+      setPastVisible((v) => v + PAGE_SIZE);
+    }
+  }
+
+  const noResultsMessage =
+    debouncedSearch || selectedPace
+      ? "Prueba con otros filtros"
+      : activeTab === "upcoming"
+        ? "¡Sé el primero en crear una!"
+        : "Aún no hay rutas pasadas";
+
+  const noResultsTitle =
+    activeTab === "upcoming"
+      ? "No hay convocatorias próximas"
+      : "No hay rutas pasadas";
 
   return (
     <div className="flex flex-col gap-6 mt-8">
+      {/* TABS */}
+      <div className="flex border-b border-border">
+        <button
+          onClick={() => setActiveTab("upcoming")}
+          className={`relative px-5 py-3 text-body-sm font-semibold transition-colors ${
+            activeTab === "upcoming"
+              ? "text-primary"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Próximas rutas
+          {upcomingAll.length > 0 && (
+            <span
+              className={`ml-2 text-caption font-bold px-1.5 py-0.5 rounded-full ${
+                activeTab === "upcoming"
+                  ? "bg-primary/15 text-primary"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {upcomingAll.length}
+            </span>
+          )}
+          {activeTab === "upcoming" && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+          )}
+        </button>
+
+        <button
+          onClick={() => setActiveTab("past")}
+          className={`relative px-5 py-3 text-body-sm font-semibold transition-colors ${
+            activeTab === "past"
+              ? "text-primary"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Rutas pasadas
+          {pastAll.length > 0 && (
+            <span
+              className={`ml-2 text-caption font-bold px-1.5 py-0.5 rounded-full ${
+                activeTab === "past"
+                  ? "bg-primary/15 text-primary"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {pastAll.length}
+            </span>
+          )}
+          {activeTab === "past" && (
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+          )}
+        </button>
+      </div>
+
       {/* FILTROS */}
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
         <div className="relative sm:w-64 shrink-0">
@@ -95,47 +192,45 @@ export default function EventsContent({ routeCalls }: EventsContentProps) {
         </div>
       </div>
 
-      {/* PRÓXIMAS RUTAS */}
-      {upcoming.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {upcoming.map((rc) => (
-            <RouteCallCard key={rc.id} routeCall={rc} />
-          ))}
-        </div>
+      {/* GRID */}
+      {activeList.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activeList.map((rc) => (
+              <RouteCallCard
+                key={rc.id}
+                routeCall={rc}
+                variant={activeTab === "past" ? "past" : "upcoming"}
+              />
+            ))}
+          </div>
+
+          {/* CONTADOR + CARGAR MÁS */}
+          <div className="flex flex-col items-center gap-3 pt-2">
+            <p className="text-caption text-faint-foreground">
+              Mostrando {activeList.length} de {filteredActiveTotal}
+            </p>
+            {hasMore && (
+              <button
+                onClick={loadMore}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-border bg-card dark:bg-muted text-soft-foreground text-body-sm font-medium hover:border-primary hover:text-primary transition-all"
+              >
+                <ChevronDown size={16} />
+                Cargar más
+              </button>
+            )}
+          </div>
+        </>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <span className="text-5xl mb-4">🛼</span>
+          {activeTab === "upcoming" && (
+            <span className="text-5xl mb-4">🛼</span>
+          )}
           <p className="text-muted-foreground text-subheading font-medium">
-            No hay convocatorias próximas
+            {noResultsTitle}
           </p>
           <p className="text-faint-foreground text-body-sm mt-1">
-            {debouncedSearch || selectedPace
-              ? "Prueba con otros filtros"
-              : "¡Sé el primero en crear una!"}
-          </p>
-        </div>
-      )}
-
-      {/* SEPARADOR RUTAS PASADAS */}
-      <div className="border-t border-border pt-8 mt-4">
-        <h2 className="text-heading text-muted-foreground text-center">
-          Rutas Pasadas
-        </h2>
-      </div>
-
-      {/* RUTAS PASADAS */}
-      {past.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {past.map((rc) => (
-            <RouteCallCard key={rc.id} routeCall={rc} variant="past" />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-muted-foreground text-body-sm">
-            {debouncedSearch || selectedPace
-              ? "No hay rutas pasadas con esos filtros"
-              : "Aún no hay rutas pasadas"}
+            {noResultsMessage}
           </p>
         </div>
       )}

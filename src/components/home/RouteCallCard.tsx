@@ -5,6 +5,9 @@ import type { RouteCall } from "@/types";
 import PaceInfoBadge from "./PaceInfoBadge";
 import RouteCallCardFooter from "./RouteCallCardFooter";
 
+const CANCELLED_STAMP_URL =
+  "https://dplwudttrngcnapuurkt.supabase.co/storage/v1/object/public/photos/routes/cancelado.png";
+
 interface RouteCallCardProps {
   routeCall: RouteCall;
   variant?: "upcoming" | "past";
@@ -44,6 +47,8 @@ function isToday(dateString: string): boolean {
 
 export default function RouteCallCard({ routeCall, variant = "upcoming" }: RouteCallCardProps) {
   const isPast = variant === "past";
+  const isCancelled = routeCall.status === "CANCELLED";
+  const isOngoing = routeCall.status === "ONGOING";
   const imageUrl = routeCall.image;
   const primaryPoint = routeCall.meetingPoints?.find(
     (mp) => mp.type === "PRIMARY",
@@ -52,20 +57,20 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
   const today = isToday(routeCall.dateRoute);
   const organizer = routeCall.organizer;
 
-  return (
-    <Link
-      href={`/events/${routeCall.id}`}
-      className={`group block bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col h-full ${isPast ? "opacity-70" : "hover:shadow-xl hover:-translate-y-1"}`}
-    >
+  const cardClassName = `group block bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col h-full ${
+    isPast || isCancelled ? "opacity-70" : "hover:shadow-xl hover:-translate-y-1"
+  }`;
+
+  const content = (
     <article className="flex flex-col flex-1 min-h-0">
-      {/* IMAGEN + BADGE FECHA / HOY */}
+      {/* IMAGEN + BADGE FECHA / HOY + SELLO CANCELADA */}
       <div className="relative h-52 w-full overflow-hidden bg-muted">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={routeCall.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className={`object-cover transition-transform duration-500 ${!isCancelled ? "group-hover:scale-105" : ""}`}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
@@ -73,7 +78,24 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
             <ImageOff size={28} className="text-faint-foreground" />
           </div>
         )}
-        {isPast ? (
+
+        {isCancelled ? (
+          <>
+            <span className="absolute top-3 left-3 bg-muted-foreground/70 text-muted text-caption font-bold px-3 py-1 rounded-full">
+              {formatDateBadge(routeCall.dateRoute)}
+            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={CANCELLED_STAMP_URL}
+              alt="Cancelada"
+              className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+            />
+          </>
+        ) : isOngoing ? (
+          <span className="absolute top-3 left-3 bg-orange-500 text-white text-caption font-bold px-3 py-1 rounded-full animate-pulse shadow-lg">
+            EN CURSO
+          </span>
+        ) : isPast ? (
           <span className="absolute top-3 left-3 bg-muted-foreground/70 text-muted text-caption font-bold px-3 py-1 rounded-full">
             {formatDateBadge(routeCall.dateRoute)}
           </span>
@@ -94,7 +116,7 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
         <PaceInfoBadge paces={routeCall.paces} />
 
         {/* TÍTULO */}
-        <h3 className="font-bold text-foreground text-body mt-1 line-clamp-1 group-hover:text-primary transition-colors">
+        <h3 className={`font-bold text-foreground text-body mt-1 line-clamp-1 transition-colors ${!isCancelled ? "group-hover:text-primary" : ""}`}>
           {routeCall.title}
         </h3>
 
@@ -153,10 +175,19 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
           routeCallId={routeCall.id}
           initialCount={attendees}
           variant={variant}
+          isCancelled={isCancelled}
         />
       </div>
     </article>
-    </Link>
   );
 
+  if (isCancelled) {
+    return <div className={cardClassName}>{content}</div>;
+  }
+
+  return (
+    <Link href={`/events/${routeCall.id}`} className={cardClassName}>
+      {content}
+    </Link>
+  );
 }

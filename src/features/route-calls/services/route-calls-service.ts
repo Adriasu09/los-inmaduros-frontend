@@ -56,6 +56,24 @@ export async function getAllRouteCallsServer(): Promise<ApiResponse<
   return serverFetch<ApiResponse<RouteCall[]>>("/route-calls");
 }
 
+// Para Server Components — convocatorias próximas (SCHEDULED + ONGOING + CANCELLED recientes)
+export async function getAllUpcomingRouteCallsServer(): Promise<ApiResponse<
+  RouteCall[]
+> | null> {
+  return serverFetch<ApiResponse<RouteCall[]>>(
+    "/route-calls?upcoming=true&limit=100",
+  );
+}
+
+// Para Server Components — convocatorias pasadas (COMPLETED + CANCELLED antiguas)
+export async function getPastRouteCallsServer(): Promise<ApiResponse<
+  RouteCall[]
+> | null> {
+  return serverFetch<ApiResponse<RouteCall[]>>(
+    "/route-calls?upcoming=false&limit=100",
+  );
+}
+
 // Para Client Components — una convocatoria por ID
 export async function getRouteCallById(
   id: string,

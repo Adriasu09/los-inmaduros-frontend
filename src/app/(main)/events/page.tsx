@@ -1,4 +1,7 @@
-import { getAllRouteCallsServer } from "@/features/route-calls";
+import {
+  getAllUpcomingRouteCallsServer,
+  getPastRouteCallsServer,
+} from "@/features/route-calls";
 import EventsHero from "./components/EventsHero";
 import EventsContent from "./components/EventsContent";
 
@@ -9,14 +12,19 @@ export const metadata = {
 };
 
 export default async function EventsPage() {
-  const response = await getAllRouteCallsServer();
-  const routeCalls = response?.data ?? [];
+  const [upcomingRes, pastRes] = await Promise.all([
+    getAllUpcomingRouteCallsServer(),
+    getPastRouteCallsServer(),
+  ]);
+
+  const upcoming = upcomingRes?.data ?? [];
+  const past = pastRes?.data ?? [];
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <EventsHero />
-        <EventsContent routeCalls={routeCalls} />
+        <EventsContent upcoming={upcoming} past={past} />
       </div>
     </div>
   );

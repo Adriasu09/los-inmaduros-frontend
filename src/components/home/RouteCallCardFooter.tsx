@@ -13,12 +13,14 @@ interface RouteCallCardFooterProps {
   routeCallId: string;
   initialCount: number;
   variant?: "upcoming" | "past";
+  isCancelled?: boolean;
 }
 
 export default function RouteCallCardFooter({
   routeCallId,
   initialCount,
   variant = "upcoming",
+  isCancelled = false,
 }: RouteCallCardFooterProps) {
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
@@ -81,7 +83,7 @@ export default function RouteCallCardFooter({
       </div>
 
       {/* BOTÓN APUNTARME / NO VOY */}
-      {variant !== "past" && (
+      {variant !== "past" && !isCancelled && (
         <button
           onClick={handleToggle}
           disabled={isPending}
