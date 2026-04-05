@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Clock, Route as RouteIcon, ImageOff } from "lucide-react";
 import type { RouteCall } from "@/types";
+import { cn } from "@/lib/utils";
+import { formatDateBadge, formatTime, isToday } from "@/lib/date-utils";
 import PaceInfoBadge from "./PaceInfoBadge";
 import RouteCallCardFooter from "./RouteCallCardFooter";
 
@@ -11,38 +13,6 @@ const CANCELLED_STAMP_URL =
 interface RouteCallCardProps {
   routeCall: RouteCall;
   variant?: "upcoming" | "past";
-}
-
-function formatDateBadge(dateString: string): string {
-  const date = new Date(dateString);
-  const weekday = date
-    .toLocaleDateString("es-ES", { weekday: "short" })
-    .toUpperCase()
-    .replace(".", "");
-  const day = date.getDate();
-  const month = date
-    .toLocaleDateString("es-ES", { month: "short" })
-    .toUpperCase()
-    .replace(".", "");
-  return `${weekday} ${day} ${month}`;
-}
-
-function formatTime(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function isToday(dateString: string): boolean {
-  const date = new Date(dateString);
-  const now = new Date();
-  return (
-    date.getFullYear() === now.getFullYear() &&
-    date.getMonth() === now.getMonth() &&
-    date.getDate() === now.getDate()
-  );
 }
 
 export default function RouteCallCard({ routeCall, variant = "upcoming" }: RouteCallCardProps) {
@@ -57,9 +27,12 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
   const today = isToday(routeCall.dateRoute);
   const organizer = routeCall.organizer;
 
-  const cardClassName = `group block bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col h-full ${
-    isPast || isCancelled ? "opacity-70" : "hover:shadow-xl hover:-translate-y-1"
-  }`;
+  const cardClassName = cn(
+    "group block bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md transition-all duration-300 flex flex-col h-full",
+    isPast || isCancelled
+      ? "opacity-70"
+      : "hover:shadow-xl hover:-translate-y-1",
+  );
 
   const content = (
     <article className="flex flex-col flex-1 min-h-0">
@@ -70,7 +43,10 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
             src={imageUrl}
             alt={routeCall.title}
             fill
-            className={`object-cover transition-transform duration-500 ${!isCancelled ? "group-hover:scale-105" : ""}`}
+            className={cn(
+              "object-cover transition-transform duration-500",
+              !isCancelled && "group-hover:scale-105",
+            )}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
@@ -116,7 +92,12 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
         <PaceInfoBadge paces={routeCall.paces} />
 
         {/* TÍTULO */}
-        <h3 className={`font-bold text-foreground text-body mt-1 line-clamp-1 transition-colors ${!isCancelled ? "group-hover:text-primary" : ""}`}>
+        <h3
+          className={cn(
+            "font-bold text-foreground text-body mt-1 line-clamp-1 transition-colors",
+            !isCancelled && "group-hover:text-primary",
+          )}
+        >
           {routeCall.title}
         </h3>
 

@@ -115,10 +115,6 @@ class HttpClient {
 
           const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
           await new Promise((resolve) => setTimeout(resolve, delay));
-
-          console.warn(
-            `Retrying request (attempt ${attempt + 2}/${retries + 1})...`,
-          );
         } else {
           throw handleNetworkError(error);
         }

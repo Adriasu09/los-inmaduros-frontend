@@ -55,7 +55,7 @@ export default function PaceMultiSelect({
               type="button"
               onClick={() => togglePace(key)}
               className={cn(
-                "flex items-center gap-2 px-3 py-2.5 rounded-lg border text-body-sm font-medium transition-all touch-manipulation",
+                "flex items-center gap-1 px-1 py-2.5 rounded-lg border text-body-sm font-medium transition-all touch-manipulation",
                 isSelected
                   ? "bg-primary/10 border-primary/30 text-foreground"
                   : "bg-muted border-border text-muted-foreground hover:border-primary/20 hover:bg-primary/5",

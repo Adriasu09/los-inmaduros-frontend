@@ -27,11 +27,11 @@ export default function HeroSection() {
         <h1 className="text-title md:text-display mb-4 max-w-2xl">
           Rueda, Conecta, Disfruta
         </h1>
-        <p className="text-body md:text-xl max-w-2xl mb-8 text-gray-200">
+        <p className="text-body max-w-2xl mb-8 text-white/85">
           La comunidad de patinaje urbano de Madrid que te mueve. Descubre
           nuevas rutas, únete a quedadas y comparte tu pasión sobre ruedas.
         </p>
-        <Link href="/rutas">
+        <Link href="/events">
           <Button size="lg" rightIcon={<ArrowRight size={20} />}>
             Ver Próximas Rutas
           </Button>

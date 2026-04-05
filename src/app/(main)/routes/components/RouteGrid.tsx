@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import type { Route, RouteLevel } from "@/types";
 import { ROUTE_LEVELS } from "@/constants";
 import { useDebounce } from "@/hooks/use-debounce";
-import { normalize } from "@/lib/utils";
+import { cn, normalize } from "@/lib/utils";
 import RouteCard from "./RouteCard";
 
 interface RouteGridProps {
@@ -66,11 +66,12 @@ export default function RouteGrid({ routes }: RouteGridProps) {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedLevel(null)}
-            className={`px-3 py-1.5 rounded-full text-caption font-medium border transition-all ${
+            className={cn(
+              "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
               selectedLevel === null
                 ? "bg-primary-hover text-white border-primary-hover"
-                : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary"
-            }`}
+                : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary",
+            )}
           >
             Todos
           </button>
@@ -81,11 +82,12 @@ export default function RouteGrid({ routes }: RouteGridProps) {
               onClick={() =>
                 setSelectedLevel(selectedLevel === level ? null : level)
               }
-              className={`px-3 py-1.5 rounded-full text-caption font-medium border transition-all ${
+              className={cn(
+                "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
                 selectedLevel === level
                   ? ROUTE_LEVELS[level].activeFilter
-                  : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary"
-              }`}
+                  : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary",
+              )}
             >
               {ROUTE_LEVELS[level].label}
             </button>

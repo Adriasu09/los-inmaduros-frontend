@@ -6,15 +6,16 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   createRouteCallSchema,
+  useCreateRouteCall,
   type CreateRouteCallFormData,
-} from "@/features/route-calls/schemas/create-route-call-schema";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCreateRouteCall } from "@/features/route-calls/hooks/use-route-calls";
-import { uploadPhoto } from "@/features/photos/services/photos-service";
+  type CreateRouteCallPayload,
+} from "@/features/route-calls";
+import { uploadPhoto } from "@/features/photos";
 import { queryKeys } from "@/lib/api/query-keys";
-import type { CreateRouteCallPayload } from "@/features/route-calls/services/route-calls-service";
 import type { Route, RoutePace } from "@/types";
 import { PREDEFINED_MEETING_POINTS } from "@/constants";
 import RouteSelector from "./RouteSelector";
@@ -347,14 +348,16 @@ export default function CreateRouteCallForm() {
                     setValue("secondaryMeetingPoint", null);
                   }
                 }}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors touch-manipulation ${
-                  field.value ? "bg-primary" : "bg-border"
-                }`}
+                className={cn(
+                  "relative inline-flex h-6 w-11 items-center rounded-full transition-colors touch-manipulation",
+                  field.value ? "bg-primary" : "bg-border",
+                )}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    field.value ? "translate-x-6" : "translate-x-1"
-                  }`}
+                  className={cn(
+                    "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
+                    field.value ? "translate-x-6" : "translate-x-1",
+                  )}
                 />
               </button>
             )}

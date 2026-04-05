@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import type { RouteCall, MeetingPoint } from "@/types";
 import { PREDEFINED_MEETING_POINTS } from "@/constants";
 import { shareRouteCallOnWhatsApp } from "@/lib/share";
+import { formatFullDate, formatTime } from "@/lib/date-utils";
 import PaceInfoBadge from "@/components/home/PaceInfoBadge";
 import MapModal from "@/components/map/MapModal";
 import MapLoadingPlaceholder from "@/components/map/MapLoadingPlaceholder";
@@ -36,32 +37,6 @@ const RouteMap = dynamic(
 
 interface RouteCallDetailProps {
   routeCall: RouteCall;
-}
-
-function formatFullDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("es-ES", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-function formatTime(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function formatMeetingPointTime(timeString: string): string {
-  const date = new Date(timeString);
-  return date.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 }
 
 function getMeetingPointMapUrl(mp: MeetingPoint): string | null {
@@ -222,7 +197,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
                 {primaryPoint.time && (
                   <span className="text-muted-foreground text-caption flex items-center gap-1">
                     <Clock size={12} />
-                    {formatMeetingPointTime(primaryPoint.time)}
+                    {formatTime(primaryPoint.time)}
                   </span>
                 )}
               </div>
@@ -239,7 +214,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
                 {secondaryPoint.time && (
                   <span className="text-muted-foreground text-caption flex items-center gap-1">
                     <Clock size={12} />
-                    {formatMeetingPointTime(secondaryPoint.time)}
+                    {formatTime(secondaryPoint.time)}
                   </span>
                 )}
               </div>

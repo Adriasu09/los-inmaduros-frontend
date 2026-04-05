@@ -1,30 +1,8 @@
 import type { RouteCall } from "@/types";
 import { ROUTE_PACES } from "@/constants";
+import { formatFullDate, formatTime } from "@/lib/date-utils";
 
 // ─── Helpers de formato ─────────────────────────────────────────────────────
-
-function formatFullDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString("es-ES", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-function formatTime(dateString: string): string {
-  return new Date(dateString).toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function formatMeetingTime(timeString: string): string {
-  return new Date(timeString).toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
@@ -62,7 +40,7 @@ export function buildWhatsAppMessage(routeCall: RouteCall, appUrl: string): stri
       `📍 Segundo punto de encuentro: ${secondary.customName ?? secondary.name}`,
     );
     if (secondary.time) {
-      lines.push(`⏰ Hora: ${formatMeetingTime(secondary.time)}`);
+      lines.push(`⏰ Hora: ${formatTime(secondary.time)}`);
     }
   }
 

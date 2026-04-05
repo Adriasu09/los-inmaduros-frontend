@@ -5,7 +5,7 @@ import { Search, ChevronDown } from "lucide-react";
 import type { RouteCall, RoutePace } from "@/types";
 import { ROUTE_PACES, PACE_ORDER } from "@/constants";
 import { useDebounce } from "@/hooks/use-debounce";
-import { normalize } from "@/lib/utils";
+import { cn, normalize } from "@/lib/utils";
 import RouteCallCard from "@/components/home/RouteCallCard";
 
 const PAGE_SIZE = 6;
@@ -95,20 +95,22 @@ export default function EventsContent({
       <div className="flex border-b border-border">
         <button
           onClick={() => setActiveTab("upcoming")}
-          className={`relative px-5 py-3 text-body-sm font-semibold transition-colors ${
+          className={cn(
+            "relative px-5 py-3 text-body-sm font-semibold transition-colors",
             activeTab === "upcoming"
               ? "text-primary"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+              : "text-muted-foreground hover:text-foreground",
+          )}
         >
           Próximas rutas
           {upcomingAll.length > 0 && (
             <span
-              className={`ml-2 text-caption font-bold px-1.5 py-0.5 rounded-full ${
+              className={cn(
+                "ml-2 text-caption font-bold px-1.5 py-0.5 rounded-full",
                 activeTab === "upcoming"
                   ? "bg-primary/15 text-primary"
-                  : "bg-muted text-muted-foreground"
-              }`}
+                  : "bg-muted text-muted-foreground",
+              )}
             >
               {upcomingAll.length}
             </span>
@@ -120,20 +122,22 @@ export default function EventsContent({
 
         <button
           onClick={() => setActiveTab("past")}
-          className={`relative px-5 py-3 text-body-sm font-semibold transition-colors ${
+          className={cn(
+            "relative px-5 py-3 text-body-sm font-semibold transition-colors",
             activeTab === "past"
               ? "text-primary"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+              : "text-muted-foreground hover:text-foreground",
+          )}
         >
           Rutas pasadas
           {pastAll.length > 0 && (
             <span
-              className={`ml-2 text-caption font-bold px-1.5 py-0.5 rounded-full ${
+              className={cn(
+                "ml-2 text-caption font-bold px-1.5 py-0.5 rounded-full",
                 activeTab === "past"
                   ? "bg-primary/15 text-primary"
-                  : "bg-muted text-muted-foreground"
-              }`}
+                  : "bg-muted text-muted-foreground",
+              )}
             >
               {pastAll.length}
             </span>
@@ -165,11 +169,12 @@ export default function EventsContent({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedPace(null)}
-            className={`px-3 py-1.5 rounded-full text-caption font-medium border transition-all ${
+            className={cn(
+              "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
               selectedPace === null
                 ? "bg-primary-hover text-white border-primary-hover"
-                : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary"
-            }`}
+                : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary",
+            )}
           >
             Todos
           </button>
@@ -180,11 +185,12 @@ export default function EventsContent({
               onClick={() =>
                 setSelectedPace(selectedPace === pace ? null : pace)
               }
-              className={`px-3 py-1.5 rounded-full text-caption font-medium border transition-all ${
+              className={cn(
+                "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
                 selectedPace === pace
                   ? "bg-primary-hover text-white border-primary-hover"
-                  : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary"
-              }`}
+                  : "bg-card dark:bg-muted text-soft-foreground border-border hover:border-primary",
+              )}
             >
               {ROUTE_PACES[pace].emoji} {ROUTE_PACES[pace].label}
             </button>
