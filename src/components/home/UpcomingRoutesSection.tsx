@@ -19,7 +19,7 @@ export default function UpcomingRoutesSection({
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
           <div>
             <h2 className="text-heading md:text-title font-bold text-foreground">
-              Próximas Rutas
+              Próximas Rutas/Eventos
             </h2>
             <p className="mt-2 text-body-sm text-muted-foreground max-w-2xl">
               Estas son las próximas quedadas. ¡Elige la tuya y apúntate!
@@ -48,7 +48,7 @@ export default function UpcomingRoutesSection({
         <div className="mt-12 text-center">
           <Link href="/events">
             <Button size="lg" rightIcon={<Calendar size={20} />}>
-              Ver Todas las Rutas{" "}
+              Ver Todos los Eventos{" "}
             </Button>
           </Link>
         </div>

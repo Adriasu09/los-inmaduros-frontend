@@ -33,7 +33,7 @@ export default function HeroSection() {
         </p>
         <Link href="/events">
           <Button size="lg" rightIcon={<ArrowRight size={20} />}>
-            Ver Próximas Rutas
+            Ver Próximos Eventos
           </Button>
         </Link>
       </div>
