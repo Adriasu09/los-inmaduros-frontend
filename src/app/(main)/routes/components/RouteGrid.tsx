@@ -50,7 +50,9 @@ export default function RouteGrid({ routes }: RouteGridProps) {
             size={16}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-faint-foreground"
           />
+          <label htmlFor="route-search" className="sr-only">Buscar rutas</label>
           <input
+            id="route-search"
             type="text"
             placeholder="Buscar rutas..."
             value={search}
@@ -66,6 +68,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedLevel(null)}
+            aria-pressed={selectedLevel === null}
             className={cn(
               "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
               selectedLevel === null
@@ -82,6 +85,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
               onClick={() =>
                 setSelectedLevel(selectedLevel === level ? null : level)
               }
+              aria-pressed={selectedLevel === level}
               className={cn(
                 "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
                 selectedLevel === level

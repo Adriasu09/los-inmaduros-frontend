@@ -24,7 +24,7 @@ export default function NavbarMobileMenu({
   if (!isOpen) return null;
 
   return (
-    <nav className="md:hidden pb-4 flex flex-col space-y-1">
+    <nav id="mobile-menu" className="md:hidden pb-4 flex flex-col space-y-1" aria-label="Menú móvil">
       {NAV_LINKS.map((link) => (
         <NavLink
           key={link.href}

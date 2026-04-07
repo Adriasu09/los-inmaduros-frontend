@@ -334,6 +334,9 @@ export default function CreateRouteCallForm() {
             render={({ field }) => (
               <button
                 type="button"
+                role="switch"
+                aria-checked={field.value}
+                aria-label="Activar punto de encuentro secundario"
                 onClick={() => {
                   const newValue = !field.value;
                   field.onChange(newValue);

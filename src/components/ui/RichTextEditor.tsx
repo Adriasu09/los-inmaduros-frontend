@@ -27,6 +27,7 @@ function ToolbarButton({
       onClick={onClick}
       disabled={disabled}
       title={title}
+      aria-label={title}
       className={cn(
         "p-2 rounded-md transition-colors touch-manipulation",
         isActive

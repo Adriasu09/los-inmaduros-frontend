@@ -162,6 +162,7 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
                   onClick={() => setIsMapOpen(true)}
                   className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
                   title="Ampliar mapa"
+                  aria-label="Ampliar mapa"
                 >
                   <Expand className="w-4 h-4" />
                 </button>

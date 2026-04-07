@@ -247,6 +247,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
               onClick={() => setIsMapOpen(true)}
               className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
               title="Ampliar mapa"
+              aria-label="Ampliar mapa"
             >
               <Expand className="w-5 h-5" />
             </button>

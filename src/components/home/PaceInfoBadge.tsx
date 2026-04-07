@@ -17,8 +17,13 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setIsOpen(false);
+      };
+      document.addEventListener("keydown", handleKeyDown);
       return () => {
         document.body.style.overflow = "";
+        document.removeEventListener("keydown", handleKeyDown);
       };
     }
   }, [isOpen]);
@@ -59,18 +64,21 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
 
             {/* MODAL */}
             <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="pace-modal-title"
               className="relative bg-card dark:bg-muted rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-y-auto p-6 border border-border"
               onClick={(e) => e.stopPropagation()}
             >
               {/* HEADER */}
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-body font-bold text-foreground">
+                <h3 id="pace-modal-title" className="text-body font-bold text-foreground">
                   Ritmos de ruta
                 </h3>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                  aria-label="Cerrar"
+                  aria-label="Cerrar información de ritmos"
                 >
                   <X size={20} />
                 </button>

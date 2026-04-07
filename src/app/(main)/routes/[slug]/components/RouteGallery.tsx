@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Camera, X, Upload } from "lucide-react";
 import { useClerk, useUser } from "@clerk/nextjs";
@@ -39,6 +39,15 @@ export default function RouteGallery({
   } = useUploadPhoto(routeSlug);
 
   const [isFullGalleryOpen, setIsFullGalleryOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isFullGalleryOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsFullGalleryOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isFullGalleryOpen]);
 
   const lightbox = useLightbox(photos);
 
@@ -97,6 +106,7 @@ export default function RouteGallery({
               <button
                 key={photo.id}
                 onClick={() => lightbox.open(i)}
+                aria-label={`Ver foto ${i + 1} de ${photos.length}${photo.caption ? `: ${photo.caption}` : ""}`}
                 className="relative aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <Image
@@ -113,6 +123,7 @@ export default function RouteGallery({
             {hasMore && (
               <button
                 onClick={() => setIsFullGalleryOpen(true)}
+                aria-label={`Ver todas las ${photos.length} fotos`}
                 className="relative aspect-square rounded-lg overflow-hidden bg-muted cursor-pointer group"
               >
                 <Image
@@ -160,11 +171,14 @@ export default function RouteGallery({
           onClick={() => setIsFullGalleryOpen(false)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gallery-modal-title"
             className="bg-card rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
-              <h3 className="text-foreground text-subheading flex items-center gap-2">
+              <h3 id="gallery-modal-title" className="text-foreground text-subheading flex items-center gap-2">
                 Galería de Fotos
                 <span className="text-caption font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
                   {photos.length}
@@ -172,6 +186,7 @@ export default function RouteGallery({
               </h3>
               <button
                 onClick={() => setIsFullGalleryOpen(false)}
+                aria-label="Cerrar galería"
                 className="text-faint-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -186,6 +201,7 @@ export default function RouteGallery({
                       setIsFullGalleryOpen(false);
                       lightbox.open(i);
                     }}
+                    aria-label={`Ver foto ${i + 1} de ${photos.length}${photo.caption ? `: ${photo.caption}` : ""}`}
                     className="relative aspect-square rounded-lg overflow-hidden bg-muted hover:opacity-80 transition-opacity cursor-pointer"
                   >
                     <Image

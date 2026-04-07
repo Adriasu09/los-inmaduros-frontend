@@ -20,6 +20,7 @@ export default function NavLink({
     <Link
       href={href}
       onClick={onClick}
+      aria-current={isActive ? "page" : undefined}
       className={cn(
         "px-4 rounded-full font-medium text-body-sm transition-all duration-200",
         isActive

@@ -51,7 +51,10 @@ export default function RouteCallCardFooter({
       {/* AVATARES / ESTADO VACÍO */}
       <div className="flex items-center gap-2">
         {totalCount > 0 ? (
-          <div className="flex -space-x-2">
+          <div
+            className="flex -space-x-2"
+            aria-label={`${totalCount} ${totalCount === 1 ? "asistente" : "asistentes"}`}
+          >
             {visibleAttendees.map((attendance) => (
               <div key={attendance.id} className="relative">
                 {attendance.user?.imageUrl ? (
@@ -87,13 +90,17 @@ export default function RouteCallCardFooter({
         <button
           onClick={handleToggle}
           disabled={isPending}
+          aria-label={isAttending ? "Cancelar asistencia a esta convocatoria" : "Apuntarme a esta convocatoria"}
+          aria-pressed={isAttending}
+          aria-busy={isPending}
           className={`text-body-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 ${
             isAttending
               ? "text-red-400 hover:text-red-300"
               : "text-primary hover:text-primary-hover"
           }`}
         >
-          {isPending ? "..." : isAttending ? "No voy" : "Apuntarme"}
+          {isPending ? <span aria-hidden="true">...</span> : isAttending ? "No voy" : "Apuntarme"}
+          {isPending && <span className="sr-only">Cargando...</span>}
         </button>
       )}
     </div>

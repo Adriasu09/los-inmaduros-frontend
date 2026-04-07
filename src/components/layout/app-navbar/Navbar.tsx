@@ -48,6 +48,8 @@ export default function Navbar() {
               className="md:hidden p-2 rounded-full text-soft-foreground hover:text-primary hover:bg-accent transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
             >
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>

@@ -73,6 +73,7 @@ export function GalleryLightbox({
               onClick={onZoomOut}
               disabled={zoomIdx === 0}
               title="Alejar (–)"
+              aria-label="Alejar"
               className="p-2 rounded-full text-white hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             >
               <ZoomOut className="w-5 h-5" />
@@ -86,6 +87,7 @@ export function GalleryLightbox({
               onClick={onZoomIn}
               disabled={zoomIdx === ZOOM_LEVELS.length - 1}
               title="Acercar (+)"
+              aria-label="Acercar"
               className="p-2 rounded-full text-white hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             >
               <ZoomIn className="w-5 h-5" />
@@ -99,6 +101,7 @@ export function GalleryLightbox({
                 onToggleFullscreen();
               }}
               title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+              aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
               className="p-2 rounded-full text-white hover:bg-white/20 transition-colors cursor-pointer"
             >
               {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
@@ -112,6 +115,7 @@ export function GalleryLightbox({
               onClose();
             }}
             title="Cerrar (Esc)"
+            aria-label="Cerrar lightbox"
             className="p-2 rounded-full text-white hover:bg-white/20 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
@@ -128,6 +132,7 @@ export function GalleryLightbox({
               e.stopPropagation();
               onGoTo(lightboxIndex - 1);
             }}
+            aria-label="Foto anterior"
             className="cursor-pointer z-10 shrink-0 p-2 m-3 rounded-full bg-black/40 hover:bg-white/20 text-white transition-colors"
           >
             <ChevronLeft className="w-7 h-7" />
@@ -173,6 +178,7 @@ export function GalleryLightbox({
               e.stopPropagation();
               onGoTo(lightboxIndex + 1);
             }}
+            aria-label="Foto siguiente"
             className="cursor-pointer z-10 shrink-0 p-2 m-3 rounded-full bg-black/40 hover:bg-white/20 text-white transition-colors"
           >
             <ChevronRight className="w-7 h-7" />

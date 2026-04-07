@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Star, X, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -58,6 +58,15 @@ export default function RouteReviews({
   const { data: response, isLoading } = useRoute(routeSlug);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE); // ← nuevo
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
 
   const route = response?.data;
   const reviews = route?.reviews ?? [];
@@ -205,15 +214,19 @@ export default function RouteReviews({
           onClick={() => setIsModalOpen(false)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="review-modal-title"
             className="bg-card rounded-2xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-foreground text-subheading">
+              <h3 id="review-modal-title" className="text-foreground text-subheading">
                 Escribe tu opinión
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
+                aria-label="Cerrar modal de opinión"
                 className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />

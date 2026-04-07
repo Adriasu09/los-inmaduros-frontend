@@ -13,9 +13,10 @@ export default function FooterSocial() {
         {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
           <Link
             target="_blank"
+            rel="noopener noreferrer"
             key={label}
             href={href}
-            aria-label={label}
+            aria-label={`${label} (abre en nueva pestaña)`}
             className="text-faint-foreground hover:text-primary transition-colors"
           >
             <Icon size={24} />

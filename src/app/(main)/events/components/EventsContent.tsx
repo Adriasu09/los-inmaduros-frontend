@@ -92,8 +92,12 @@ export default function EventsContent({
   return (
     <div className="flex flex-col gap-6 mt-8">
       {/* TABS */}
-      <div className="flex border-b border-border">
+      <div role="tablist" aria-label="Tipo de convocatorias" className="flex border-b border-border">
         <button
+          role="tab"
+          id="tab-upcoming"
+          aria-selected={activeTab === "upcoming"}
+          aria-controls="tabpanel-events"
           onClick={() => setActiveTab("upcoming")}
           className={cn(
             "relative px-5 py-3 text-body-sm font-semibold transition-colors",
@@ -121,6 +125,10 @@ export default function EventsContent({
         </button>
 
         <button
+          role="tab"
+          id="tab-past"
+          aria-selected={activeTab === "past"}
+          aria-controls="tabpanel-events"
           onClick={() => setActiveTab("past")}
           className={cn(
             "relative px-5 py-3 text-body-sm font-semibold transition-colors",
@@ -155,7 +163,9 @@ export default function EventsContent({
             size={16}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-faint-foreground"
           />
+          <label htmlFor="events-search" className="sr-only">Buscar convocatorias</label>
           <input
+            id="events-search"
             type="text"
             placeholder="Buscar convocatorias..."
             value={search}
@@ -169,6 +179,7 @@ export default function EventsContent({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedPace(null)}
+            aria-pressed={selectedPace === null}
             className={cn(
               "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
               selectedPace === null
@@ -185,6 +196,7 @@ export default function EventsContent({
               onClick={() =>
                 setSelectedPace(selectedPace === pace ? null : pace)
               }
+              aria-pressed={selectedPace === pace}
               className={cn(
                 "px-3 py-1.5 rounded-full text-caption font-medium border transition-all",
                 selectedPace === pace
@@ -199,6 +211,11 @@ export default function EventsContent({
       </div>
 
       {/* GRID */}
+      <div
+        id="tabpanel-events"
+        role="tabpanel"
+        aria-labelledby={activeTab === "upcoming" ? "tab-upcoming" : "tab-past"}
+      >
       {activeList.length > 0 ? (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -240,6 +257,7 @@ export default function EventsContent({
           </p>
         </div>
       )}
+      </div>
     </div>
   );
 }

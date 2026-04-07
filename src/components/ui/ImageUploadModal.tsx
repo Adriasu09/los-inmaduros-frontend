@@ -38,6 +38,8 @@ export default function ImageUploadModal({
   const [caption, setCaption] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const titleId = "image-upload-modal-title";
+  const captionId = "image-upload-caption";
 
   // Resetear estado completo cuando el modal se cierra (tanto por handleClose como por onSuccess externo)
   useEffect(() => {
@@ -50,6 +52,17 @@ export default function ImageUploadModal({
         return null;
       });
     }
+  }, [isOpen]);
+
+  // Cerrar con ESC
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const handleClose = () => {
@@ -106,17 +119,21 @@ export default function ImageUploadModal({
       onClick={handleClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
         className="bg-card rounded-2xl shadow-2xl w-full max-w-md flex flex-col gap-5 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="text-foreground text-subheading">
+          <h3 id={titleId} className="text-foreground text-subheading">
             {title}
           </h3>
           <button
             onClick={handleClose}
             disabled={isPending}
+            aria-label="Cerrar modal de subida"
             className="text-faint-foreground hover:text-foreground transition-colors disabled:opacity-50 cursor-pointer"
           >
             <X className="w-5 h-5" />
@@ -147,9 +164,13 @@ export default function ImageUploadModal({
           </div>
         ) : (
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Seleccionar foto. Haz clic o arrastra una imagen"
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
             onClick={() => inputRef.current?.click()}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); inputRef.current?.click(); } }}
             className={cn(
               "w-full aspect-video rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors",
               validationError
@@ -185,7 +206,11 @@ export default function ImageUploadModal({
 
         {/* Caption */}
         <div className="flex flex-col gap-1">
+          <label htmlFor={captionId} className="sr-only">
+            Descripción de la foto (opcional)
+          </label>
           <textarea
+            id={captionId}
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             maxLength={MAX_CAPTION_LENGTH}

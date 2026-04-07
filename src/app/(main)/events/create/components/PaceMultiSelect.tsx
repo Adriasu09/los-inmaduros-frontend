@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Info, X } from "lucide-react";
 import { ROUTE_PACES, PACE_ORDER } from "@/constants";
 import type { RoutePace } from "@/types";
@@ -18,6 +18,15 @@ export default function PaceMultiSelect({
   error,
 }: PaceMultiSelectProps) {
   const [showInfo, setShowInfo] = useState(false);
+
+  useEffect(() => {
+    if (!showInfo) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowInfo(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [showInfo]);
 
   const togglePace = (pace: RoutePace) => {
     if (selected.includes(pace)) {
@@ -38,6 +47,7 @@ export default function PaceMultiSelect({
           onClick={() => setShowInfo(true)}
           className="text-muted-foreground hover:text-primary transition-colors"
           title="Información sobre los ritmos"
+          aria-label="Información sobre los ritmos"
         >
           <Info className="w-4 h-4" />
         </button>
@@ -79,16 +89,20 @@ export default function PaceMultiSelect({
           onClick={() => setShowInfo(false)}
         >
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pace-info-modal-title"
             className="bg-card rounded-2xl shadow-2xl w-full max-w-sm max-h-[80vh] overflow-y-auto p-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-subheading font-bold text-foreground">
+              <h3 id="pace-info-modal-title" className="text-subheading font-bold text-foreground">
                 Niveles de ritmo
               </h3>
               <button
                 type="button"
                 onClick={() => setShowInfo(false)}
+                aria-label="Cerrar información de ritmos"
                 className="text-faint-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-5 h-5" />
