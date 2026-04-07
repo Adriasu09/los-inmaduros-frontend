@@ -17,14 +17,17 @@ export default async function EventsPage() {
     getPastRouteCallsServer(),
   ]);
 
-  const upcoming = upcomingRes?.data ?? [];
-  const past = pastRes?.data ?? [];
+  const initialUpcoming = upcomingRes?.data ?? [];
+  const initialPast = pastRes?.data ?? [];
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <EventsHero />
-        <EventsContent upcoming={upcoming} past={past} />
+        <EventsContent
+          initialUpcoming={initialUpcoming}
+          initialPast={initialPast}
+        />
       </div>
     </div>
   );

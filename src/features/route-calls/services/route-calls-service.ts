@@ -26,6 +26,26 @@ export interface CreateRouteCallPayload {
   meetingPoints: CreateRouteCallMeetingPoint[];
 }
 
+// Filtros para obtener convocatorias desde el backend
+export interface RouteCallFilters {
+  upcoming: boolean;
+  pace?: RoutePace;
+  month?: string; // "YYYY-MM"
+  limit?: number;
+}
+
+// Para Client Components — convocatorias filtradas desde el backend
+export async function getFilteredRouteCalls(
+  filters: RouteCallFilters,
+): Promise<ApiResponse<RouteCall[]>> {
+  const params = new URLSearchParams();
+  params.set("upcoming", String(filters.upcoming));
+  params.set("limit", String(filters.limit ?? 100));
+  if (filters.pace) params.set("pace", filters.pace);
+  if (filters.month) params.set("month", filters.month);
+  return apiClient.get<ApiResponse<RouteCall[]>>(`/route-calls?${params}`);
+}
+
 // Para Client Components (React Query hooks)
 export async function getUpcomingRouteCalls(): Promise<
   ApiResponse<RouteCall[]>
