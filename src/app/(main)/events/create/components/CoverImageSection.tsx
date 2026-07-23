@@ -34,6 +34,7 @@ export default function CoverImageSection({
   useEffect(() => {
     if (coverImage) {
       const url = URL.createObjectURL(coverImage);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs preview with the Blob URL lifecycle (external browser API + required revoke on cleanup), not derived UI state; documented rule false positive (facebook/react#34743)
       setPreview(url);
       return () => URL.revokeObjectURL(url);
     } else {

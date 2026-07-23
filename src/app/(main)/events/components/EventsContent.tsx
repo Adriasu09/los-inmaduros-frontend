@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import type { RouteCall, RoutePace } from "@/types";
 import { ROUTE_PACES, PACE_ORDER } from "@/constants";
@@ -86,11 +86,26 @@ export default function EventsContent({
     [pastData, debouncedSearch],
   );
 
-  // Reset visible counts when filters change
-  useEffect(() => {
+  // Reset visible counts when filters change (adjusted during render, not in
+  // an effect, to avoid the extra cascading render an effect-based reset causes).
+  const [prevFilters, setPrevFilters] = useState({
+    search: debouncedSearch,
+    pace: selectedPace,
+    month: selectedMonth,
+  });
+  if (
+    prevFilters.search !== debouncedSearch ||
+    prevFilters.pace !== selectedPace ||
+    prevFilters.month !== selectedMonth
+  ) {
+    setPrevFilters({
+      search: debouncedSearch,
+      pace: selectedPace,
+      month: selectedMonth,
+    });
     setUpcomingVisible(PAGE_SIZE);
     setPastVisible(PAGE_SIZE);
-  }, [debouncedSearch, selectedPace, selectedMonth]);
+  }
 
   const visibleUpcoming = filteredUpcoming.slice(0, upcomingVisible);
   const visiblePast = filteredPast.slice(0, pastVisible);
