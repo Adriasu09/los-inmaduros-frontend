@@ -1,72 +1,68 @@
+import axios, { type AxiosResponse } from "axios";
 import { ApiError } from "./api-error";
 import type { ApiErrorCode, ApiErrorResponse } from "./types";
 
 /**
- * Handle API error responses
+ * Convierte una respuesta de error HTTP de axios en un ApiError.
  */
-export async function handleApiError(response: Response): Promise<ApiError> {
-  let errorData: ApiErrorResponse;
-
-  try {
-    errorData = await response.json();
-  } catch {
-    errorData = {
-      message: response.statusText || "Unknown error",
-      statusCode: response.status,
-    };
-  }
+export function handleApiError(response: AxiosResponse): ApiError {
+  const data = response.data as Partial<ApiErrorResponse> | undefined;
 
   const code = getErrorCode(response.status);
 
   return new ApiError({
-    message: errorData.message || "An error occurred",
+    // Fallback defensivo en es-ES por si `data` no es el envelope esperado
+    // (p. ej. un HTML de error de un proxy en vez del JSON del backend).
+    message:
+      typeof data?.message === "string" && data.message.trim().length > 0
+        ? data.message
+        : "Ha ocurrido un error inesperado. Inténtalo de nuevo.",
     code,
     statusCode: response.status,
-    errors: errorData.errors,
+    errors: data?.errors,
   });
 }
 
 /**
- * Handle network errors
+ * Convierte un error de red/timeout (sin respuesta HTTP) en un ApiError.
  */
 export function handleNetworkError(error: unknown): ApiError {
   if (error instanceof ApiError) {
     return error;
   }
 
-  if (error instanceof Error) {
-    // Timeout error
-    if (error.name === "AbortError" || error.message.includes("timeout")) {
+  if (axios.isAxiosError(error)) {
+    // Timeout: axios aborta la petición al superar el `timeout` configurado
+    if (error.code === "ECONNABORTED") {
       return new ApiError({
-        message: "Request timeout. Please try again.",
+        message: "La solicitud ha tardado demasiado. Inténtalo de nuevo.",
         code: "TIMEOUT_ERROR",
       });
     }
-
-    // Network error
-    if (error.message.includes("fetch") || error.message.includes("network")) {
+    // Fallo de red: sin conexión, DNS, CORS, servidor inalcanzable...
+    if (error.code === "ERR_NETWORK") {
       return new ApiError({
-        message: "Network error. Please check your connection.",
+        message: "Error de red. Comprueba tu conexión e inténtalo de nuevo.",
         code: "NETWORK_ERROR",
       });
     }
   }
 
-  // Unknown error
   return new ApiError({
-    message: "An unexpected error occurred",
+    message: "Ha ocurrido un error inesperado.",
     code: "UNKNOWN_ERROR",
   });
 }
 
 /**
- * Map HTTP status to error code
+ * Map HTTP status to error code.
+ * El backend usa 400 (no 422) para errores de validación (envelope con `errors`).
  */
 function getErrorCode(status: number): ApiErrorCode {
   if (status === 401) return "UNAUTHORIZED";
   if (status === 403) return "FORBIDDEN";
   if (status === 404) return "NOT_FOUND";
-  if (status === 422) return "VALIDATION_ERROR";
+  if (status === 400) return "VALIDATION_ERROR";
   if (status >= 500) return "SERVER_ERROR";
   return "UNKNOWN_ERROR";
 }

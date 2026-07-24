@@ -66,9 +66,9 @@ class HttpClient {
     // Response interceptor - error handling
     this.client.interceptors.response.use(
       (response) => response,
-      async (error) => {
+      (error) => {
         if (error.response) {
-          const apiError = await handleApiError(error.response);
+          const apiError = handleApiError(error.response);
           if (apiError.is("UNAUTHORIZED") || apiError.is("FORBIDDEN")) {
             this.handleUnauthorized();
           }
@@ -195,7 +195,7 @@ class HttpClient {
 
 // Export singleton instance
 const apiClient = new HttpClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api",
 });
 
 export default apiClient;
