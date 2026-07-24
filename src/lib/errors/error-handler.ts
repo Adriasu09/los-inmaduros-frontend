@@ -70,10 +70,3 @@ function getErrorCode(status: number): ApiErrorCode {
   if (status >= 500) return "SERVER_ERROR";
   return "UNKNOWN_ERROR";
 }
-
-/**
- * Check if error is retryable
- */
-export function isRetryableError(error: ApiError): boolean {
-  return error.isRetryable();
-}
