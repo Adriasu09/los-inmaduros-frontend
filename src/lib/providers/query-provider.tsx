@@ -15,14 +15,14 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             gcTime: 5 * 60 * 1000,
             refetchOnWindowFocus: false,
             retry: (failureCount, error) => {
-              // No reintentar errores de autenticación
-              if (
-                error instanceof ApiError &&
-                (error.statusCode === 401 || error.statusCode === 403)
-              ) {
-                return false;
+              // Única capa de reintentos (la de HttpClient se retiró).
+              // Solo errores transitorios (red, timeout, 5xx), reutilizando la
+              // misma lógica de ApiError.isRetryable(). Los 4xx (auth,
+              // validación, 404) NO se reintentan: no cambiaría el resultado.
+              if (error instanceof ApiError) {
+                return error.isRetryable() && failureCount < 1;
               }
-              return failureCount < 1;
+              return false;
             },
           },
         },

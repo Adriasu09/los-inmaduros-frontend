@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
-import { ApiError, handleApiError, handleNetworkError } from "@/lib/errors";
+import { handleApiError, handleNetworkError } from "@/lib/errors";
 
 // Bridge para inyectar el token de Clerk en cada request sin depender de React
 let getClerkToken: (() => Promise<string | null>) | null = null;
@@ -16,12 +16,11 @@ export function setClerkTokenGetter(
 interface HttpClientConfig {
   baseURL: string;
   timeout?: number;
-  retries?: number;
   onUnauthorized?: () => void;
 }
 
 /**
- * HTTP Client with retries, timeout, and error handling
+ * HTTP Client con timeout, token de Clerk y manejo de errores.
  */
 class HttpClient {
   private client: AxiosInstance;
@@ -30,7 +29,6 @@ class HttpClient {
   constructor(config: HttpClientConfig) {
     this.config = {
       timeout: 30000,
-      retries: 1,
       ...config,
     };
 
@@ -63,13 +61,15 @@ class HttpClient {
       (error) => Promise.reject(handleNetworkError(error)),
     );
 
-    // Response interceptor - error handling
+    // Response interceptor - convierte los errores de axios en ApiError
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response) {
           const apiError = handleApiError(error.response);
-          if (apiError.is("UNAUTHORIZED") || apiError.is("FORBIDDEN")) {
+          // Solo 401 (sesión inválida) dispara la re-autenticación.
+          // 403 es "autenticado pero sin permiso" y NO debe forzar re-login.
+          if (apiError.is("UNAUTHORIZED")) {
             this.handleUnauthorized();
           }
           return Promise.reject(apiError);
@@ -90,54 +90,11 @@ class HttpClient {
   }
 
   /**
-   * Execute request with retries
-   */
-  private async executeWithRetries<T>(
-    request: () => Promise<T>,
-    retries: number = this.config.retries!,
-  ): Promise<T> {
-    let lastError: ApiError | null = null;
-
-    for (let attempt = 0; attempt <= retries; attempt++) {
-      try {
-        return await request();
-      } catch (error) {
-        if (error instanceof ApiError) {
-          lastError = error;
-
-          if (!error.isRetryable()) {
-            throw error;
-          }
-
-          if (attempt === retries) {
-            throw error;
-          }
-
-          const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
-          await new Promise((resolve) => setTimeout(resolve, delay));
-        } else {
-          throw handleNetworkError(error);
-        }
-      }
-    }
-
-    throw (
-      lastError ||
-      new ApiError({
-        message: "Request failed after all retries",
-        code: "UNKNOWN_ERROR",
-      })
-    );
-  }
-
-  /**
    * GET request
    */
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.executeWithRetries(async () => {
-      const response = await this.client.get<T>(url, config);
-      return response.data;
-    });
+    const response = await this.client.get<T>(url, config);
+    return response.data;
   }
 
   /**
@@ -148,10 +105,8 @@ class HttpClient {
     data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> {
-    return this.executeWithRetries(async () => {
-      const response = await this.client.post<T>(url, data, config);
-      return response.data;
-    });
+    const response = await this.client.post<T>(url, data, config);
+    return response.data;
   }
 
   /**
@@ -162,10 +117,8 @@ class HttpClient {
     data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> {
-    return this.executeWithRetries(async () => {
-      const response = await this.client.patch<T>(url, data, config);
-      return response.data;
-    });
+    const response = await this.client.patch<T>(url, data, config);
+    return response.data;
   }
 
   /**
@@ -176,20 +129,16 @@ class HttpClient {
     data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> {
-    return this.executeWithRetries(async () => {
-      const response = await this.client.put<T>(url, data, config);
-      return response.data;
-    });
+    const response = await this.client.put<T>(url, data, config);
+    return response.data;
   }
 
   /**
    * DELETE request
    */
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.executeWithRetries(async () => {
-      const response = await this.client.delete<T>(url, config);
-      return response.data;
-    });
+    const response = await this.client.delete<T>(url, config);
+    return response.data;
   }
 }
 
