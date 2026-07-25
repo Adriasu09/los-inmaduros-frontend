@@ -1,10 +1,44 @@
 # Barrido frontend — Fase 7
 
-> **Fecha:** 23 de julio de 2026
+> **Fecha:** 23 de julio de 2026 · **Última actualización:** 24 de julio de 2026 (cierre D14)
 > Auditoría de solo lectura de `src/` + configuración, previa a las tareas de Fase 7.
 > Referencias: `CLAUDE.md`, `docs/route-calls-contract.md`, `docs/gherkin/route-calls-ui.feature`.
-> Nada de lo listado se ha tocado. Los hallazgos que implican backend/contrato están
-> marcados como **IMPROVEMENT PROPOSAL** (decide la autora).
+> Los hallazgos que implican backend/contrato están marcados como **IMPROVEMENT PROPOSAL**
+> (decide la autora). El texto original de cada hallazgo se conserva sin reescribir (es un
+> registro de auditoría); el estado de resolución se añade como nota al final de cada fila
+> resuelta, con fecha.
+
+## ✅ Resuelto en D14 (24-jul) — resumen para Notion
+
+| # | Hallazgo | Qué se hizo |
+|---|---|---|
+| 1 | `handleApiError` usaba `.json()` de fetch sobre un `AxiosResponse` | Reescrito para leer `error.response.data` directamente (ya viene parseado) |
+| 4 | 422 mapeado, 400 no | `getErrorCode` ahora mapea 400 → `VALIDATION_ERROR` |
+| 9 | `catch` genérico en `CreateRouteCallForm` pisaba el `message` del backend | Ahora usa `error instanceof ApiError ? error.message : fallback` |
+| 13 (parcial) | Código muerto | Supabase, hooks/servicios sin uso, `isRetryableError`, query keys de reviews/photos, imports muertos de `PlusCircle`/`RouteReviews`, `i.pravatar.cc`, ruta fantasma del middleware — todo eliminado. **Excepción deliberada:** `useRouteCall` se conservó (ver nota abajo) |
+| 14 | Fallbacks en inglés, detección de red por string | Traducidos a es-ES; ahora se usa `axios.isAxiosError` + `error.code` (`ECONNABORTED`/`ERR_NETWORK`) |
+| 28 | `ApiResponse` sin `message`/`count`; detalle sin `attendances` | Añadidos; se creó `RouteCallAttendee` (tipo propio, más estrecho que `Attendance` — el backend solo embebe `id`, `status`, `user`) |
+
+**Nota sobre el 13 — lección de scope:** en la limpieza inicial también se marcaron como muertos
+`useRouteCall`, la ruta `/gallery` del middleware y el dominio `i.pravatar.cc`. Tras revisión:
+`useRouteCall` se conservó a propósito (es la API que necesitará la UI de edición, D15).
+`/gallery` no se borró, se **corrigió** a `/galeria` (coincidía con la navegación real, no con
+el middleware — bug, no código muerto). `i.pravatar.cc` sí se borró, tras confirmar que ningún
+dato de la BD lo usa. Ver [[los-inmaduros-cleanup-scope]] en memoria: antes de borrar un export
+sin uso hay que preguntar si es scaffolding futuro; un *import* sin uso sí se borra sin preguntar.
+
+**Extra hecho en la misma pasada (no estaba en la tabla original):** `ApiErrorResponse` tenía
+`code?`/`statusCode?` que el backend nunca envía (dead fields) — eliminados; se añadió
+`CONFLICT` (409) a `ApiErrorCode`, que faltaba. `msw` quitado de `pnpm.onlyBuiltDependencies`
+(no estaba instalado) — **recordar re-añadirlo si T-39 lo necesita**. `aria-pressed` en
+`role="gridcell"` (MonthYearPicker) cambiado a `aria-selected` (el atributo correcto para ese
+rol ARIA).
+
+**Deliberadamente NO tocado en D14** (fuera de alcance, ver plan del día):
+punto 2 (sanitización XSS), punto 3 (timezone, tarea propia), punto 5b (N+1 en tarjetas),
+punto 6 (enlaces `/contacto`, `/nosotros`, `/normas` — solo se arregló `/galeria`), punto 7
+(`serverFetch` como 404), punto 8 (`/events/create` pública), punto 10 (mutaciones sin
+`onError`), punto 11 (import cruzado `RouteMap`), y los de accesibilidad general (T-50).
 
 ## Prerequisito backend del formulario de edición (VERIFICADO 23-jul contra el código)
 

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { ApiError } from "@/lib/errors";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   createRouteCallSchema,
@@ -26,15 +27,12 @@ import type { MeetingPointValue } from "./MeetingPointSelector";
 
 // Lazy import RichTextEditor (not needed for SSR)
 import dynamic from "next/dynamic";
-const RichTextEditor = dynamic(
-  () => import("@/components/ui/RichTextEditor"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-45 bg-muted border border-border rounded-lg animate-pulse" />
-    ),
-  },
-);
+const RichTextEditor = dynamic(() => import("@/components/ui/RichTextEditor"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-45 bg-muted border border-border rounded-lg animate-pulse" />
+  ),
+});
 
 export default function CreateRouteCallForm() {
   const router = useRouter();
@@ -129,7 +127,9 @@ export default function CreateRouteCallForm() {
       type,
       name: mp.customName?.trim() || "",
       ...(mp.customName?.trim() && { customName: mp.customName.trim() }),
-      ...(toGoogleMapsUrl(mp.location) && { location: toGoogleMapsUrl(mp.location) }),
+      ...(toGoogleMapsUrl(mp.location) && {
+        location: toGoogleMapsUrl(mp.location),
+      }),
       ...(isoTime && { time: isoTime }),
     };
   };
@@ -146,12 +146,20 @@ export default function CreateRouteCallForm() {
       ).toISOString();
 
       const meetingPoints = [
-        buildMeetingPointPayload(data.primaryMeetingPoint, "PRIMARY", data.dateRoute),
+        buildMeetingPointPayload(
+          data.primaryMeetingPoint,
+          "PRIMARY",
+          data.dateRoute,
+        ),
       ];
 
       if (data.hasSecondaryMeetingPoint && data.secondaryMeetingPoint) {
         meetingPoints.push(
-          buildMeetingPointPayload(data.secondaryMeetingPoint, "SECONDARY", data.dateRoute),
+          buildMeetingPointPayload(
+            data.secondaryMeetingPoint,
+            "SECONDARY",
+            data.dateRoute,
+          ),
         );
       }
 
@@ -183,9 +191,13 @@ export default function CreateRouteCallForm() {
 
       // 4. Redirect to home
       router.push("/");
-    } catch {
+    } catch(error) {
+      // Surface the backend message (D13); the generic text is only a fallback
+      // for non-API failures (network, unexpected).
       setSubmitError(
-        "Ha ocurrido un error al crear la convocatoria. Inténtalo de nuevo.",
+        error instanceof ApiError
+          ? error.message
+          : "Ha ocurrido un error al crear la convocatoria. Inténtalo de nuevo.",
       );
     } finally {
       setIsSubmitting(false);

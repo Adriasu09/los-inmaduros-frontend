@@ -52,6 +52,7 @@ function getErrorCode(status: number): ApiErrorCode {
   if (status === 404) return "NOT_FOUND";
   // Backend uses 400 (not 422) for validation errors.
   if (status === 400) return "VALIDATION_ERROR";
+  if (status === 409) return "CONFLICT";
   if (status >= 500) return "SERVER_ERROR";
   return "UNKNOWN_ERROR";
 }

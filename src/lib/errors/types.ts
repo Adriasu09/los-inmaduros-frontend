@@ -8,15 +8,16 @@ export type ApiErrorCode =
   | "FORBIDDEN"
   | "NOT_FOUND"
   | "VALIDATION_ERROR"
+  | "CONFLICT"
   | "SERVER_ERROR"
   | "UNKNOWN_ERROR";
 
 /**
- * API Error response structure
+ * Shape of the backend's error envelope. `code`/`statusCode` aren't part of
+ * it (the backend only sends `message` + optional `errors`) — don't add them
+ * back without checking the contract first.
  */
 export interface ApiErrorResponse {
   message: string;
-  code?: string;
-  statusCode?: number;
   errors?: Record<string, string[]>;
 }

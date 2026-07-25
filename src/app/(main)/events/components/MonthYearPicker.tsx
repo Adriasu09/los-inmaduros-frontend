@@ -134,7 +134,7 @@ export default function MonthYearPicker({
                 type="button"
                 role="gridcell"
                 aria-label={`${MONTH_NAMES_FULL[i]} ${viewYear}`}
-                aria-pressed={isSelected}
+                aria-selected={isSelected}
                 onClick={() => selectMonth(i)}
                 className={cn(
                   "py-1.5 rounded-md text-caption font-medium transition-all",

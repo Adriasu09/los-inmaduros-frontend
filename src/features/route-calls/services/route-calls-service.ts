@@ -70,14 +70,16 @@ export async function getUpcomingRouteCallsServer(): Promise<ApiResponse<
   );
 }
 
+// Despite the name, the backend still applies its default page size (20)
+// when no `limit` is sent — this is NOT an unpaginated "get everything".
 export async function getAllRouteCalls(): Promise<ApiResponse<RouteCall[]>> {
-  return apiClient.get<ApiResponse<RouteCall[]>>("/route-calls");
+  return apiClient.get<ApiResponse<RouteCall[]>>("/route-calls?limit=100");
 }
 
 export async function getAllRouteCallsServer(): Promise<ApiResponse<
   RouteCall[]
 > | null> {
-  return serverFetch<ApiResponse<RouteCall[]>>("/route-calls");
+  return serverFetch<ApiResponse<RouteCall[]>>("/route-calls?limit=100");
 }
 
 // Upcoming: SCHEDULED + ONGOING + recently CANCELLED.
@@ -131,6 +133,8 @@ export async function cancelRouteCall(
 
 export async function deleteRouteCall(
   id: string,
-): Promise<ApiResponse<null>> {
-  return apiClient.delete<ApiResponse<null>>(`/route-calls/${id}`);
+): Promise<{ success: boolean; message?: string }> {
+  return apiClient.delete<{ success: boolean; message?: string }>(
+    `/route-calls/${id}`,
+  );
 }

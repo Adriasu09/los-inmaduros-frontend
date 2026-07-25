@@ -70,6 +70,8 @@ export interface MeetingPoint {
   time: string | null;
 }
 
+// The detail endpoint embeds a slimmer attendee than `Attendance`:
+// only these three fields are sent, and `user` is always present.
 export interface RouteCallAttendee {
   id: string;
   status: AttendanceStatus;

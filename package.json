@@ -52,7 +52,6 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@clerk/shared",
-      "msw",
       "sharp",
       "unrs-resolver"
     ]
