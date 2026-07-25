@@ -41,6 +41,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# claude — CLAUDE.md stays tracked on purpose (AI guidelines are portfolio
+# evidence); only machine-local state is ignored.
+.claude/settings.local.json
+.claude/*.lock
+
 # reference backend + planning
 reference/
 plans/
