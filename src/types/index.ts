@@ -85,6 +85,7 @@ export interface RouteCall {
   route?: Route;
   organizer?: User;
   meetingPoints?: MeetingPoint[];
+  attendances?: Attendance[];
   _count?: {
     attendances: number;
   };
@@ -164,5 +165,7 @@ export interface PaginationMeta {
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
+  message?: string;
+  count?: number;
   pagination?: PaginationMeta;
 }

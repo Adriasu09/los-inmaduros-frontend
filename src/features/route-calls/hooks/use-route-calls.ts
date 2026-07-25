@@ -5,9 +5,13 @@ import {
   getRouteCallById,
   createRouteCall,
   getFilteredRouteCalls,
+  updateRouteCall,
+  cancelRouteCall,
+  deleteRouteCall,
 } from "../services/route-calls-service";
 import type {
   CreateRouteCallPayload,
+  UpdateRouteCallPayload,
   RouteCallFilters,
 } from "../services/route-calls-service";
 import { queryKeys } from "@/lib/api/query-keys";
@@ -54,3 +58,43 @@ export function useCreateRouteCall() {
     },
   });
 }
+
+export function useUpdateRouteCall(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: UpdateRouteCallPayload) => updateRouteCall(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.routeCalls.lists() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.routeCalls.detail(id),
+      });
+    },
+  });
+}
+
+export function useCancelRouteCall(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => cancelRouteCall(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.routeCalls.lists() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.routeCalls.detail(id),
+      });
+    },
+  });
+}
+
+export function useDeleteRouteCall(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => deleteRouteCall(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.routeCalls.lists() });
+    },
+  });
+}
+

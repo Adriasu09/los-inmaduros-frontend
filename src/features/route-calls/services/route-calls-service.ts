@@ -25,6 +25,14 @@ export interface CreateRouteCallPayload {
   meetingPoints: CreateRouteCallMeetingPoint[];
 }
 
+export interface UpdateRouteCallPayload {
+  title?: string;
+  description?: string | null;
+  image?: string;
+  dateRoute?: string;
+  paces?: RoutePace[];
+}
+
 export interface RouteCallFilters {
   upcoming: boolean;
   pace?: RoutePace;
@@ -106,4 +114,23 @@ export async function createRouteCall(
   data: CreateRouteCallPayload,
 ): Promise<ApiResponse<RouteCall>> {
   return apiClient.post<ApiResponse<RouteCall>>("/route-calls", data);
+}
+
+export async function updateRouteCall(
+  id: string,
+  data: UpdateRouteCallPayload,
+): Promise<ApiResponse<RouteCall>> {
+  return apiClient.patch<ApiResponse<RouteCall>>(`/route-calls/${id}`, data);
+}
+
+export async function cancelRouteCall(
+  id: string,
+): Promise<ApiResponse<RouteCall>> {
+  return apiClient.patch<ApiResponse<RouteCall>>(`/route-calls/${id}/cancel`);
+}
+
+export async function deleteRouteCall(
+  id: string,
+): Promise<ApiResponse<null>> {
+  return apiClient.delete<ApiResponse<null>>(`/route-calls/${id}`);
 }
