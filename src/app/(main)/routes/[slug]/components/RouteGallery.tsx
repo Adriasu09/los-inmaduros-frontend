@@ -77,9 +77,7 @@ export default function RouteGallery({
 
   return (
     <>
-      {/* ── Sección galería ── */}
       <div className="flex flex-col gap-4">
-        {/* Cabecera */}
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-foreground text-heading flex items-center gap-2 min-w-0">
             <span className="truncate">Galería de Fotos</span>
@@ -99,7 +97,6 @@ export default function RouteGallery({
           </button>
         </div>
 
-        {/* Grid o empty state */}
         {photos.length > 0 ? (
           <div className="grid grid-cols-3 gap-2">
             {previewPhotos.map((photo, i) => (
@@ -119,7 +116,6 @@ export default function RouteGallery({
               </button>
             ))}
 
-            {/* Slot "+N más" */}
             {hasMore && (
               <button
                 onClick={() => setIsFullGalleryOpen(true)}
@@ -164,7 +160,6 @@ export default function RouteGallery({
         )}
       </div>
 
-      {/* ── Modal galería completa ── */}
       {isFullGalleryOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
@@ -219,7 +214,6 @@ export default function RouteGallery({
         </div>
       )}
 
-      {/* ── Lightbox ── */}
       {lightbox.currentPhoto && (
         <GalleryLightbox
           photos={photos}
@@ -242,7 +236,6 @@ export default function RouteGallery({
         />
       )}
 
-      {/* Modal de subida */}
       <ImageUploadModal
         isOpen={isUploadOpen}
         onClose={handleUploadClose}

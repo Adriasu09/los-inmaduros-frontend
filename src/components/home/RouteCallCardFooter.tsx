@@ -48,7 +48,6 @@ export default function RouteCallCardFooter({
 
   return (
     <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
-      {/* AVATARES / ESTADO VACÍO */}
       <div className="flex items-center gap-2">
         {totalCount > 0 ? (
           <div
@@ -85,7 +84,6 @@ export default function RouteCallCardFooter({
         )}
       </div>
 
-      {/* BOTÓN APUNTARME / NO VOY */}
       {variant !== "past" && !isCancelled && (
         <button
           onClick={handleToggle}

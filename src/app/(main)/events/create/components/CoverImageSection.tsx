@@ -92,7 +92,6 @@ export default function CoverImageSection({
             className="object-cover"
             unoptimized={!!preview}
           />
-          {/* Overlay buttons */}
           <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 group-hover:bg-black/40 transition-colors">
             <button
               type="button"

@@ -18,9 +18,8 @@ export function useIsFavorite(routeId: string) {
     enabled: !!isSignedIn,
   });
 
-  // Cuando el usuario cierra sesión, ignoramos la caché y devolvemos false
-  // inmediatamente. Sin esto, React Query mantiene el último valor cacheado
-  // (gcTime: 5min) y los corazones quedan rojos aunque no haya sesión activa.
+  // Ignore the cache on sign-out: without this, React Query keeps the last
+  // cached value (gcTime: 5min) and hearts stay red with no active session.
   return {
     ...query,
     data: isSignedIn ? query.data : false,

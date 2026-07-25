@@ -89,7 +89,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* BACK LINK */}
       <Link
         href="/events"
         className="flex items-center gap-2 text-body-sm text-muted-foreground hover:text-foreground transition-colors w-fit"
@@ -98,7 +97,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         Volver a eventos
       </Link>
 
-      {/* HEADER */}
       <div className="flex flex-wrap justify-between gap-4 items-start">
         <div className="flex flex-col gap-2 min-w-0 flex-1">
           <h1 className="text-foreground text-title sm:text-4xl">
@@ -117,7 +115,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         )}
       </div>
 
-      {/* ACTION BUTTONS */}
       <div className="flex flex-wrap gap-3 justify-end">
         <Button
           variant="ghost"
@@ -139,7 +136,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         )}
       </div>
 
-      {/* COVER IMAGE */}
       {routeCall.image ? (
         <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
           <Image
@@ -157,13 +153,11 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         </div>
       )}
 
-      {/* ROUTE DETAILS */}
       <section>
         <h2 className="text-foreground text-heading mb-3">
           Detalles de la Ruta
         </h2>
         <div className="grid grid-cols-[minmax(120px,30%)_1fr] gap-x-6">
-          {/* Ritmo */}
           <div className="col-span-2 grid grid-cols-subgrid border-t border-border py-4">
             <p className="text-muted-foreground text-body-sm">
               Ritmo
@@ -173,7 +167,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
             </div>
           </div>
 
-          {/* Distancia */}
           {linkedRoute?.approximateDistance && (
             <div className="col-span-2 grid grid-cols-subgrid border-t border-border py-4">
               <p className="text-muted-foreground text-body-sm">
@@ -186,7 +179,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
             </div>
           )}
 
-          {/* Meeting Points */}
           {primaryPoint && (
             <div className="col-span-2 grid grid-cols-subgrid border-t border-border py-4">
               <p className="text-muted-foreground text-body-sm">
@@ -223,7 +215,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         </div>
       </section>
 
-      {/* DESCRIPTION */}
       {routeCall.description && (
         <section>
           <h2 className="text-foreground text-heading mb-3">
@@ -236,7 +227,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         </section>
       )}
 
-      {/* ROUTE MAP */}
       {linkedRoute?.gpxFileUrl && (
         <section>
           <div className="flex items-center justify-between mb-3">
@@ -264,7 +254,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         </section>
       )}
 
-      {/* PARTICIPANTS */}
       <section>
         <h2 className="text-foreground text-heading mb-3">
           Participantes ({attendees.length})
@@ -302,7 +291,6 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         )}
       </section>
 
-      {/* ORGANIZER */}
       {organizer && (
         <section>
           <h2 className="text-foreground text-heading mb-3">

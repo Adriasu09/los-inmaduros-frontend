@@ -41,20 +41,19 @@ export default function ImageUploadModal({
   const titleId = "image-upload-modal-title";
   const captionId = "image-upload-caption";
 
-  // Resetear estado completo cuando el modal se cierra (tanto por handleClose como por onSuccess externo)
+  // Reset on close, whether triggered by handleClose or an external onSuccess.
   useEffect(() => {
     if (!isOpen) {
       setFile(null);
       setCaption("");
       setValidationError(null);
       setPreview((prev) => {
-        if (prev) URL.revokeObjectURL(prev); // Liberar memoria del preview
+        if (prev) URL.revokeObjectURL(prev);
         return null;
       });
     }
   }, [isOpen]);
 
-  // Cerrar con ESC
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -96,7 +95,7 @@ export default function ImageUploadModal({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) validateAndSetFile(selected);
-    // Resetear el input para permitir seleccionar el mismo archivo otra vez
+    // Reset so selecting the same file again still fires onChange.
     e.target.value = "";
   };
 
@@ -125,7 +124,6 @@ export default function ImageUploadModal({
         className="bg-card rounded-2xl shadow-2xl w-full max-w-md flex flex-col gap-5 p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between">
           <h3 id={titleId} className="text-foreground text-subheading">
             {title}
@@ -140,7 +138,6 @@ export default function ImageUploadModal({
           </button>
         </div>
 
-        {/* Área de selección / Preview */}
         {preview ? (
           <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted group">
             <Image
@@ -150,7 +147,6 @@ export default function ImageUploadModal({
               className="object-cover"
               unoptimized // Preview local, no necesita optimización de Next.js
             />
-            {/* Botón para cambiar la imagen */}
             <button
               onClick={() => inputRef.current?.click()}
               disabled={isPending}
@@ -190,7 +186,6 @@ export default function ImageUploadModal({
           </div>
         )}
 
-        {/* Input de archivo oculto */}
         <input
           ref={inputRef}
           type="file"
@@ -199,12 +194,10 @@ export default function ImageUploadModal({
           className="hidden"
         />
 
-        {/* Error de validación local */}
         {validationError && (
           <p className="text-destructive text-body-sm -mt-2">{validationError}</p>
         )}
 
-        {/* Caption */}
         <div className="flex flex-col gap-1">
           <label htmlFor={captionId} className="sr-only">
             Descripción de la foto (opcional)
@@ -224,14 +217,12 @@ export default function ImageUploadModal({
           </p>
         </div>
 
-        {/* Error de API */}
         {isError && (
           <p className="text-destructive text-body-sm text-center -mt-2">
             Ha ocurrido un error al subir la foto. Inténtalo de nuevo.
           </p>
         )}
 
-        {/* Botones */}
         <div className="flex gap-3">
           <button
             type="button"

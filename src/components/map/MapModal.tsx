@@ -58,7 +58,6 @@ export default function MapModal({
         className="bg-card rounded-2xl shadow-2xl w-full max-w-4xl h-[80vh] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <h3 className="text-foreground text-subheading">{title}</h3>
           <button
@@ -69,7 +68,6 @@ export default function MapModal({
           </button>
         </div>
 
-        {/* Map */}
         <div className="flex-1">
           <LeafletMap className="w-full h-full">
             <GpxTrackLayer gpxUrl={gpxUrl} />

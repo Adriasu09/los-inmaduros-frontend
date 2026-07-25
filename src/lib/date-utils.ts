@@ -1,8 +1,5 @@
-/**
- * Utilidades de formato de fecha/hora para la UI.
- * Única fuente de verdad: todas las fechas de la app se formatean aquí.
- * Locale fijo a es-ES porque la app es monolingüe en español.
- */
+// Single source of truth for date/time formatting. Locale is hardcoded to
+// es-ES: the app is monolingual Spanish, so this isn't a shortcut, it's correct.
 
 /** "miércoles, 5 de abril de 2026" */
 export function formatFullDate(dateString: string): string {
@@ -22,7 +19,7 @@ export function formatTime(dateString: string): string {
   });
 }
 
-/** "MIÉ 5 ABR" — etiqueta compacta para badges sobre tarjetas. */
+/** Compact badge label, e.g. "MIÉ 5 ABR". */
 export function formatDateBadge(dateString: string): string {
   const date = new Date(dateString);
   const weekday = date
@@ -37,7 +34,7 @@ export function formatDateBadge(dateString: string): string {
   return `${weekday} ${day} ${month}`;
 }
 
-/** True si la fecha cae en el día actual del usuario. */
+/** Whether dateString falls on the user's current calendar day. */
 export function isToday(dateString: string): boolean {
   const date = new Date(dateString);
   const now = new Date();

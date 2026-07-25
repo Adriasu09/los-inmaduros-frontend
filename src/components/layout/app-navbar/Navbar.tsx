@@ -12,8 +12,7 @@ const NavbarActions = dynamic(() => import("./NavbarActions"), { ssr: false });
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  // useCallback garantiza una referencia estable para onClose,
-  // evitando que el useEffect de NavbarMobileMenu se dispare en cada render
+  // Stable reference so NavbarMobileMenu's effect doesn't re-fire on every render.
   const handleCloseMenu = useCallback(() => setMenuOpen(false), []);
 
   return (

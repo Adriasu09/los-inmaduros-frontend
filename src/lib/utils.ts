@@ -5,10 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-/**
- * Normaliza un string para búsquedas: elimina tildes y convierte a minúsculas.
- * Útil para comparar texto ignorando acentos (ej: "ruta" === "Rúta").
- */
+// Accent-insensitive compare: NFD-decompose and strip diacritics, then lowercase.
 export function normalize(str: string): string {
   return str
     .normalize("NFD")

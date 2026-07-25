@@ -21,11 +21,11 @@ const MONTH_NAMES_FULL = [
   "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
 
-// Rango de años: desde 2025 (inicio del club) hasta el año siguiente al actual
+// Year range: from 2025 (the club's founding year) to next year.
 const START_YEAR = 2025;
 
 interface MonthYearPickerProps {
-  value: string | undefined; // "YYYY-MM" o undefined
+  value: string | undefined; // "YYYY-MM" or undefined
   onChange: (value: string | undefined) => void;
 }
 
@@ -95,7 +95,6 @@ export default function MonthYearPicker({
         role="dialog"
         aria-label="Seleccionar mes y año"
       >
-        {/* Navegación de año */}
         <div className="flex items-center justify-between mb-3">
           <button
             type="button"
@@ -122,7 +121,6 @@ export default function MonthYearPicker({
           </button>
         </div>
 
-        {/* Rejilla de meses */}
         <div
           className="grid grid-cols-3 gap-1"
           role="grid"

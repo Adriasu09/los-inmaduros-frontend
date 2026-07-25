@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 import { handleApiError, handleNetworkError } from "@/lib/errors";
 
-// Bridge para inyectar el token de Clerk en cada request sin depender de React
+// Bridge to inject the Clerk token into every request without depending on React.
 let getClerkToken: (() => Promise<string | null>) | null = null;
 
 export function setClerkTokenGetter(
@@ -10,18 +10,15 @@ export function setClerkTokenGetter(
   getClerkToken = fn;
 }
 
-/**
- * Configuration for HTTP Client
- */
 interface HttpClientConfig {
   baseURL: string;
   timeout?: number;
   onUnauthorized?: () => void;
 }
 
-/**
- * HTTP Client con timeout, token de Clerk y manejo de errores.
- */
+// Retries live in React Query (a single layer), not here: this avoids
+// stacking retries and never auto-retries mutations (edit/cancel/delete),
+// which could otherwise duplicate side effects.
 class HttpClient {
   private client: AxiosInstance;
   private config: HttpClientConfig;
@@ -43,11 +40,7 @@ class HttpClient {
     this.setupInterceptors();
   }
 
-  /**
-   * Setup request and response interceptors
-   */
   private setupInterceptors(): void {
-    // Request interceptor - inyecta el token de Clerk si está disponible
     this.client.interceptors.request.use(
       async (config) => {
         if (getClerkToken) {
@@ -61,14 +54,13 @@ class HttpClient {
       (error) => Promise.reject(handleNetworkError(error)),
     );
 
-    // Response interceptor - convierte los errores de axios en ApiError
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response) {
           const apiError = handleApiError(error.response);
-          // Solo 401 (sesión inválida) dispara la re-autenticación.
-          // 403 es "autenticado pero sin permiso" y NO debe forzar re-login.
+          // Only 401 (invalid session) triggers re-auth. 403 means
+          // "authenticated but not allowed" and must not force a re-login.
           if (apiError.is("UNAUTHORIZED")) {
             this.handleUnauthorized();
           }
@@ -79,27 +71,18 @@ class HttpClient {
     );
   }
 
-  /**
-   * Handle unauthorized errors
-   */
   private handleUnauthorized(): void {
     if (this.config.onUnauthorized) {
       this.config.onUnauthorized();
     }
-    // Sin redirect por defecto: Clerk gestiona la autenticación vía modal/redirect
+    // No default redirect: Clerk handles re-authentication via modal/redirect.
   }
 
-  /**
-   * GET request
-   */
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.get<T>(url, config);
     return response.data;
   }
 
-  /**
-   * POST request
-   */
   async post<T>(
     url: string,
     data?: unknown,
@@ -109,9 +92,6 @@ class HttpClient {
     return response.data;
   }
 
-  /**
-   * PATCH request
-   */
   async patch<T>(
     url: string,
     data?: unknown,
@@ -121,9 +101,6 @@ class HttpClient {
     return response.data;
   }
 
-  /**
-   * PUT request
-   */
   async put<T>(
     url: string,
     data?: unknown,
@@ -133,16 +110,12 @@ class HttpClient {
     return response.data;
   }
 
-  /**
-   * DELETE request
-   */
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.delete<T>(url, config);
     return response.data;
   }
 }
 
-// Export singleton instance
 const apiClient = new HttpClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api",
 });

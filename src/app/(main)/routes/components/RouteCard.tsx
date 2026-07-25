@@ -42,7 +42,6 @@ export default function RouteCard({ route }: RouteCardProps) {
   return (
     <div className="group relative bg-card dark:bg-muted rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
       <Link href={`/routes/${route.slug}`} className="flex flex-col flex-1">
-        {/* IMAGEN */}
         <div className="relative h-48 w-full overflow-hidden bg-muted">
           {imgError ? (
             <div className="flex h-full w-full items-center justify-center">
@@ -60,13 +59,11 @@ export default function RouteCard({ route }: RouteCardProps) {
           )}
         </div>
 
-        {/* CONTENIDO */}
         <div className="p-4 flex flex-col gap-2 flex-1">
           <h3 className="font-bold text-foreground text-body leading-snug group-hover:text-primary transition-colors">
             {route.name}
           </h3>
 
-          {/* BADGES DE NIVEL */}
           <div className="flex gap-1 flex-wrap">
             {route.level.map((lvl) => (
               <span
@@ -78,7 +75,6 @@ export default function RouteCard({ route }: RouteCardProps) {
             ))}
           </div>
 
-          {/* DISTANCIA + RATING */}
           <div className="flex items-center justify-between mt-auto pt-2 border-t border-border">
             <div className="flex items-center gap-1 text-muted-foreground text-body-sm">
               <MapPin size={13} className="shrink-0" />
@@ -102,7 +98,7 @@ export default function RouteCard({ route }: RouteCardProps) {
         </div>
       </Link>
 
-      {/* CORAZÓN — fuera del <Link> para evitar <button> dentro de <a> */}
+      {/* Kept outside <Link> to avoid nesting a <button> inside an <a>. */}
       <button
         onClick={handleFavorite}
         aria-label="Añadir a favoritos"

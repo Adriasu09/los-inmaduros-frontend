@@ -15,10 +15,8 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             gcTime: 5 * 60 * 1000,
             refetchOnWindowFocus: false,
             retry: (failureCount, error) => {
-              // Única capa de reintentos (la de HttpClient se retiró).
-              // Solo errores transitorios (red, timeout, 5xx), reutilizando la
-              // misma lógica de ApiError.isRetryable(). Los 4xx (auth,
-              // validación, 404) NO se reintentan: no cambiaría el resultado.
+              // Single retry layer (HttpClient's was removed). Only
+              // transient errors (network, timeout, 5xx); 4xx never retries.
               if (error instanceof ApiError) {
                 return error.isRetryable() && failureCount < 1;
               }

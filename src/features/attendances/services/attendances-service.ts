@@ -1,9 +1,6 @@
 import apiClient from "@/lib/api/client";
 import type { ApiResponse, Attendance } from "@/types";
 
-/**
- * Obtener asistentes de una convocatoria (público, para avatares)
- */
 export async function getRouteCallAttendees(
   routeCallId: string,
 ): Promise<ApiResponse<Attendance[]>> {
@@ -12,9 +9,6 @@ export async function getRouteCallAttendees(
   );
 }
 
-/**
- * Comprobar si el usuario actual está apuntado a una convocatoria
- */
 export async function checkIsAttending(
   routeCallId: string,
 ): Promise<ApiResponse<{ isAttending: boolean }>> {
@@ -23,9 +17,6 @@ export async function checkIsAttending(
   );
 }
 
-/**
- * Apuntarse a una convocatoria
- */
 export async function joinRouteCall(
   routeCallId: string,
 ): Promise<ApiResponse<Attendance>> {
@@ -34,9 +25,6 @@ export async function joinRouteCall(
   );
 }
 
-/**
- * Desapuntarse de una convocatoria
- */
 export async function leaveRouteCall(
   routeCallId: string,
 ): Promise<ApiResponse<Attendance>> {

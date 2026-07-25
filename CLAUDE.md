@@ -145,6 +145,12 @@ Rules (the refactor is about enforcing these, not reorganizing):
 
 - Code, comments, commit messages in **English**. UI texts in **Spanish** (the app is
   monolingual es-ES).
+- **Comments: minimal, English, only when the WHY is non-obvious** (a hidden constraint, a
+  workaround, a surprising side effect). Well-named identifiers already say the WHAT — don't
+  restate a function's name in a docstring above it, and don't label obvious JSX sections
+  (`{/* Header */}`, `{/* CONTENIDO */}`) — the markup already shows that. Default to no comment;
+  add one only when removing it would leave a future reader confused about *why*, not *what*.
+  (Swept the whole app for Spanish/redundant comments on 24-jul-2026 — don't reintroduce them.)
 - TypeScript strict; types for API payloads live in `src/types` and must mirror the contract.
 - Client vs server: hooks/mutations are client components; initial page data uses
   `serverFetch` in server components (existing pattern — respect it).

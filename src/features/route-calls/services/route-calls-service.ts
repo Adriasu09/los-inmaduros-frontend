@@ -7,8 +7,7 @@ import type {
   MeetingPointType,
 } from "@/types";
 
-// Payload para crear una convocatoria
-// Uses optional (not null) to match backend Zod .optional() validation
+// Uses optional (not null) to match backend Zod .optional() validation.
 export interface CreateRouteCallMeetingPoint {
   type: MeetingPointType;
   name: string;
@@ -26,7 +25,6 @@ export interface CreateRouteCallPayload {
   meetingPoints: CreateRouteCallMeetingPoint[];
 }
 
-// Filtros para obtener convocatorias desde el backend
 export interface RouteCallFilters {
   upcoming: boolean;
   pace?: RoutePace;
@@ -34,7 +32,9 @@ export interface RouteCallFilters {
   limit?: number;
 }
 
-// Para Client Components — convocatorias filtradas desde el backend
+// `*Server` functions use serverFetch and run in server components;
+// the rest use apiClient (axios) and run in client components.
+
 export async function getFilteredRouteCalls(
   filters: RouteCallFilters,
 ): Promise<ApiResponse<RouteCall[]>> {
@@ -46,7 +46,6 @@ export async function getFilteredRouteCalls(
   return apiClient.get<ApiResponse<RouteCall[]>>(`/route-calls?${params}`);
 }
 
-// Para Client Components (React Query hooks)
 export async function getUpcomingRouteCalls(): Promise<
   ApiResponse<RouteCall[]>
 > {
@@ -55,7 +54,6 @@ export async function getUpcomingRouteCalls(): Promise<
   );
 }
 
-// Para Server Components (page.tsx)
 export async function getUpcomingRouteCallsServer(): Promise<ApiResponse<
   RouteCall[]
 > | null> {
@@ -64,19 +62,17 @@ export async function getUpcomingRouteCallsServer(): Promise<ApiResponse<
   );
 }
 
-// Para Client Components — todas las convocatorias (sin filtro)
 export async function getAllRouteCalls(): Promise<ApiResponse<RouteCall[]>> {
   return apiClient.get<ApiResponse<RouteCall[]>>("/route-calls");
 }
 
-// Para Server Components — todas las convocatorias (sin filtro)
 export async function getAllRouteCallsServer(): Promise<ApiResponse<
   RouteCall[]
 > | null> {
   return serverFetch<ApiResponse<RouteCall[]>>("/route-calls");
 }
 
-// Para Server Components — convocatorias próximas (SCHEDULED + ONGOING + CANCELLED recientes)
+// Upcoming: SCHEDULED + ONGOING + recently CANCELLED.
 export async function getAllUpcomingRouteCallsServer(): Promise<ApiResponse<
   RouteCall[]
 > | null> {
@@ -85,7 +81,7 @@ export async function getAllUpcomingRouteCallsServer(): Promise<ApiResponse<
   );
 }
 
-// Para Server Components — convocatorias pasadas (COMPLETED + CANCELLED antiguas)
+// Past: COMPLETED + older CANCELLED.
 export async function getPastRouteCallsServer(): Promise<ApiResponse<
   RouteCall[]
 > | null> {
@@ -94,21 +90,18 @@ export async function getPastRouteCallsServer(): Promise<ApiResponse<
   );
 }
 
-// Para Client Components — una convocatoria por ID
 export async function getRouteCallById(
   id: string,
 ): Promise<ApiResponse<RouteCall>> {
   return apiClient.get<ApiResponse<RouteCall>>(`/route-calls/${id}`);
 }
 
-// Para Server Components — una convocatoria por ID
 export async function getRouteCallByIdServer(
   id: string,
 ): Promise<ApiResponse<RouteCall> | null> {
   return serverFetch<ApiResponse<RouteCall>>(`/route-calls/${id}`);
 }
 
-// Crear una nueva convocatoria
 export async function createRouteCall(
   data: CreateRouteCallPayload,
 ): Promise<ApiResponse<RouteCall>> {

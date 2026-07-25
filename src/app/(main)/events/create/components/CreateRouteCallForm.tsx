@@ -197,7 +197,6 @@ export default function CreateRouteCallForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-      {/* ─── Section 1: Route Selection ─── */}
       <section>
         <Controller
           control={control}
@@ -214,7 +213,6 @@ export default function CreateRouteCallForm() {
         />
       </section>
 
-      {/* ─── Section 2: Cover Image ─── */}
       <section>
         <Controller
           control={control}
@@ -229,7 +227,6 @@ export default function CreateRouteCallForm() {
         />
       </section>
 
-      {/* ─── Section 3: Date & Time ─── */}
       <section>
         <h3 className="text-label font-semibold text-foreground mb-3">
           Fecha y hora de inicio
@@ -290,7 +287,6 @@ export default function CreateRouteCallForm() {
         </div>
       </section>
 
-      {/* ─── Section 4: Pace Selection ─── */}
       <section>
         <Controller
           control={control}
@@ -305,7 +301,6 @@ export default function CreateRouteCallForm() {
         />
       </section>
 
-      {/* ─── Section 5: Primary Meeting Point ─── */}
       <section>
         <Controller
           control={control}
@@ -322,7 +317,6 @@ export default function CreateRouteCallForm() {
         />
       </section>
 
-      {/* ─── Section 6: Secondary Meeting Point ─── */}
       <section>
         <div className="flex items-center gap-3 mb-3">
           <label className="text-label font-semibold text-foreground">
@@ -398,7 +392,6 @@ export default function CreateRouteCallForm() {
         )}
       </section>
 
-      {/* ─── Section 7: Description ─── */}
       <section>
         <label className="text-label font-semibold text-foreground mb-3 block">
           Descripción / Comentarios
@@ -416,14 +409,12 @@ export default function CreateRouteCallForm() {
         />
       </section>
 
-      {/* ─── Submit Error ─── */}
       {submitError && (
         <p className="text-destructive text-body-sm text-center bg-destructive/10 rounded-lg p-3">
           {submitError}
         </p>
       )}
 
-      {/* ─── Submit Button ─── */}
       <Button
         type="submit"
         size="lg"

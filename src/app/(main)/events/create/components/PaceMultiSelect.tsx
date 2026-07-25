@@ -53,7 +53,6 @@ export default function PaceMultiSelect({
         </button>
       </div>
 
-      {/* Pace grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         {PACE_ORDER.map((key) => {
           const pace = ROUTE_PACES[key];
@@ -82,7 +81,6 @@ export default function PaceMultiSelect({
         <p className="text-destructive text-caption">{error}</p>
       )}
 
-      {/* Info modal */}
       {showInfo && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"

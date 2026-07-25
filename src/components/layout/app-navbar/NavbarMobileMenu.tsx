@@ -16,7 +16,7 @@ export default function NavbarMobileMenu({
 }: NavbarMobileMenuProps) {
   const pathname = usePathname();
 
-  // Cierra el menú automáticamente si cambia la ruta
+  // Close the menu automatically on route change.
   useEffect(() => {
     onClose();
   }, [pathname, onClose]);

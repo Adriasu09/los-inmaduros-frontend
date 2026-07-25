@@ -13,7 +13,7 @@ interface PaceInfoBadgeProps {
 export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Bloquear scroll del body cuando el modal está abierto
+  // Lock body scroll while the modal is open.
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -30,7 +30,6 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
 
   return (
     <>
-      {/* BADGE: emojis de todos los paces + icono info */}
       <div className="flex items-center gap-1.5">
         <span className="text-caption font-semibold text-primary">Ritmo:</span>
         <span
@@ -52,17 +51,14 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
         </button>
       </div>
 
-      {/* MODAL — renderizado vía portal fuera del DOM de la card */}
       {isOpen &&
         createPortal(
           <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={() => setIsOpen(false)}
           >
-            {/* BACKDROP */}
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-            {/* MODAL */}
             <div
               role="dialog"
               aria-modal="true"
@@ -70,7 +66,6 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
               className="relative bg-card dark:bg-muted rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-y-auto p-6 border border-border"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* HEADER */}
               <div className="flex items-center justify-between mb-4">
                 <h3 id="pace-modal-title" className="text-body font-bold text-foreground">
                   Ritmos de ruta
@@ -84,7 +79,6 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
                 </button>
               </div>
 
-              {/* LISTA DE RITMOS */}
               <div className="space-y-3">
                 {PACE_ORDER.map((paceKey) => {
                   const p = ROUTE_PACES[paceKey];
@@ -114,7 +108,6 @@ export default function PaceInfoBadge({ paces }: PaceInfoBadgeProps) {
                 })}
               </div>
 
-              {/* PROGRESIÓN */}
               <p className="text-caption text-muted-foreground text-center mt-4">
                 🪨🔜🐌🔜🐛🔜🦋🔜🚀🔜☠️🔜🐈🦄
               </p>
