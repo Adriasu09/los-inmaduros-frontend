@@ -70,7 +70,6 @@ export default function RouteSelector({
         <p className="text-destructive text-caption">{error}</p>
       )}
 
-      {/* Campo de título para ruta personalizada */}
       {selectedRouteId === null && (
         <div className="flex flex-col gap-1.5">
           <label className="text-caption font-medium text-soft-foreground">

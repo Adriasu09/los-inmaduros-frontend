@@ -32,7 +32,6 @@ export const ROUTE_LEVELS = {
   },
 } as const;
 
-// Route paces con iconos y descripciones
 export const ROUTE_PACES = {
   ROCA: {
     label: "Roca",
@@ -108,7 +107,6 @@ export const FOOTER_COMMUNITY_LINKS = [
   { label: "Contacto", href: "mailto:losinmadurosrollermadrid@gmail.com" },
 ];
 
-// Puntos de encuentro predeterminados para convocatorias
 export const PREDEFINED_MEETING_POINTS = [
   {
     id: "explanada",

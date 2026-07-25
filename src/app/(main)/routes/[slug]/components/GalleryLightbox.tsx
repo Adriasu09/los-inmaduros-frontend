@@ -55,19 +55,15 @@ export function GalleryLightbox({
       className="fixed inset-0 z-60 flex flex-col bg-black"
       onClick={zoom <= 1 ? onClose : undefined}
     >
-      {/* Barra superior */}
       <div
         className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-4 py-3 bg-linear-to-b from-black/70 to-transparent pointer-events-none"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Contador */}
         <span className="text-white/80 text-body-sm font-medium pointer-events-auto select-none">
           {lightboxIndex + 1} / {photos.length}
         </span>
 
-        {/* Controles */}
         <div className="flex items-center gap-1 pointer-events-auto">
-          {/* Zoom + separador + pantalla completa: solo en desktop */}
           <div className="hidden md:flex items-center gap-1">
             <button
               onClick={onZoomOut}
@@ -108,7 +104,6 @@ export function GalleryLightbox({
             </button>
           </div>
 
-          {/* Cerrar */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -123,9 +118,7 @@ export function GalleryLightbox({
         </div>
       </div>
 
-      {/* Zona central: flechas + imagen */}
       <div className="flex flex-1 items-center min-h-0">
-        {/* Flecha izquierda */}
         {photos.length > 1 && (
           <button
             onClick={(e) => {
@@ -139,7 +132,6 @@ export function GalleryLightbox({
           </button>
         )}
 
-        {/* Contenedor de imagen con zoom / pan */}
         <div
           className="flex-1 h-full overflow-hidden flex items-center justify-center"
           style={{
@@ -171,7 +163,6 @@ export function GalleryLightbox({
           </div>
         </div>
 
-        {/* Flecha derecha */}
         {photos.length > 1 && (
           <button
             onClick={(e) => {
@@ -186,7 +177,6 @@ export function GalleryLightbox({
         )}
       </div>
 
-      {/* Barra inferior: caption */}
       {currentPhoto.caption && (
         <div
           className="absolute bottom-0 inset-x-0 px-6 py-4 bg-linear-to-t from-black/70 to-transparent"

@@ -133,7 +133,6 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             </div>
           </div>
 
-          {/* Botón favorito */}
           <Button
             variant="ghost"
             size="sm"
@@ -151,7 +150,6 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             {isFavorite ? "Guardado en favoritos" : "Guardar en favoritos"}
           </Button>
 
-          {/* Mapa interactivo */}
           <div className="bg-card border border-border rounded-xl overflow-hidden">
             <div className="flex items-center justify-between px-4 pt-4 pb-2">
               <h3 className="text-foreground text-subheading">
@@ -184,7 +182,6 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             </div>
           </div>
 
-          {/* Modal del mapa expandido */}
           {route.gpxFileUrl && (
             <MapModal
               isOpen={isMapOpen}
@@ -194,7 +191,6 @@ export default function RouteDetailHero({ route }: RouteDetailHeroProps) {
             />
           )}
 
-          {/* Galería de fotos — sidebar */}
           <RouteGallery routeSlug={route.slug} routeId={route.id} />
         </div>
       </div>

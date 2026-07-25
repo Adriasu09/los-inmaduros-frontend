@@ -1,8 +1,5 @@
 import type { ApiErrorCode, ApiErrorResponse } from "./types";
 
-/**
- * Custom API Error class
- */
 export class ApiError extends Error {
   public readonly code: ApiErrorCode;
   public readonly statusCode?: number;
@@ -20,20 +17,13 @@ export class ApiError extends Error {
     this.statusCode = params.statusCode;
     this.errors = params.errors;
 
-    // Mantener el stack trace correcto
     Object.setPrototypeOf(this, ApiError.prototype);
   }
 
-  /**
-   * Check if error is of a specific type
-   */
   is(code: ApiErrorCode): boolean {
     return this.code === code;
   }
 
-  /**
-   * Check if error is retryable
-   */
   isRetryable(): boolean {
     return (
       this.code === "NETWORK_ERROR" ||

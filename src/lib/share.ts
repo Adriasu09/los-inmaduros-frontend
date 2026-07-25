@@ -2,18 +2,11 @@ import type { RouteCall } from "@/types";
 import { ROUTE_PACES } from "@/constants";
 import { formatFullDate, formatTime } from "@/lib/date-utils";
 
-// ─── Helpers de formato ─────────────────────────────────────────────────────
-
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
 }
 
-// ─── Generador del mensaje ───────────────────────────────────────────────────
-
-/**
- * Construye el mensaje de WhatsApp para compartir una convocatoria.
- * Sigue el formato "Rut4!" del grupo para facilitar la búsqueda en el chat.
- */
+// Follows the group's "Rut4!" convention so it's easy to spot in chat.
 export function buildWhatsAppMessage(routeCall: RouteCall, appUrl: string): string {
   const paces = routeCall.paces
     .map((p) => `${ROUTE_PACES[p].label} ${ROUTE_PACES[p].emoji}`)
@@ -54,9 +47,6 @@ export function buildWhatsAppMessage(routeCall: RouteCall, appUrl: string): stri
   return lines.join("\n");
 }
 
-// ─── Acción de compartir ─────────────────────────────────────────────────────
-
-/** Detecta si el usuario está en un dispositivo móvil/táctil. */
 function isMobileDevice(): boolean {
   return (
     typeof window !== "undefined" &&
@@ -64,19 +54,14 @@ function isMobileDevice(): boolean {
   );
 }
 
-/**
- * Comparte la convocatoria por WhatsApp:
- *
- * - Móvil: usa navigator.share con la imagen adjunta y el texto como caption.
- * - Escritorio: abre wa.me con el mensaje de texto (sin imagen).
- */
+// Mobile: native share sheet with the image attached and text as caption.
+// Desktop (or mobile without file-sharing support): wa.me with text only.
 export async function shareRouteCallOnWhatsApp(
   routeCall: RouteCall,
   appUrl: string,
 ): Promise<void> {
   const message = buildWhatsAppMessage(routeCall, appUrl);
 
-  // Móvil con imagen → share nativo (imagen + texto como caption)
   if (isMobileDevice() && navigator.share && routeCall.image) {
     try {
       const response = await fetch(routeCall.image);
@@ -89,10 +74,9 @@ export async function shareRouteCallOnWhatsApp(
         return;
       }
     } catch {
-      // Si falla, cae al fallback de texto
+      // Fall through to the text-only fallback below.
     }
   }
 
-  // Escritorio (o móvil sin soporte de archivos) → WhatsApp Web con texto
   window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
 }

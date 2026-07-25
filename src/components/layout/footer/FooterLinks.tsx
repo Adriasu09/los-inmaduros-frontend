@@ -4,7 +4,6 @@ import { FOOTER_EXPLORE_LINKS, FOOTER_COMMUNITY_LINKS } from "@/constants";
 export default function FooterLinks() {
   return (
     <>
-      {/* EXPLORAR */}
       <div>
         <h4 className="text-body font-semibold text-foreground mb-4">
           Explorar
@@ -23,7 +22,6 @@ export default function FooterLinks() {
         </ul>
       </div>
 
-      {/* COMUNIDAD */}
       <div>
         <h4 className="text-body font-semibold text-foreground mb-4">
           Comunidad

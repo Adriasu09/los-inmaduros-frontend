@@ -15,14 +15,12 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             gcTime: 5 * 60 * 1000,
             refetchOnWindowFocus: false,
             retry: (failureCount, error) => {
-              // No reintentar errores de autenticación
-              if (
-                error instanceof ApiError &&
-                (error.statusCode === 401 || error.statusCode === 403)
-              ) {
-                return false;
+              // Single retry layer (HttpClient's was removed). Only
+              // transient errors (network, timeout, 5xx); 4xx never retries.
+              if (error instanceof ApiError) {
+                return error.isRetryable() && failureCount < 1;
               }
-              return failureCount < 1;
+              return false;
             },
           },
         },

@@ -16,8 +16,8 @@ export default function RouteGrid({ routes }: RouteGridProps) {
   const [search, setSearch] = useState("");
   const [selectedLevel, setSelectedLevel] = useState<RouteLevel | null>(null);
 
-  // El input actualiza 'search' inmediatamente (UI responsive),
-  // pero el filtrado solo se recalcula 300ms después de que el usuario para de escribir
+  // `search` updates immediately (responsive input); filtering only
+  // recomputes 300ms after the user stops typing.
   const debouncedSearch = useDebounce(search, 300);
 
   const availableLevels = useMemo(() => {
@@ -42,9 +42,7 @@ export default function RouteGrid({ routes }: RouteGridProps) {
 
   return (
     <div className="flex flex-col gap-6 mt-8">
-      {/* BARRA DE BÚSQUEDA + FILTROS */}
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-        {/* Buscador */}
         <div className="relative sm:w-64 shrink-0">
           <Search
             size={16}
@@ -61,10 +59,8 @@ export default function RouteGrid({ routes }: RouteGridProps) {
           />
         </div>
 
-        {/* Separador visual solo en desktop */}
         <div className="hidden sm:block h-6 w-px bg-border" />
 
-        {/* Pills de nivel */}
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setSelectedLevel(null)}
@@ -99,7 +95,6 @@ export default function RouteGrid({ routes }: RouteGridProps) {
         </div>
       </div>
 
-      {/* GRID */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((route) => (

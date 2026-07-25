@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import type { RouteCall, RoutePace } from "@/types";
 import { ROUTE_PACES, PACE_ORDER } from "@/constants";
@@ -42,7 +42,6 @@ export default function EventsContent({
 
   const debouncedSearch = useDebounce(search, 300);
 
-  // Filtros para backend
   const upcomingFilters: RouteCallFilters = {
     upcoming: true,
     pace: selectedPace !== "all" ? selectedPace : undefined,
@@ -65,7 +64,7 @@ export default function EventsContent({
   const { data: pastData = initialPast, isFetching: isFetchingPast } =
     useFilteredRouteCalls(pastFilters);
 
-  // Búsqueda client-side sobre resultados del server
+  // Client-side search layered on top of the server-filtered results.
   const filteredUpcoming = useMemo(
     () =>
       debouncedSearch
@@ -86,11 +85,26 @@ export default function EventsContent({
     [pastData, debouncedSearch],
   );
 
-  // Reset visible counts when filters change
-  useEffect(() => {
+  // Reset visible counts when filters change (adjusted during render, not in
+  // an effect, to avoid the extra cascading render an effect-based reset causes).
+  const [prevFilters, setPrevFilters] = useState({
+    search: debouncedSearch,
+    pace: selectedPace,
+    month: selectedMonth,
+  });
+  if (
+    prevFilters.search !== debouncedSearch ||
+    prevFilters.pace !== selectedPace ||
+    prevFilters.month !== selectedMonth
+  ) {
+    setPrevFilters({
+      search: debouncedSearch,
+      pace: selectedPace,
+      month: selectedMonth,
+    });
     setUpcomingVisible(PAGE_SIZE);
     setPastVisible(PAGE_SIZE);
-  }, [debouncedSearch, selectedPace, selectedMonth]);
+  }
 
   const visibleUpcoming = filteredUpcoming.slice(0, upcomingVisible);
   const visiblePast = filteredPast.slice(0, pastVisible);
@@ -127,7 +141,6 @@ export default function EventsContent({
 
   return (
     <div className="flex flex-col gap-6 mt-8">
-      {/* TABS */}
       <div
         role="tablist"
         aria-label="Tipo de convocatorias"
@@ -196,9 +209,7 @@ export default function EventsContent({
         </button>
       </div>
 
-      {/* FILTROS — visibles en ambas pestañas */}
       <div className="flex flex-col sm:flex-row gap-3 sm:items-center flex-wrap">
-        {/* 1. Búsqueda */}
         <div className="relative sm:w-64 shrink-0">
           <Search
             size={16}
@@ -219,7 +230,6 @@ export default function EventsContent({
 
         <div className="hidden sm:block h-6 w-px bg-border" />
 
-        {/* 2. Dropdown Ritmo */}
         <Select
           value={selectedPace}
           onValueChange={(value) =>
@@ -242,11 +252,9 @@ export default function EventsContent({
           </SelectContent>
         </Select>
 
-        {/* 3. Picker Mes y Año */}
         <MonthYearPicker value={selectedMonth} onChange={setSelectedMonth} />
       </div>
 
-      {/* GRID */}
       <div
         id="tabpanel-events"
         role="tabpanel"
@@ -270,7 +278,6 @@ export default function EventsContent({
               ))}
             </div>
 
-            {/* CONTADOR + CARGAR MÁS */}
             <div className="flex flex-col items-center gap-3 pt-2">
               <p className="text-caption text-faint-foreground">
                 Mostrando {activeList.length} de {filteredActiveTotal}

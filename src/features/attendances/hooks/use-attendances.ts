@@ -8,9 +8,6 @@ import {
   leaveRouteCall,
 } from "../services/attendances-service";
 
-/**
- * Obtener la lista de asistentes de una convocatoria (público, para avatares)
- */
 export function useRouteCallAttendees(routeCallId: string) {
   return useQuery({
     queryKey: queryKeys.attendances.byRouteCall(routeCallId),
@@ -19,9 +16,6 @@ export function useRouteCallAttendees(routeCallId: string) {
   });
 }
 
-/**
- * Comprobar si el usuario actual está apuntado a una convocatoria
- */
 export function useIsAttending(routeCallId: string) {
   const { isSignedIn } = useAuth();
 
@@ -38,9 +32,6 @@ export function useIsAttending(routeCallId: string) {
   };
 }
 
-/**
- * Mutación para apuntarse/desapuntarse de una convocatoria
- */
 export function useToggleAttendance(routeCallId: string) {
   const queryClient = useQueryClient();
 

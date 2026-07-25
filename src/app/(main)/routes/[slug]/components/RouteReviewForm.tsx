@@ -36,7 +36,6 @@ export default function RouteReviewForm({
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Selector de estrellas */}
       <div className="flex flex-col items-center gap-2">
         <p className="text-muted-foreground text-body-sm">
           Selecciona tu puntuación
@@ -65,7 +64,6 @@ export default function RouteReviewForm({
         </div>
       </div>
 
-      {/* Textarea */}
       <div className="flex flex-col gap-1">
         <textarea
           value={comment}

@@ -36,7 +36,6 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
 
   const content = (
     <article className="flex flex-col flex-1 min-h-0">
-      {/* IMAGEN + BADGE FECHA / HOY + SELLO CANCELADA */}
       <div className="relative h-52 w-full overflow-hidden bg-muted">
         {imageUrl ? (
           <Image
@@ -86,12 +85,9 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
         )}
       </div>
 
-      {/* CONTENIDO */}
       <div className="p-5 flex flex-col flex-1">
-        {/* RITMO */}
         <PaceInfoBadge paces={routeCall.paces} />
 
-        {/* TÍTULO */}
         <h3
           className={cn(
             "font-bold text-foreground text-body mt-1 line-clamp-1 transition-colors",
@@ -101,7 +97,6 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
           {routeCall.title}
         </h3>
 
-        {/* ORGANIZADOR */}
         {organizer && (
           <div className="flex items-center gap-1.5 mt-1">
             {organizer.imageUrl ? (
@@ -123,7 +118,6 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
           </div>
         )}
 
-        {/* DESCRIPCIÓN */}
         {routeCall.description && (
           <div
             className="text-body-sm text-muted-foreground mt-1 line-clamp-3 prose prose-sm dark:prose-invert max-w-none"
@@ -131,7 +125,6 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
           />
         )}
 
-        {/* METADATA */}
         <div className="flex items-center gap-4 mt-4 mb-2 text-caption text-muted-foreground flex-wrap">
           {primaryPoint && (
             <span className="flex items-center gap-1">
@@ -151,7 +144,6 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
           )}
         </div>
 
-        {/* FOOTER */}
         <RouteCallCardFooter
           routeCallId={routeCall.id}
           initialCount={attendees}

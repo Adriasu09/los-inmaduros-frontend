@@ -34,6 +34,7 @@ export default function CoverImageSection({
   useEffect(() => {
     if (coverImage) {
       const url = URL.createObjectURL(coverImage);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs preview with the Blob URL lifecycle (external browser API + required revoke on cleanup), not derived UI state; documented rule false positive (facebook/react#34743)
       setPreview(url);
       return () => URL.revokeObjectURL(url);
     } else {
@@ -91,7 +92,6 @@ export default function CoverImageSection({
             className="object-cover"
             unoptimized={!!preview}
           />
-          {/* Overlay buttons */}
           <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 group-hover:bg-black/40 transition-colors">
             <button
               type="button"

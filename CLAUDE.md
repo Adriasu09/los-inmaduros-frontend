@@ -37,9 +37,13 @@ Web app for an inline-skating community in Madrid: predefined routes, skate meet
 (route-calls), attendance, reviews, favorites and photos. The frontend is LIVE on Vercel
 (https://los-inmaduros-rollers.vercel.app) and already works against the new FastAPI backend.
 
-> **CURRENT STATE (23-jul):** the FastAPI backend CORE is complete and deployed on Render
-> (https://los-inmaduros-fastapi.onrender.com — free tier, warm it up before demos: ~30-50s
-> cold start). 119 tests green. **This phase (Fase 7) = frontend.**
+> **CURRENT STATE (24-jul, end of D14):** the FastAPI backend CORE is complete and deployed on
+> Render (https://los-inmaduros-fastapi.onrender.com — free tier, warm it up before demos:
+> ~30-50s cold start). 119 tests green. **D14 closed on `feature/d14-cleanup-and-route-call-actions`:**
+> pnpm migration, dead-code cleanup, the axios error-handling fix (D25), and the
+> update/cancel/delete services + hooks (she wrote them) are done and committed. Full log in the
+> Notion "Deuda técnica" page ("Cierre del D14" section). **Next up: D15/D16 = the three UIs**
+> (edit / cancel / delete route-calls) — see section 7.
 > **Code freeze July 25 · presentation Monday July 27** (July 26 is presentation-prep only).
 
 - Backend repo (FastAPI, NOT touched from here): los-inmaduros-fastapi. Its CLAUDE.md and
@@ -94,23 +98,30 @@ Contract facts that shape the new UI (decisions D4, D16, D18 from the backend):
 | Forms | react-hook-form + zod v4 (`@hookform/resolvers`) |
 | Auth | Clerk (`@clerk/nextjs`), middleware.ts protects routes |
 | Editor / maps | Tiptap v3 · Leaflet + leaflet-gpx + react-leaflet |
-| Package manager | npm today → **pnpm** (D8, task in this phase) |
+| Package manager | **pnpm** (migrated D14; `packageManager` pinned in `package.json`) |
 | Tests | none today → **Vitest + Testing Library** (D8, setup delegated; she writes the tests) |
 
 Env vars: `NEXT_PUBLIC_API_URL` (FastAPI base, ends in `/api`; local dev backend or the Render
-URL), `NEXT_PUBLIC_APP_URL`, Clerk keys. The `NEXT_PUBLIC_SUPABASE_*` vars die with the
-Supabase cleanup task.
+URL), `NEXT_PUBLIC_APP_URL`, Clerk keys. The `NEXT_PUBLIC_SUPABASE_*` vars are gone (D14 cleanup);
+`.env.example` documents what's actually needed.
 
 ### Commands
 
 ```bash
-npm run dev      # dev server at http://localhost:3000 (needs .env.local, see README)
-npm run build    # production build (also the de-facto type check — tsconfig is noEmit)
-npm run lint     # ESLint (flat config, eslint-config-next core-web-vitals + typescript)
+pnpm dev      # dev server at http://localhost:3000 (needs .env, see README)
+pnpm build    # production build (also the de-facto type check — tsconfig is noEmit)
+pnpm lint     # ESLint (flat config, eslint-config-next core-web-vitals + typescript)
 ```
 
-No test script yet — it arrives with the Vitest setup task (D8). After the pnpm migration,
-these become `pnpm dev` / `pnpm build` / `pnpm lint`. TS path alias: `@/*` → `src/*`.
+No test script yet — it arrives with the Vitest setup task (D8). TS path alias: `@/*` → `src/*`.
+
+**Local dev + CORS (D14 lesson):** the deployed Render backend's `CORS_ORIGINS` only allows the
+Vercel origin, not `http://localhost:3000`. With `NEXT_PUBLIC_API_URL` pointed at Render, SSR
+(`serverFetch`) works fine on localhost but **client-side calls (React Query/axios) fail** —
+attendances, favorites, reviews and photos will look empty/broken even though nothing is wrong
+in the frontend. That's CORS, not a bug. To test those features locally, point
+`NEXT_PUBLIC_API_URL` at a local backend instance instead (its default `CORS_ORIGINS` already
+includes `localhost:3000`).
 
 ## 4. Architecture: feature-based (bulletproof-react rules)
 
@@ -145,6 +156,12 @@ Rules (the refactor is about enforcing these, not reorganizing):
 
 - Code, comments, commit messages in **English**. UI texts in **Spanish** (the app is
   monolingual es-ES).
+- **Comments: minimal, English, only when the WHY is non-obvious** (a hidden constraint, a
+  workaround, a surprising side effect). Well-named identifiers already say the WHAT — don't
+  restate a function's name in a docstring above it, and don't label obvious JSX sections
+  (`{/* Header */}`, `{/* CONTENIDO */}`) — the markup already shows that. Default to no comment;
+  add one only when removing it would leave a future reader confused about *why*, not *what*.
+  (Swept the whole app for Spanish/redundant comments on 24-jul-2026 — don't reintroduce them.)
 - TypeScript strict; types for API payloads live in `src/types` and must mirror the contract.
 - Client vs server: hooks/mutations are client components; initial page data uses
   `serverFetch` in server components (existing pattern — respect it).
@@ -167,17 +184,25 @@ Rules (the refactor is about enforcing these, not reorganizing):
 
 ## 7. Phase 7 plan (order matters; P1 = committed, P2 = if time remains)
 
-1. **P1** — `docs/` folder: copy route-calls contract excerpt + gherkin (you may write these).
-2. **P1** — Service functions update / cancel / delete + mutation hooks (she writes).
+1. **P1** — `docs/` folder: copy route-calls contract excerpt + gherkin. ✅ **done**
+2. **P1** — Service functions update / cancel / delete + mutation hooks (she writes). ✅ **done (D14)**
 3. **P1** — Edit UI: form pre-filled from the detail, organizer-only, visible only while
    `SCHEDULED` (D16). Scope of fields depends on the backend prerequisite (section 1).
+   👉 **NEXT (D15/D16)**
 4. **P1** — Cancel UI: confirmation dialog, organizer-only, `SCHEDULED`/`ONGOING`.
 5. **P1** — Delete UI: ADMIN-only visibility (D4), confirmation dialog.
 6. **P1** — Timezone fix (delegated).
-7. **P1** — Supabase dead-code cleanup (delegated) · then npm → pnpm migration (delegated).
+7. **P1** — Supabase dead-code cleanup (delegated) ✅ **done (D14)** · npm → pnpm migration
+   (delegated) ✅ **done (D14)**.
 8. **P2** — Vitest setup (delegated) + tests of the new actions (she writes).
 9. **P2** — Accessibility pass: Lighthouse + axe on main pages, fix critical/serious,
    document the rest (D10 / T-50).
+
+**D14 recap:** items 2 and 7 are done; item 6 (timezone fix) is still pending. The axios
+error-handling fix (fetch→axios bug, 400 vs 422 mapping, es-ES fallbacks — decision D25) was a
+hard prerequisite for item 2 and is also done. Full detail, including what was found and fixed
+beyond the original plan (ESLint 10 incompatibility, single retry layer, 401 vs 403), is in the
+Notion "Deuda técnica" page → "Cierre del D14" section.
 
 Out of scope (parked, do not start): gallery section in events, event-detail visual polish,
 reviews/favorites/photos changes — the backend gallery endpoints are not migrated.
@@ -188,6 +213,13 @@ reviews/favorites/photos changes — the backend gallery endpoints are not migra
   backend error by changing the frontend's expectations silently. If the contract seems
   wrong, STOP and raise it (it becomes a backend `IMPROVEMENT PROPOSAL`, decided by the author).
 - Do not talk to Supabase from the frontend (D6) — the client is being deleted, keep it dead.
+- **Do not delete code just because it has zero callers today.** Some of it is deliberate
+  scaffolding for pages not yet built (profile/favorites list, photo gallery, reviews page).
+  Before deleting anything that maps to a product feature — not just an obvious leftover import
+  or a duplicate function — ASK first. (D14 lesson: `queryKeys.reviews`/`.photos`,
+  `getUserFavorites`/`useUserFavorites`, and the route-calls client hooks were deleted once as
+  "dead code" and had to be restored — same reasoning the plan already used to keep
+  `useRouteCall` for the future edit UI.)
 - Do not add dependencies without justifying them (dialogs: use the existing radix/shadcn-style
   primitives in `components/ui` before reaching for anything new).
 - Do not add Vite as a build tool (D8): Next's own build stays. Vitest is only the test runner.

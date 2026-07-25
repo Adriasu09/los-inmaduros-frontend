@@ -4,10 +4,7 @@ import { useAuth } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { setClerkTokenGetter } from "@/lib/api/client";
 
-/**
- * Sincroniza el token JWT de Clerk con el apiClient de axios.
- * Debe montarse dentro de ClerkProvider.
- */
+// Syncs the Clerk JWT into the axios apiClient. Must be mounted inside ClerkProvider.
 export function ClerkAxiosSync() {
   const { getToken, isSignedIn } = useAuth();
 

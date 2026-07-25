@@ -80,9 +80,8 @@ export default function RouteReviews({
     return { star, count, percent };
   });
 
-  // Las reviews que mostramos ahora mismo (slice = "cortar" el array)
   const visibleReviews = reviews.slice(0, visibleCount);
-  const hasMore = visibleCount < reviews.length; // ¿quedan reseñas por mostrar?
+  const hasMore = visibleCount < reviews.length;
 
   if (isLoading) {
     return (
@@ -136,7 +135,6 @@ export default function RouteReviews({
           </p>
         )}
 
-        {/* Botón escribir opinión */}
         <Button
           variant="ghost"
           size="sm"
@@ -153,7 +151,6 @@ export default function RouteReviews({
           Escribir una opinión
         </Button>
 
-        {/* Lista — solo las visibles */}
         <div className="flex flex-col gap-6">
           {visibleReviews.map((review) => (
             <div
@@ -196,7 +193,6 @@ export default function RouteReviews({
           ))}
         </div>
 
-        {/* Botón "Ver más" — solo si quedan reseñas */}
         {hasMore && (
           <button
             onClick={() => setVisibleCount((prev) => prev + REVIEWS_PER_PAGE)}
@@ -207,7 +203,6 @@ export default function RouteReviews({
         )}
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"

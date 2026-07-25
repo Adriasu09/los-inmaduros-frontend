@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getRouteBySlugServer } from "@/features/routes";
 import RouteDetailHero from "./components/RouteDetailHero";
-import RouteReviews from "./components/RouteReviews";
 
 interface RouteDetailPageProps {
   params: Promise<{ slug: string }>;

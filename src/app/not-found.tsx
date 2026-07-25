@@ -13,7 +13,6 @@ export default function NotFound() {
         `,
       }}
     >
-      {/* Header minimalista con logo */}
       <header className="flex items-center border-b border-sky-400/10 px-6 py-4 md:px-20">
         <Link href="/" className="flex items-center">
           <Image
@@ -27,15 +26,12 @@ export default function NotFound() {
         </Link>
       </header>
 
-      {/* Contenido principal */}
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-12 text-center">
-        {/* Emoji con glow */}
         <div className="relative mb-10 group">
           <div className="absolute -inset-6 rounded-full bg-sky-400/20 blur-3xl opacity-60 group-hover:opacity-80 transition-opacity" />
           <span className="relative text-8xl md:text-9xl select-none">🛼</span>
         </div>
 
-        {/* Titular y subtítulo */}
         <div className="max-w-2xl space-y-5">
           <h1 className="text-title md:text-display md:text-6xl">
             ¡Uy! Parece que esta página{" "}
@@ -47,7 +43,6 @@ export default function NotFound() {
           </p>
         </div>
 
-        {/* Botones */}
         <div className="mt-10 flex w-full max-w-sm flex-col sm:flex-row gap-4">
           <Link
             href="/routes"
@@ -63,7 +58,6 @@ export default function NotFound() {
           </Link>
         </div>
 
-        {/* Redes sociales */}
         <div className="mt-16 w-full max-w-md border-t border-sky-400/10 pt-10">
           <p className="mb-6 text-label tracking-widest text-sky-400">
             Mantente en movimiento
@@ -89,7 +83,6 @@ export default function NotFound() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="py-8 px-6 text-center text-body-sm text-slate-500">
         <p>© {new Date().getFullYear()} Los Inmaduros Roller Madrid. Deslizando por la ciudad.</p>
       </footer>

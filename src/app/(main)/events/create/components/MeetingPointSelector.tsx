@@ -112,7 +112,6 @@ export default function MeetingPointSelector({
         {label}
       </label>
 
-      {/* Predefined options */}
       <div className="flex flex-col gap-2">
         {PREDEFINED_MEETING_POINTS.map((point) => (
           <button
@@ -140,7 +139,6 @@ export default function MeetingPointSelector({
           </button>
         ))}
 
-        {/* Custom option */}
         <button
           type="button"
           onClick={handleCustomSelect}
@@ -155,7 +153,6 @@ export default function MeetingPointSelector({
         </button>
       </div>
 
-      {/* Custom point details */}
       {isCustom && (
         <div className="flex flex-col gap-3 pl-3 border-l-2 border-primary/20">
           <input
@@ -178,7 +175,6 @@ export default function MeetingPointSelector({
         </div>
       )}
 
-      {/* Show mini-map for predefined selection */}
       {selectedPredefined && (
         <MapPointPicker
           markerPosition={selectedPredefined.coordinates as unknown as [number, number]}
@@ -189,7 +185,6 @@ export default function MeetingPointSelector({
         />
       )}
 
-      {/* Time input for secondary meeting point */}
       {showTimeInput && (
         <div className="flex flex-col gap-1.5">
           <label className="text-caption font-medium text-soft-foreground">

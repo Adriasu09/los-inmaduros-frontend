@@ -11,7 +11,6 @@ export default function NavbarActions() {
 
   return (
     <div className="flex items-center space-x-4">
-      {/* TOGGLE DARK/LIGHT */}
       <button
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="cursor-pointer p-2 rounded-full text-soft-foreground hover:text-primary hover:bg-accent transition-colors"
@@ -20,7 +19,6 @@ export default function NavbarActions() {
         {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
       </button>
 
-      {/* AUTH CON CLERK */}
       <SignedOut>
         <Link href="/sign-in">
           <Button size="sm">Únete</Button>

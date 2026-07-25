@@ -92,7 +92,6 @@ export default function RichTextEditor({
         className,
       )}
     >
-      {/* Toolbar */}
       <div className="flex items-center gap-0.5 px-2 py-1.5 border-b border-border bg-muted/50">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -147,7 +146,6 @@ export default function RichTextEditor({
         </ToolbarButton>
       </div>
 
-      {/* Editor content */}
       <EditorContent editor={editor} />
     </div>
   );
