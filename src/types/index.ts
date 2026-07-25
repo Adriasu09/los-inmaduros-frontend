@@ -70,6 +70,16 @@ export interface MeetingPoint {
   time: string | null;
 }
 
+export interface RouteCallAttendee {
+  id: string;
+  status: AttendanceStatus;
+  user: {
+    id: string;
+    name: string | null;
+    imageUrl: string | null;
+  };
+}
+
 export interface RouteCall {
   id: string;
   routeId: string | null;
@@ -85,7 +95,7 @@ export interface RouteCall {
   route?: Route;
   organizer?: User;
   meetingPoints?: MeetingPoint[];
-  attendances?: Attendance[];
+  attendances?: RouteCallAttendee[];
   _count?: {
     attendances: number;
   };
