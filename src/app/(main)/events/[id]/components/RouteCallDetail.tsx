@@ -32,6 +32,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import {
   PaceInfoBadge,
   useCancelRouteCall,
+  useDeleteRouteCall,
   useRouteCallPermissions,
 } from "@/features/route-calls";
 
@@ -64,6 +65,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
   const pathname = usePathname();
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const { data: attendees = [] } = useRouteCallAttendees(routeCall.id);
   const { data: isAttending = false } = useIsAttending(routeCall.id);
@@ -71,13 +73,19 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
     routeCall.id,
   );
 
-  const { canCancel } = useRouteCallPermissions(routeCall);
+  const { canCancel, canDelete } = useRouteCallPermissions(routeCall);
   const {
     mutate: cancel,
     isPending: isCancelling,
     error: cancelError,
     reset: resetCancel,
   } = useCancelRouteCall(routeCall.id);
+  const {
+    mutate: deleteCall,
+    isPending: isDeleting,
+    error: deleteError,
+    reset: resetDelete,
+  } = useDeleteRouteCall(routeCall.id);
 
   const handleShareWhatsApp = async () => {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin;
@@ -107,6 +115,27 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
     });
   };
 
+  const openDeleteDialog = () => {
+    resetDelete();
+    setIsDeleteOpen(true);
+  };
+
+  const switchToCancelDialog = () => {
+    setIsDeleteOpen(false);
+    openCancelDialog();
+  };
+
+  const handleDelete = () => {
+    deleteCall(undefined, {
+      // The detail page 404s once the route call is gone, so we leave instead
+      // of refreshing in place.
+      onSuccess: () => {
+        router.push("/events");
+        router.refresh();
+      },
+    });
+  };
+
   const organizer = routeCall.organizer;
   const linkedRoute = routeCall.route;
   const meetingPoints = routeCall.meetingPoints ?? [];
@@ -114,6 +143,25 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
   const secondaryPoint = meetingPoints.find((mp) => mp.type === "SECONDARY");
   const isCancelled = routeCall.status === "CANCELLED";
   const isPast = routeCall.status === "COMPLETED" || isCancelled;
+  const attendanceCount = routeCall._count?.attendances ?? 0;
+
+  const isDeleteBlocked = attendanceCount > 0;
+
+  const deleteDescription = isDeleteBlocked
+    ? `Esta convocatoria tiene ${attendanceCount} ${
+        attendanceCount === 1 ? "participante" : "participantes"
+      }. Al tener asistentes no se puede eliminar: cancélala en su lugar para que quede constancia.`
+    : "La convocatoria se borrará de forma permanente, junto con sus puntos de encuentro. Esta acción no se puede deshacer.";
+
+  // When the count already rules deletion out, the dialog stops offering it and
+  // points to the action that does work. The delete request is still wired for
+  // the race where somebody joins after this render.
+  const deleteAction = isDeleteBlocked
+    ? {
+        label: "Cancelar convocatoria en su lugar",
+        onConfirm: canCancel ? switchToCancelDialog : undefined,
+      }
+    : { label: "Sí, eliminar", onConfirm: handleDelete };
 
   return (
     <div className="flex flex-col gap-6">
@@ -145,6 +193,11 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
       </div>
 
       <div className="flex flex-wrap gap-3 justify-end">
+        {canDelete && (
+          <Button variant="ghost" size="sm" onClick={openDeleteDialog}>
+            Eliminar
+          </Button>
+        )}
         {canCancel && (
           <Button variant="ghost" size="sm" onClick={openCancelDialog}>
             Cancelar convocatoria
@@ -366,6 +419,18 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         isPending={isCancelling}
         errorMessage={cancelError?.message}
         isDestructive
+      />
+
+      <ConfirmDialog
+        open={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        title="¿Eliminar esta convocatoria?"
+        description={deleteDescription}
+        confirmLabel={deleteAction.label}
+        onConfirm={deleteAction.onConfirm}
+        isPending={isDeleting}
+        errorMessage={deleteError?.message}
+        isDestructive={!isDeleteBlocked}
       />
     </div>
   );

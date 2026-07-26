@@ -18,9 +18,11 @@ interface ConfirmDialogProps {
   onOpenChange: (open: boolean) => void;
   title: string;
   description: ReactNode;
-  confirmLabel: string;
+  // Both optional: a dialog whose action is impossible right now shows only the
+  // dismiss button instead of offering a click that is bound to fail.
+  confirmLabel?: string;
   cancelLabel?: string;
-  onConfirm: () => void;
+  onConfirm?: () => void;
   isPending?: boolean;
   errorMessage?: string | null;
   isDestructive?: boolean;
@@ -68,20 +70,22 @@ export function ConfirmDialog({
               {cancelLabel}
             </Button>
           </AlertDialogCancel>
-          <Button
-            size="sm"
-            onClick={onConfirm}
-            disabled={isPending}
-            aria-busy={isPending}
-            className={cn(
-              isDestructive &&
-                // The dark palette's --destructive is light enough that white
-                // text on it falls to 2.9:1; dark text clears AA instead.
-                "bg-destructive text-white hover:bg-destructive/90 dark:text-background",
-            )}
-          >
-            {confirmLabel}
-          </Button>
+          {onConfirm && (
+            <Button
+              size="sm"
+              onClick={onConfirm}
+              disabled={isPending}
+              aria-busy={isPending}
+              className={cn(
+                isDestructive &&
+                  // The dark palette's --destructive is light enough that white
+                  // text on it falls to 2.9:1; dark text clears AA instead.
+                  "bg-destructive text-white hover:bg-destructive/90 dark:text-background",
+              )}
+            >
+              {confirmLabel}
+            </Button>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
