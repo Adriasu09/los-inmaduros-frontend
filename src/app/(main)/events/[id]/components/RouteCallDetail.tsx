@@ -73,7 +73,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
     routeCall.id,
   );
 
-  const { canCancel, canDelete } = useRouteCallPermissions(routeCall);
+  const { canEdit, canCancel, canDelete } = useRouteCallPermissions(routeCall);
   const {
     mutate: cancel,
     isPending: isCancelling,
@@ -202,6 +202,13 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
           <Button variant="ghost" size="sm" onClick={openCancelDialog}>
             Cancelar convocatoria
           </Button>
+        )}
+        {canEdit && (
+          <Link href={`/events/${routeCall.id}/edit`}>
+            <Button variant="ghost" size="sm">
+              Editar
+            </Button>
+          </Link>
         )}
         <Button
           variant="ghost"

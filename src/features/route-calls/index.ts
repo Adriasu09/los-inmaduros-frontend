@@ -9,3 +9,5 @@ export { default as RouteCallCard } from "./components/RouteCallCard";
 export { default as RouteCallCardFooter } from "./components/RouteCallCardFooter";
 export { default as PaceInfoBadge } from "./components/PaceInfoBadge";
 export { default as CreateRouteCallButton } from "./components/CreateRouteCallButton";
+export { default as CoverImageSection } from "./components/CoverImageSection";
+export { default as PaceMultiSelect } from "./components/PaceMultiSelect";

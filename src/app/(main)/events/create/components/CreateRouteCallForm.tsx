@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { ApiError } from "@/lib/errors";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  CoverImageSection,
+  PaceMultiSelect,
   createRouteCallSchema,
   useCreateRouteCall,
   type CreateRouteCallFormData,
@@ -20,8 +22,6 @@ import { queryKeys } from "@/lib/api/query-keys";
 import type { Route, RoutePace } from "@/types";
 import { PREDEFINED_MEETING_POINTS } from "@/constants";
 import RouteSelector from "./RouteSelector";
-import CoverImageSection from "./CoverImageSection";
-import PaceMultiSelect from "./PaceMultiSelect";
 import MeetingPointSelector from "./MeetingPointSelector";
 import type { MeetingPointValue } from "./MeetingPointSelector";
 
