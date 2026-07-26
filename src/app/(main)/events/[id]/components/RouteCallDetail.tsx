@@ -19,7 +19,6 @@ import type { RouteCall, MeetingPoint } from "@/types";
 import { CANCELLED_STAMP_URL, PREDEFINED_MEETING_POINTS } from "@/constants";
 import { shareRouteCallOnWhatsApp } from "@/lib/share";
 import { formatFullDate, formatTime } from "@/lib/date-utils";
-import PaceInfoBadge from "@/components/home/PaceInfoBadge";
 import MapModal from "@/components/map/MapModal";
 import MapLoadingPlaceholder from "@/components/map/MapLoadingPlaceholder";
 import { Button } from "@/components/ui/Button";
@@ -31,6 +30,7 @@ import {
 import dynamic from "next/dynamic";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import {
+  PaceInfoBadge,
   useCancelRouteCall,
   useRouteCallPermissions,
 } from "@/features/route-calls";

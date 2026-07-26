@@ -6,7 +6,7 @@ import type { RouteCall, RoutePace } from "@/types";
 import { ROUTE_PACES, PACE_ORDER } from "@/constants";
 import { useDebounce } from "@/hooks/use-debounce";
 import { cn, normalize } from "@/lib/utils";
-import { useFilteredRouteCalls } from "@/features/route-calls";
+import { RouteCallCard, useFilteredRouteCalls } from "@/features/route-calls";
 import type { RouteCallFilters } from "@/features/route-calls";
 import {
   Select,
@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import RouteCallCard from "@/components/home/RouteCallCard";
 import MonthYearPicker from "./MonthYearPicker";
 
 const PAGE_SIZE = 6;

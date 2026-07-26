@@ -1,4 +1,4 @@
-import CreateRouteCallButton from "@/components/home/CreateRouteCallButton";
+import { CreateRouteCallButton } from "@/features/route-calls";
 
 export default function EventsHero() {
   return (
