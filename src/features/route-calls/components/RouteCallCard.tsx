@@ -2,13 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Clock, Route as RouteIcon, ImageOff } from "lucide-react";
 import type { RouteCall } from "@/types";
+import { CANCELLED_STAMP_URL } from "@/constants";
 import { cn } from "@/lib/utils";
 import { formatDateBadge, formatTime, isToday } from "@/lib/date-utils";
 import PaceInfoBadge from "./PaceInfoBadge";
+import RouteCallCardActions from "./RouteCallCardActions";
 import RouteCallCardFooter from "./RouteCallCardFooter";
-
-const CANCELLED_STAMP_URL =
-  "https://dplwudttrngcnapuurkt.supabase.co/storage/v1/object/public/photos/routes/cancelado.png";
 
 interface RouteCallCardProps {
   routeCall: RouteCall;
@@ -83,6 +82,8 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
             {formatDateBadge(routeCall.dateRoute)}
           </span>
         )}
+
+        <RouteCallCardActions routeCall={routeCall} />
       </div>
 
       <div className="p-5 flex flex-col flex-1">

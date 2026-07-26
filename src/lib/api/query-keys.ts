@@ -6,6 +6,11 @@
  */
 
 export const queryKeys = {
+  auth: {
+    all: ["auth"] as const,
+    me: () => [...queryKeys.auth.all, "me"] as const,
+  },
+
   // Routes (rutas predefinidas)
   routes: {
     all: ["routes"] as const,

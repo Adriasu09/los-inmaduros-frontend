@@ -14,12 +14,11 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useClerk, useUser } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { RouteCall, MeetingPoint } from "@/types";
-import { PREDEFINED_MEETING_POINTS } from "@/constants";
+import { CANCELLED_STAMP_URL, PREDEFINED_MEETING_POINTS } from "@/constants";
 import { shareRouteCallOnWhatsApp } from "@/lib/share";
 import { formatFullDate, formatTime } from "@/lib/date-utils";
-import PaceInfoBadge from "@/components/home/PaceInfoBadge";
 import MapModal from "@/components/map/MapModal";
 import MapLoadingPlaceholder from "@/components/map/MapLoadingPlaceholder";
 import { Button } from "@/components/ui/Button";
@@ -29,6 +28,13 @@ import {
   useToggleAttendance,
 } from "@/features/attendances";
 import dynamic from "next/dynamic";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import {
+  PaceInfoBadge,
+  useCancelRouteCall,
+  useDeleteRouteCall,
+  useRouteCallPermissions,
+} from "@/features/route-calls";
 
 const RouteMap = dynamic(
   () => import("@/app/(main)/routes/[slug]/components/RouteMap"),
@@ -42,9 +48,7 @@ interface RouteCallDetailProps {
 function getMeetingPointMapUrl(mp: MeetingPoint): string | null {
   if (mp.location?.startsWith("http")) return mp.location;
 
-  const predefined = PREDEFINED_MEETING_POINTS.find(
-    (p) => p.name === mp.name,
-  );
+  const predefined = PREDEFINED_MEETING_POINTS.find((p) => p.name === mp.name);
   if (predefined) return predefined.googleMapsUrl;
 
   if (mp.location && /^-?\d+\.?\d*,-?\d+\.?\d*$/.test(mp.location)) {
@@ -55,16 +59,33 @@ function getMeetingPointMapUrl(mp: MeetingPoint): string | null {
 }
 
 export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
+  const router = useRouter();
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
   const pathname = usePathname();
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const { data: attendees = [] } = useRouteCallAttendees(routeCall.id);
   const { data: isAttending = false } = useIsAttending(routeCall.id);
-  const { mutate: toggleAttendance, isPending } = useToggleAttendance(
+  const { mutate: toggleAttendance, isPending: isTogglingAttendance } = useToggleAttendance(
     routeCall.id,
   );
+
+  const { canEdit, canCancel, canDelete } = useRouteCallPermissions(routeCall);
+  const {
+    mutate: cancel,
+    isPending: isCancelling,
+    error: cancelError,
+    reset: resetCancel,
+  } = useCancelRouteCall(routeCall.id);
+  const {
+    mutate: deleteCall,
+    isPending: isDeleting,
+    error: deleteError,
+    reset: resetDelete,
+  } = useDeleteRouteCall(routeCall.id);
 
   const handleShareWhatsApp = async () => {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin;
@@ -72,7 +93,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
   };
 
   const handleToggleAttendance = () => {
-    if (isPending) return;
+    if (isTogglingAttendance) return;
     if (!isSignedIn) {
       openSignIn({ forceRedirectUrl: pathname });
       return;
@@ -80,12 +101,67 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
     toggleAttendance(isAttending);
   };
 
+  const openCancelDialog = () => {
+    resetCancel();
+    setIsCancelOpen(true);
+  };
+
+  const handleCancel = () => {
+    cancel(undefined, {
+      onSuccess: () => {
+        setIsCancelOpen(false);
+        router.refresh();
+      },
+    });
+  };
+
+  const openDeleteDialog = () => {
+    resetDelete();
+    setIsDeleteOpen(true);
+  };
+
+  const switchToCancelDialog = () => {
+    setIsDeleteOpen(false);
+    openCancelDialog();
+  };
+
+  const handleDelete = () => {
+    deleteCall(undefined, {
+      // The detail page 404s once the route call is gone, so we leave instead
+      // of refreshing in place.
+      onSuccess: () => {
+        router.push("/events");
+        router.refresh();
+      },
+    });
+  };
+
   const organizer = routeCall.organizer;
   const linkedRoute = routeCall.route;
   const meetingPoints = routeCall.meetingPoints ?? [];
   const primaryPoint = meetingPoints.find((mp) => mp.type === "PRIMARY");
   const secondaryPoint = meetingPoints.find((mp) => mp.type === "SECONDARY");
-  const isPast = routeCall.status === "COMPLETED" || routeCall.status === "CANCELLED";
+  const isCancelled = routeCall.status === "CANCELLED";
+  const isPast = routeCall.status === "COMPLETED" || isCancelled;
+  const attendanceCount = routeCall._count?.attendances ?? 0;
+
+  const isDeleteBlocked = attendanceCount > 0;
+
+  const deleteDescription = isDeleteBlocked
+    ? `Esta convocatoria tiene ${attendanceCount} ${
+        attendanceCount === 1 ? "participante" : "participantes"
+      }. Al tener asistentes no se puede eliminar: cancélala en su lugar para que quede constancia.`
+    : "La convocatoria se borrará de forma permanente, junto con sus puntos de encuentro. Esta acción no se puede deshacer.";
+
+  // When the count already rules deletion out, the dialog stops offering it and
+  // points to the action that does work. The delete request is still wired for
+  // the race where somebody joins after this render.
+  const deleteAction = isDeleteBlocked
+    ? {
+        label: "Cancelar convocatoria en su lugar",
+        onConfirm: canCancel ? switchToCancelDialog : undefined,
+      }
+    : { label: "Sí, eliminar", onConfirm: handleDelete };
 
   return (
     <div className="flex flex-col gap-6">
@@ -103,7 +179,8 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
             {routeCall.title}
           </h1>
           <p className="text-muted-foreground text-body-sm capitalize">
-            {formatFullDate(routeCall.dateRoute)}, {formatTime(routeCall.dateRoute)}
+            {formatFullDate(routeCall.dateRoute)},{" "}
+            {formatTime(routeCall.dateRoute)}
           </p>
         </div>
         {linkedRoute && (
@@ -116,6 +193,23 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
       </div>
 
       <div className="flex flex-wrap gap-3 justify-end">
+        {canDelete && (
+          <Button variant="ghost" size="sm" onClick={openDeleteDialog}>
+            Eliminar
+          </Button>
+        )}
+        {canCancel && (
+          <Button variant="ghost" size="sm" onClick={openCancelDialog}>
+            Cancelar convocatoria
+          </Button>
+        )}
+        {canEdit && (
+          <Link href={`/events/${routeCall.id}/edit`}>
+            <Button variant="ghost" size="sm">
+              Editar
+            </Button>
+          </Link>
+        )}
         <Button
           variant="ghost"
           size="sm"
@@ -129,15 +223,15 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
             variant={isAttending ? "outline" : "solid"}
             size="sm"
             onClick={handleToggleAttendance}
-            disabled={isPending}
+            disabled={isTogglingAttendance}
           >
-            {isPending ? "..." : isAttending ? "No voy" : "Apuntarme"}
+            {isTogglingAttendance ? "..." : isAttending ? "No voy" : "Apuntarme"}
           </Button>
         )}
       </div>
 
-      {routeCall.image ? (
-        <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
+        {routeCall.image ? (
           <Image
             src={routeCall.image}
             alt={routeCall.title}
@@ -146,12 +240,21 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
             priority
             sizes="(max-width: 768px) 100vw, 960px"
           />
-        </div>
-      ) : (
-        <div className="w-full aspect-video rounded-xl bg-muted flex items-center justify-center">
-          <ImageOff size={48} className="text-faint-foreground" />
-        </div>
-      )}
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <ImageOff size={48} className="text-faint-foreground" />
+          </div>
+        )}
+
+        {isCancelled && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={CANCELLED_STAMP_URL}
+            alt="Convocatoria cancelada"
+            className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+          />
+        )}
+      </div>
 
       <section>
         <h2 className="text-foreground text-heading mb-3">
@@ -159,9 +262,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
         </h2>
         <div className="grid grid-cols-[minmax(120px,30%)_1fr] gap-x-6">
           <div className="col-span-2 grid grid-cols-subgrid border-t border-border py-4">
-            <p className="text-muted-foreground text-body-sm">
-              Ritmo
-            </p>
+            <p className="text-muted-foreground text-body-sm">Ritmo</p>
             <div>
               <PaceInfoBadge paces={routeCall.paces} />
             </div>
@@ -169,11 +270,12 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
 
           {linkedRoute?.approximateDistance && (
             <div className="col-span-2 grid grid-cols-subgrid border-t border-border py-4">
-              <p className="text-muted-foreground text-body-sm">
-                Distancia
-              </p>
+              <p className="text-muted-foreground text-body-sm">Distancia</p>
               <p className="text-foreground text-body-sm flex items-center gap-1.5">
-                <RouteIcon size={14} className="text-faint-foreground shrink-0" />
+                <RouteIcon
+                  size={14}
+                  className="text-faint-foreground shrink-0"
+                />
                 {linkedRoute.approximateDistance}
               </p>
             </div>
@@ -217,9 +319,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
 
       {routeCall.description && (
         <section>
-          <h2 className="text-foreground text-heading mb-3">
-            Descripción
-          </h2>
+          <h2 className="text-foreground text-heading mb-3">Descripción</h2>
           <div
             className="text-soft-foreground text-body prose prose-sm dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: routeCall.description }}
@@ -230,9 +330,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
       {linkedRoute?.gpxFileUrl && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-foreground text-heading">
-              Mapa de la Ruta
-            </h2>
+            <h2 className="text-foreground text-heading">Mapa de la Ruta</h2>
             <button
               onClick={() => setIsMapOpen(true)}
               className="text-faint-foreground hover:text-foreground transition-colors cursor-pointer"
@@ -293,9 +391,7 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
 
       {organizer && (
         <section>
-          <h2 className="text-foreground text-heading mb-3">
-            Convocada por
-          </h2>
+          <h2 className="text-foreground text-heading mb-3">Convocada por</h2>
           <div className="flex items-center gap-4">
             {organizer.imageUrl ? (
               <Image
@@ -314,13 +410,35 @@ export default function RouteCallDetail({ routeCall }: RouteCallDetailProps) {
               <p className="text-foreground text-body font-medium">
                 {organizer.name ?? "Anónimo"}
               </p>
-              <p className="text-muted-foreground text-body-sm">
-                Organizador
-              </p>
+              <p className="text-muted-foreground text-body-sm">Organizador</p>
             </div>
           </div>
         </section>
       )}
+
+      <ConfirmDialog
+        open={isCancelOpen}
+        onOpenChange={setIsCancelOpen}
+        title="¿Cancelar esta convocatoria?"
+        description="Los participantes la verán como cancelada y se anunciará en el canal de Telegram. Si la compartiste por WhatsApp o en otros grupos, avisa también allí: esos mensajes no se actualizan solos. Esta acción no se puede deshacer."
+        confirmLabel="Sí, cancelar"
+        onConfirm={handleCancel}
+        isPending={isCancelling}
+        errorMessage={cancelError?.message}
+        isDestructive
+      />
+
+      <ConfirmDialog
+        open={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        title="¿Eliminar esta convocatoria?"
+        description={deleteDescription}
+        confirmLabel={deleteAction.label}
+        onConfirm={deleteAction.onConfirm}
+        isPending={isDeleting}
+        errorMessage={deleteError?.message}
+        isDestructive={!isDeleteBlocked}
+      />
     </div>
   );
 }

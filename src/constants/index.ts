@@ -107,6 +107,9 @@ export const FOOTER_COMMUNITY_LINKS = [
   { label: "Contacto", href: "mailto:losinmadurosrollermadrid@gmail.com" },
 ];
 
+export const CANCELLED_STAMP_URL =
+  "https://dplwudttrngcnapuurkt.supabase.co/storage/v1/object/public/photos/routes/cancelado.png";
+
 export const PREDEFINED_MEETING_POINTS = [
   {
     id: "explanada",

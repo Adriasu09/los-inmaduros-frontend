@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const VALID_PACES = [
+export const VALID_PACES = [
   "ROCA",
   "CARACOL",
   "GUSANO",
@@ -24,7 +24,10 @@ export const createRouteCallSchema = z
       .string()
       .min(3, "El título debe tener al menos 3 caracteres")
       .max(100, "El título no puede superar 100 caracteres"),
-    description: z.string().nullable(),
+    description: z
+      .string()
+      .max(1000, "La descripción no puede superar 1000 caracteres")
+      .nullable(),
     dateRoute: z.string().min(1, "La fecha es obligatoria"),
     startTime: z.string().min(1, "La hora es obligatoria"),
     paces: z
