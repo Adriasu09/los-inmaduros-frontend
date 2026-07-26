@@ -43,13 +43,18 @@ function AlertDialogOverlay({
   )
 }
 
+// AlertDialog blocks outside-click dismissal and overrides any handler passed to
+// Content, so opting back in has to happen on the overlay element itself.
 function AlertDialogContent({
   className,
+  onOverlayClick,
   ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
+}: React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
+  onOverlayClick?: () => void
+}) {
   return (
     <AlertDialogPortal>
-      <AlertDialogOverlay />
+      <AlertDialogOverlay onClick={onOverlayClick} />
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(

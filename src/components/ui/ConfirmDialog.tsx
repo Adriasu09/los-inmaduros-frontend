@@ -49,45 +49,55 @@ export function ConfirmDialog({
         if (!isPending) onOpenChange(next);
       }}
     >
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
-        </AlertDialogHeader>
+      {/* React bubbles events through the component tree, not the DOM, so clicks
+          inside the portalled dialog still reach whatever rendered it — a card
+          wrapped in a <Link> would navigate away. `contents` keeps this wrapper
+          out of the layout. */}
+      <div className="contents" onClick={(event) => event.stopPropagation()}>
+        <AlertDialogContent
+          onOverlayClick={() => {
+            if (!isPending) onOpenChange(false);
+          }}
+        >
+          <AlertDialogHeader>
+            <AlertDialogTitle>{title}</AlertDialogTitle>
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          </AlertDialogHeader>
 
-        {errorMessage && (
-          <p
-            role="alert"
-            className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive"
-          >
-            {errorMessage}
-          </p>
-        )}
-
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant="ghost" size="sm" disabled={isPending}>
-              {cancelLabel}
-            </Button>
-          </AlertDialogCancel>
-          {onConfirm && (
-            <Button
-              size="sm"
-              onClick={onConfirm}
-              disabled={isPending}
-              aria-busy={isPending}
-              className={cn(
-                isDestructive &&
-                  // The dark palette's --destructive is light enough that white
-                  // text on it falls to 2.9:1; dark text clears AA instead.
-                  "bg-destructive text-white hover:bg-destructive/90 dark:text-background",
-              )}
+          {errorMessage && (
+            <p
+              role="alert"
+              className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive"
             >
-              {confirmLabel}
-            </Button>
+              {errorMessage}
+            </p>
           )}
-        </AlertDialogFooter>
-      </AlertDialogContent>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel asChild>
+              <Button variant="ghost" size="sm" disabled={isPending}>
+                {cancelLabel}
+              </Button>
+            </AlertDialogCancel>
+            {onConfirm && (
+              <Button
+                size="sm"
+                onClick={onConfirm}
+                disabled={isPending}
+                aria-busy={isPending}
+                className={cn(
+                  isDestructive &&
+                    // The dark palette's --destructive is light enough that
+                    // white text on it falls to 2.9:1; dark text clears AA.
+                    "bg-destructive text-white hover:bg-destructive/90 dark:text-background",
+                )}
+              >
+                {confirmLabel}
+              </Button>
+            )}
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </div>
     </AlertDialog>
   );
 }

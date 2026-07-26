@@ -6,6 +6,7 @@ import { CANCELLED_STAMP_URL } from "@/constants";
 import { cn } from "@/lib/utils";
 import { formatDateBadge, formatTime, isToday } from "@/lib/date-utils";
 import PaceInfoBadge from "./PaceInfoBadge";
+import RouteCallCardActions from "./RouteCallCardActions";
 import RouteCallCardFooter from "./RouteCallCardFooter";
 
 interface RouteCallCardProps {
@@ -81,6 +82,8 @@ export default function RouteCallCard({ routeCall, variant = "upcoming" }: Route
             {formatDateBadge(routeCall.dateRoute)}
           </span>
         )}
+
+        <RouteCallCardActions routeCall={routeCall} />
       </div>
 
       <div className="p-5 flex flex-col flex-1">
