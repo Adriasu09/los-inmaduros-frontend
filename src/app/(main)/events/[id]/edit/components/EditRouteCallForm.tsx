@@ -45,6 +45,15 @@ export default function EditRouteCallForm({
 
   const initial = getMadridDateTimeParts(routeCall.dateRoute);
 
+  // Meeting points are not editable yet (the API's update body has no room for
+  // them), so the start time cannot be pushed past the secondary point's time.
+  const secondaryPointTime = routeCall.meetingPoints?.find(
+    (mp) => mp.type === "SECONDARY",
+  )?.time;
+  const secondaryTime = secondaryPointTime
+    ? getMadridDateTimeParts(secondaryPointTime).time
+    : null;
+
   const {
     control,
     handleSubmit,
@@ -88,6 +97,14 @@ export default function EditRouteCallForm({
   }
 
   const onSubmit = async (data: EditRouteCallFormData) => {
+    // "HH:mm" is zero-padded, so comparing the strings compares the times.
+    if (secondaryTime && data.startTime >= secondaryTime) {
+      setError("startTime", {
+        message: `El segundo punto de encuentro es a las ${secondaryTime} y todavía no se puede editar, así que la hora de inicio debe ser anterior.`,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -216,6 +233,13 @@ export default function EditRouteCallForm({
           <h2 className="text-label font-semibold text-foreground mb-3">
             Fecha y hora de inicio
           </h2>
+          {secondaryTime && (
+            <p className="text-muted-foreground text-caption mb-3">
+              El segundo punto de encuentro es a las {secondaryTime} y su hora
+              no se puede editar todavía, así que la de inicio debe seguir
+              siendo anterior.
+            </p>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
               <label
