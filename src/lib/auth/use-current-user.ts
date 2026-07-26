@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
 import { queryKeys } from "@/lib/api/query-keys";
-import { getCurrentUser } from "../services/auth-service";
+import { getCurrentUser } from "./auth-service";
 
 export function useCurrentUser() {
   const { isSignedIn } = useAuth();
