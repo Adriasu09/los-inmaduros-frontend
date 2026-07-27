@@ -9,7 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ApiError } from "@/lib/errors";
-import { getMadridDateTimeParts, madridDateTimeToIso } from "@/lib/date-utils";
+import {
+  getMadridDateTimeParts,
+  getMadridToday,
+  madridDateTimeToIso,
+} from "@/lib/date-utils";
 import {
   CoverImageSection,
   PaceMultiSelect,
@@ -256,6 +260,7 @@ export default function EditRouteCallForm({
                     {...field}
                     id="dateRoute"
                     type="date"
+                    min={getMadridToday()}
                     aria-invalid={!!errors.dateRoute}
                     aria-describedby={
                       errors.dateRoute ? "dateRoute-error" : undefined

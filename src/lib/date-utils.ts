@@ -79,6 +79,11 @@ export function getMadridDateTimeParts(dateString: string): {
   };
 }
 
+/** Today in Madrid as `YYYY-MM-DD`, for the `min` of native date inputs. */
+export function getMadridToday(): string {
+  return getMadridDateTimeParts(new Date().toISOString()).date;
+}
+
 /** How far ahead of UTC Madrid is at a given instant, in ms (DST-aware). */
 function madridOffsetMs(instant: Date): number {
   const parts = new Intl.DateTimeFormat("en-GB", {
@@ -126,10 +131,21 @@ export function madridDateTimeToIso(date: string, time: string): string {
   ).toISOString();
 }
 
+/**
+ * Whether the `YYYY-MM-DD` / `HH:mm` a user typed is still ahead of now.
+ *
+ * Form schemas must not compare `new Date("2026-07-27T18:30")` directly: that
+ * resolves against the device's zone, so the same meetup would count as past or
+ * future depending on where the organizer happens to be.
+ */
+export function isMadridDateTimeInFuture(date: string, time: string): boolean {
+  // A malformed pair would make the Intl lookup inside the conversion throw,
+  // so it is rejected here rather than crashing the validator.
+  if (Number.isNaN(new Date(`${date}T${time}:00Z`).getTime())) return false;
+  return new Date(madridDateTimeToIso(date, time)) > new Date();
+}
+
 /** Whether dateString falls on the current calendar day in Madrid. */
 export function isToday(dateString: string): boolean {
-  return (
-    getMadridDateTimeParts(dateString).date ===
-    getMadridDateTimeParts(new Date().toISOString()).date
-  );
+  return getMadridDateTimeParts(dateString).date === getMadridToday();
 }

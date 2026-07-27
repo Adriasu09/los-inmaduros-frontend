@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { ApiError } from "@/lib/errors";
+import { getMadridToday } from "@/lib/date-utils";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   CoverImageSection,
@@ -204,8 +205,9 @@ export default function CreateRouteCallForm() {
     }
   };
 
-  // Get today's date in YYYY-MM-DD format for min attribute
-  const today = new Date().toISOString().split("T")[0];
+  // Read in Madrid: `toISOString()` would give the UTC day, which past midnight
+  // is already tomorrow and would block today's late-night meetups.
+  const today = getMadridToday();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">

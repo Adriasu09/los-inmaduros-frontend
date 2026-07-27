@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isMadridDateTimeInFuture } from "@/lib/date-utils";
 
 export const VALID_PACES = [
   "ROCA",
@@ -83,8 +84,7 @@ export const createRouteCallSchema = z
   .refine(
     (data) => {
       if (!data.dateRoute || !data.startTime) return true;
-      const selectedDate = new Date(`${data.dateRoute}T${data.startTime}`);
-      return selectedDate > new Date();
+      return isMadridDateTimeInFuture(data.dateRoute, data.startTime);
     },
     {
       message: "La fecha y hora deben ser futuras",

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isMadridDateTimeInFuture } from "@/lib/date-utils";
 import { VALID_PACES } from "./create-route-call-schema";
 
 // Meeting points are deliberately absent: the backend's RouteCallUpdateIn does
@@ -21,7 +22,7 @@ export const editRouteCallSchema = z
   .refine(
     (data) => {
       if (!data.dateRoute || !data.startTime) return true;
-      return new Date(`${data.dateRoute}T${data.startTime}`) > new Date();
+      return isMadridDateTimeInFuture(data.dateRoute, data.startTime);
     },
     {
       message: "La fecha y hora deben ser futuras",
